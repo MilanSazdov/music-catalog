@@ -22,7 +22,7 @@
                       GridLinesVisibility="None" 
                       FocusVisualStyle="{x:Null}" 
                       BorderBrush="{StaticResource PrimaryBrush}" 
-                      HeadersVisibility="Column">
+                      HeadersVisibility="Column" FontWeight="Bold">
                 <DataGrid.Resources>
                     <!-- Preuzeti stilovi iz AdminAnketeView.xaml -->
                     <Style TargetType="DataGridCell">
@@ -60,7 +60,7 @@
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
                                 <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
-                                
+                                <!-- Uklonjen DropShadowEffect da bi bio kao AnketeView -->
                                 <Setter Property="FontWeight" Value="Bold"/>
                             </Trigger>
                         </Style.Triggers>
@@ -85,6 +85,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
+            <!-- Details and podzanr management - Stilovi ažurirani -->
             <Grid Margin="0,12,0,0" Visibility="{Binding PrikaziDetalje, Converter={StaticResource BoolToVis}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -97,7 +98,8 @@
                           Grid.Column="0"
                           Background="{StaticResource SurfaceBrush}" 
                           BorderBrush="{StaticResource PrimaryBrush}" 
-                          Foreground="{StaticResource PrimaryBrush}">
+                          Foreground="{StaticResource PrimaryBrush}"
+                          FontWeight="Bold">
                     <DataGrid ItemsSource="{Binding Podzanrovi}" AutoGenerateColumns="False" CanUserAddRows="False" 
                               Background="{StaticResource SurfaceBrush}" 
                               RowBackground="{StaticResource SurfaceBrush}" 
@@ -140,8 +142,8 @@
 
                 <!-- Middle add button -->
                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding PrikaziDetalje, Converter={StaticResource BoolToVis}}" Margin="8,0">
-                    <Button Content=">>" Command="{Binding AddPodzanrCommand}" 
-                            Padding="4" FontSize="12" Margin="0,8" Width="40" Height="28"
+                    <Button Content="Dodaj" Command="{Binding AddPodzanrCommand}" 
+                            Padding="4" FontSize="12" Margin="0,8" Width="60" Height="28"
                             Style="{StaticResource PrimaryButton}"/>
                 </StackPanel>
 
@@ -150,7 +152,8 @@
                           Background="{StaticResource SurfaceBrush}" 
                           BorderBrush="{StaticResource PrimaryBrush}" 
                           Foreground="{StaticResource PrimaryBrush}" 
-                          Visibility="{Binding DodavanjePodzanra, Converter={StaticResource BoolToVis}}">
+                          Visibility="{Binding DodavanjePodzanra, Converter={StaticResource BoolToVis}}"
+                          FontWeight="Bold">
                     <DockPanel>
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="4">
                             <Button Content="Zavrsi" Command="{Binding ZatvoriDodavanjeCommand}" 
@@ -166,6 +169,7 @@
                                   HeadersVisibility="Column" 
                                   Foreground="{StaticResource PrimaryBrush}">
                             <DataGrid.Resources>
+                                <!-- Korišćenje istih stilova kao u glavnom DataGrid-u -->
                                 <Style TargetType="DataGridColumnHeader">
                                     <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
                                     <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
@@ -199,3 +203,4 @@
         </StackPanel>
     </Grid>
 </UserControl>
+
