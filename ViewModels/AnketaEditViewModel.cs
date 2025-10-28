@@ -182,7 +182,6 @@ namespace MusicCatalog.ViewModels
                 }
                 else
                 {
-                    // Neočekivano — napravimo novu sa istim Id-om
                     var newA = new Anketa
                     {
                         Id = Id,
@@ -196,7 +195,6 @@ namespace MusicCatalog.ViewModels
             }
             else
             {
-                // kreiraj novu anketu; generišemo Id kao max + 1
                 var all = _repository.GetAll();
                 int nextId = all.Any() ? all.Max(x => x.Id) + 1 : 1;
 
@@ -211,13 +209,11 @@ namespace MusicCatalog.ViewModels
 
                 _repository.Add(newAnketa);
                 Id = nextId;
-                IsEditing = true; // nakon kreiranja možemo smatrati da je sada u edit modu
+                IsEditing = true;
             }
 
-            // Sacuvaj promene u fajl
             _repository.SaveChanges();
 
-            // Obavesti UI (npr. zatvori view ili navigacija)
             OnSaved?.Invoke();
             RaiseCommandsCanExecuteChanged();
         }
@@ -228,7 +224,6 @@ namespace MusicCatalog.ViewModels
         }
 
 
-        // IDataErrorInfo.Error - generalna greška (ne koristi se često)
         public string Error => string.Empty;
 
         public string this[string columnName]
@@ -257,7 +252,6 @@ namespace MusicCatalog.ViewModels
 
         private bool CanSave()
         {
-            // minimalna validacija
             if (string.IsNullOrWhiteSpace(Naziv)) return false;
             if (!DatumPocetka.HasValue || !DatumKraja.HasValue) return false;
             if (DatumPocetka > DatumKraja) return false;
@@ -266,7 +260,6 @@ namespace MusicCatalog.ViewModels
 
         private void OnValidationChanged()
         {
-            // Kada se validacija promeni, obavesti komandu da može da osveži CanExecute
             ErrorMessage = string.Empty;
             RaiseCommandsCanExecuteChanged();
         }

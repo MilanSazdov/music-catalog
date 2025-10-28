@@ -1,5 +1,6 @@
 ﻿using MusicCatalog.Models;
 using MusicCatalog.Models.Enums;
+using MusicCatalog.Models.MuzickiSadrzaj;
 using System;
 
 namespace MusicCatalog.Models
@@ -10,7 +11,10 @@ namespace MusicCatalog.Models
         public MuzickiUrednik(string email, string ime, string prezime, string lozinka)
             : base(email, ime, prezime, lozinka, Uloga.MuzickiUrednik)
         {
+            Specijalizacija = new List<Zanr>();
         }
+
+        public List<Zanr> Specijalizacija { get; set; }
 
         // --- Metode iz UML dijagrama ---
         public void dodavanjeAlbuma() { }
