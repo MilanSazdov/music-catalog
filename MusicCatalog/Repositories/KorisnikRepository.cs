@@ -1,4 +1,4 @@
-﻿using MusicCatalog.Models;
+﻿using MusicCatalog.Models.Korisnici;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
+using System.Security.Policy;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace MusicCatalog.Models.MuzickiSadrzaj
+{
+    public abstract class MuzickoDelo
+    {
+        public int Id { get; set; }
+        public string Naziv { get; set; }
+        public TimeSpan Trajanje { get; set; }
+        public DateTime DatumIzdanja { get; set; }
+
+
+        public List<int> ZanrIDs { get; set; } = new List<int>();
+        public MuzickoDelo(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrovi)
+        {
+            Id = id;
+            Naziv = naziv;
+            Trajanje = trajanje;
+            DatumIzdanja = datumIzdanja;
+            ZanrIDs = zanrovi;
+        }
+
+        
+
+    }
+}

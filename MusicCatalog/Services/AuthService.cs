@@ -1,4 +1,4 @@
-﻿using MusicCatalog.Models;
+﻿using MusicCatalog.Models.Korisnici;
 using MusicCatalog.Repositories; // <-- DODAJ OVAJ RED
 
 namespace MusicCatalog.Services
