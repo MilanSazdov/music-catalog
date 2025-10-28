@@ -9,6 +9,7 @@ namespace MusicCatalog
     public partial class App : Application
     {
         private IKorisnikRepository _korisnikRepository;
+        private AnketaRepository _anketaRepository;
         private AuthService _authService;
 
         private MainViewModel _mainViewModel;
@@ -22,6 +23,7 @@ namespace MusicCatalog
 
             
             _korisnikRepository = new KorisnikRepository();
+            _anketaRepository = new AnketaRepository();
             _authService = new AuthService(_korisnikRepository);
 
            
@@ -34,6 +36,14 @@ namespace MusicCatalog
 
             _loginViewModel.ShowRegisterView = () => _mainViewModel.TrenutniView = _registerViewModel;
             _registerViewModel.ShowLoginView = () => _mainViewModel.TrenutniView = _loginViewModel;
+
+            _loginViewModel.ShowAdminView = () =>
+            {
+                var vm = new AdminViewModel(_anketaRepository);
+                vm.LoggedOut += () => _mainViewModel.TrenutniView = _loginViewModel;
+                _mainViewModel.TrenutniView = vm;
+
+            };
 
 
             MainWindow = new MainWindow
