@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="MusicCatalog.Views.IzmeniPodatkeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MusicCatalog.Views"
+             xmlns:utils="clr-namespace:MusicCatalog.Utils"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="600">
+    <StackPanel MaxWidth="400" VerticalAlignment="Center" HorizontalAlignment="Center">
+        
+        <TextBlock Text="Izmeni Podatke" 
+                   Foreground="{StaticResource TextBrush}" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Left" Margin="0,0,0,20"/>
+
+        <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
+        <TextBox Style="{StaticResource ModernTextBox}"
+                 Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+        <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
+        <TextBox Style="{StaticResource ModernTextBox}"
+                 Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+        <TextBlock Text="Email (ne može se menjati)" Style="{StaticResource FormLabel}"/>
+        <TextBox Style="{StaticResource ModernTextBox}"
+                 IsEnabled="False"
+                 Background="{StaticResource DisabledBrush}"
+                 
+                 Text="{Binding Email, Mode=OneWay}"/>
+
+        <Separator Margin="0,20"/>
+        
+        <TextBlock Text="Promeni Lozinku (opciono)" 
+                   Foreground="{StaticResource HintBrush}"
+                   FontSize="16"
+                   HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Nova Lozinka (ostavi prazno da zadržiš staru)" Style="{StaticResource FormLabel}"/>
+        <PasswordBox Style="{StaticResource ModernPasswordBox}"
+                     utils:PasswordHelper.Password="{Binding NovaLozinka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+        <TextBlock Text="Potvrdi Novu Lozinku" Style="{StaticResource FormLabel}"/>
+        <PasswordBox Style="{StaticResource ModernPasswordBox}"
+                     utils:PasswordHelper.Password="{Binding PotvrdaNoveLozinke, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+        <TextBlock Text="{Binding ErrorMessage}" 
+                   Foreground="{StaticResource ErrorBrush}" 
+                   Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                   Margin="0,10" TextWrapping="Wrap"/>
+
+        <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+            <Button Content="Sačuvaj Izmene" 
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding SaveCommand}"/>
+            
+            <Button Content="Poništi" 
+                    Style="{StaticResource TextButton}"
+                    Command="{Binding CancelCommand}"
+                    Margin="10,0,0,0"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

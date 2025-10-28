@@ -1,0 +1,77 @@
+<UserControl x:Class="MusicCatalog.Views.RegistrovaniKorisnikView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MusicCatalog.Views"
+             xmlns:viewmodels="clr-namespace:MusicCatalog.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800"
+             Background="{StaticResource WindowBackgroundBrush}">
+
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:IzmeniPodatkeViewModel}">
+            <local:IzmeniPodatkeView/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}" CornerRadius="15,0,0,15">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="1" BlurRadius="15" Color="Gray" Opacity="0.3"/>
+            </Border.Effect>
+
+            <DockPanel>
+
+                <StackPanel DockPanel.Dock="Top" Margin="20,20,20,10">
+                    <TextBlock Foreground="{StaticResource TextBrush}" FontSize="16" Margin="0,0,0,10">
+						<Run Text="Prijavljeni ste kao:"/>
+                    </TextBlock>
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}" FontSize="20" FontWeight="Bold" TextTrimming="CharacterEllipsis">
+						<Run Text="{Binding TrenutniKorisnik.Ime}"/>
+						<Run Text="{Binding TrenutniKorisnik.Prezime}"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding TrenutniKorisnik.Email}" Foreground="{StaticResource HintBrush}" FontSize="14" TextTrimming="CharacterEllipsis"/>
+                    <Separator Margin="0,20,0,0"/>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Top" Margin="10">
+                    <Button Content="Prikaži Sadržaj"
+                            Command="{Binding PrikaziSadrzajCommand}"
+                            Margin="5"
+                            Style="{StaticResource PrimaryButton}"/>
+
+                    <Button Content="Izmeni Podatke"
+                            Command="{Binding IzmeniPodatkeCommand}"
+                            Margin="5"
+                            Style="{StaticResource PrimaryButton}"
+                            Background="{StaticResource DisabledBrush}"/>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom" Margin="10">
+                    <Separator Margin="5"/>
+                    <Button Content="Odjavi se"
+                            Command="{Binding LogoutCommand}"
+                            Margin="5"
+                            Style="{StaticResource PrimaryButton}"
+                            Background="{StaticResource DisabledBrush}"/>
+                    <Button Content="Obriši Nalog"
+                            Command="{Binding ObrisiNalogCommand}"
+                            Margin="5"
+                            Style="{StaticResource PrimaryButton}"
+                            Background="{StaticResource ErrorBrush}"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Column="1" Margin="40">
+            <ContentControl Content="{Binding CurrentContentView}"/>
+        </Grid>
+
+    </Grid>
+</UserControl>
