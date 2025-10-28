@@ -73,8 +73,8 @@ namespace MusicCatalog.ViewModels
  if (Selected == null) return;
  var md = Selected.Source;
  if (MessageBox.Show($"Obrisati '{md.Naziv}'?", "Potvrda", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
- // remove from all genres lists first
- foreach (var z in _zanrRepo.GetAll())
+ // remove from all genres lists first - iterate a snapshot to avoid modifying during enumeration
+ foreach (var z in _zanrRepo.GetAll().ToList())
  {
  if (z.MuzickaDelaIDs.Remove(md.Id))
  {
