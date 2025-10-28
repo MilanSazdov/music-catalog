@@ -83,17 +83,24 @@ namespace MusicCatalog.ViewModels
                 ClearFields();
 
                 // --- ISPRAVLJENA LOGIKA ---
-                // Koristi if-else if da bi samo jedan View bio pozvan
-                if (ulogovaniKorisnik.Uloga == Uloga.Administrator)
+                // Pokrij sve uloge i dodaj bezbedan podrazumevani slučaj.
+                switch (ulogovaniKorisnik.Uloga)
                 {
-                    ShowAdminView?.Invoke();
+                    case Uloga.Administrator:
+                        ShowAdminView?.Invoke();
+                        break;
+
+                    case Uloga.RegistrovaniKorisnik:
+                        ShowRegistrovaniKorisnikView?.Invoke();
+                        break;
+
+                    // TODO: Kada bude dodat View za muzičkog urednika, zameni podrazumevano grananje
+                    // sa: ShowMuzickiUrednikView?.Invoke();
+                    default:
+                        // Privremeno: tretiraj sve ostale uloge kao registrovanog korisnika
+                        ShowRegistrovaniKorisnikView?.Invoke();
+                        break;
                 }
-                else if (ulogovaniKorisnik.Uloga == Uloga.RegistrovaniKorisnik)
-                {
-                    ShowRegistrovaniKorisnikView?.Invoke();
-                }
-                // TODO: Dodaj 'else if (ulogovaniKorisnik.Uloga == Uloga.MuzickiUrednik)'
-                // kada budeš imao taj View.
             }
             else
             {

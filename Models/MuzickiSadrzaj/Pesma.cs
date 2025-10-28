@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MusicCatalog.Models.MuzickiSadrzaj
 {
     public class Pesma : MuzickoDelo
     {
-        public Pesma(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrovi) : base(id, naziv, trajanje, datumIzdanja, zanrovi)
+        public Pesma() { }
+
+        public Pesma(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrIDs)
+            : base(id, naziv, trajanje, datumIzdanja, zanrIDs)
         {
         }
     }

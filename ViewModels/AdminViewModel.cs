@@ -1,8 +1,9 @@
 ﻿using MusicCatalog.Repositories;
 using MusicCatalog.Utils;
-using MusicCatalog.Views;
 using System;
 using System.Windows.Input;
+using MusicCatalog.Views;
+
 
 namespace MusicCatalog.ViewModels
 {
@@ -21,11 +22,12 @@ namespace MusicCatalog.ViewModels
         public ICommand ShowMuzickiSadrzajCommand { get; }
         public ICommand ShowZanroviCommand { get; }
         public ICommand LogoutCommand { get; }
+
         public AdminViewModel(AnketaRepository anketaRepository)
         {
             _anketaRepository = anketaRepository;
             _zanrRepo = new ZanrRepository();
-            _deloRepo = new MuzickoDeloRepository(_zanrRepo.GetAll());
+            _deloRepo = new MuzickoDeloRepository(_zanrRepo);
             ShowKorisniciCommand = new RelayCommand(_ => ShowKorisnici());
             ShowUredniciCommand = new RelayCommand(_ => ShowUrednici());
 
