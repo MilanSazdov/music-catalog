@@ -9,16 +9,22 @@ using System.Threading.Tasks;
 
 namespace MusicCatalog.Models.MuzickiSadrzaj
 {
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
+    [JsonDerivedType(typeof(Pesma), typeDiscriminator: "Pesma")]
+    [JsonDerivedType(typeof(Album), typeDiscriminator: "Album")]
     public abstract class MuzickoDelo
     {
         public int Id { get; set; }
-        public string Naziv { get; set; }
+        public string Naziv { get; set; } = string.Empty;
         public TimeSpan Trajanje { get; set; }
         public DateTime DatumIzdanja { get; set; }
 
 
         public List<int> ZanrIDs { get; set; } = new List<int>();
-        public MuzickoDelo(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrovi)
+
+        protected MuzickoDelo() { }
+
+        protected MuzickoDelo(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrovi)
         {
             Id = id;
             Naziv = naziv;
@@ -26,8 +32,5 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
             DatumIzdanja = datumIzdanja;
             ZanrIDs = zanrovi;
         }
-
-        
-
     }
 }

@@ -19,7 +19,12 @@
             <DataTemplate DataType="{x:Type viewmodels:AdminKorisniciViewModel}">
                 <local:AdminKorisniciView/>
             </DataTemplate>
-
+            <DataTemplate DataType="{x:Type viewmodels:AdminMuzickiSadrzajViewModel}">
+                <local:AdminMuzickiSadrzajView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:AdminZanroviViewModel}">
+                <local:AdminZanroviView/>
+            </DataTemplate>
         </UserControl.Resources>
 
         <Grid>
@@ -45,6 +50,8 @@
                         <Button Content="Prikazi Korisnike" Command="{Binding ShowKorisniciCommand}" Margin="5"  Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Prikazi Urednike" Command="{Binding ShowUredniciCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Prikazi Ankete" Command="{Binding ShowAnketeCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Muzicki sadrzaj" Command="{Binding ShowMuzickiSadrzajCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Zanrovi" Command="{Binding ShowZanroviCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
 
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Bottom" Margin="10">

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using MusicCatalog.Models.Umetnici;
 namespace MusicCatalog.Models.MuzickiSadrzaj
 {
     public class Zanr
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Naziv { get; set; }
         public List<int> MuzickaDelaIDs { get; set; } = new List<int>();
         public List<int> IzvodjaciIDs { get; set; } = new List<int>();
@@ -22,11 +22,11 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
 
         public void DodajPodzanr(Zanr podzanr)
         {
-            ZanrIDs.Add(podzanr.ID);
+            ZanrIDs.Add(podzanr.Id);
         }
         public void UkloniPodzanr(Zanr podzanr)
         {
-            ZanrIDs.Remove(podzanr.ID);
+            ZanrIDs.Remove(podzanr.Id);
         }
         public void DodajMuzickoDelo(MuzickoDelo muzickoDelo)
         {
@@ -36,15 +36,15 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
         {
             MuzickaDelaIDs.Remove(muzickoDelo.Id);
         }
-        /*
+        
         public void DodajIzvodjaca(Izvodjac izvodjac)
         {
-            IzvodjaciIDs.Add(izvodjac.ID);
+            IzvodjaciIDs.Add(izvodjac.Id);
         }
         public void UkloniIzvodjaca(Izvodjac izvodjac)
         {
-            IzvodjaciIDs.Remove(izvodjac.ID);
+            IzvodjaciIDs.Remove(izvodjac.Id);
         }
-        */
+        
     }
 }

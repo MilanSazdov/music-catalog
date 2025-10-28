@@ -18,7 +18,7 @@ namespace MusicCatalog.Repositories
 
         public List<Zanr> _zanrovi = new List<Zanr>();
 
-        ZanrRepository(string filePath = "Data/muzicka_dela.json")
+        public ZanrRepository(string filePath = "Data/zanrovi.json")
         {
             _filePath = filePath;
             _options = new JsonSerializerOptions
@@ -26,6 +26,7 @@ namespace MusicCatalog.Repositories
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
+            Load();
         }
 
         private void Load()
@@ -33,7 +34,7 @@ namespace MusicCatalog.Repositories
             if (!File.Exists(_filePath))
             {
                 _zanrovi = new List<Zanr>();
-                Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
+                Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
                 return;
             }
             try
@@ -44,7 +45,7 @@ namespace MusicCatalog.Repositories
                     _zanrovi = new List<Zanr>();
                     return;
                 }
-                _zanrovi = JsonSerializer.Deserialize<List<Zanr>>(json);
+                _zanrovi = JsonSerializer.Deserialize<List<Zanr>>(json, _options) ?? new List<Zanr>();
             }
             catch (JsonException)
             {
@@ -55,6 +56,7 @@ namespace MusicCatalog.Repositories
         private void Save()
         {
             string json = JsonSerializer.Serialize(_zanrovi, _options);
+            Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
             File.WriteAllText(_filePath, json);
         }
 
@@ -65,7 +67,7 @@ namespace MusicCatalog.Repositories
         }
         public Zanr? GetById(int id)
         {
-            return _zanrovi.FirstOrDefault(z => z.ID == id);
+            return _zanrovi.FirstOrDefault(z => z.Id == id);
         }
         public void Add(Zanr zanr)
         {
@@ -76,17 +78,16 @@ namespace MusicCatalog.Repositories
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it as needed
                 throw new ApplicationException("Greška prilikom dodavanja žanra.", ex);
             }
         }
         public void Update(Zanr zanr)
         {
-            var existingZanr = GetById(zanr.ID);
+            var existingZanr = GetById(zanr.Id);
             if (existingZanr != null)
             {
-                _zanrovi.Remove(existingZanr);
-                _zanrovi.Add(zanr);
+                int index = _zanrovi.IndexOf(existingZanr);
+                _zanrovi[index] = zanr;
                 Save();
             }
             else
@@ -113,7 +114,7 @@ namespace MusicCatalog.Repositories
             {
                 return 1;
             }
-            return _zanrovi.Max(z => z.ID) + 1;
+            return _zanrovi.Max(z => z.Id) + 1;
         }
         
     }

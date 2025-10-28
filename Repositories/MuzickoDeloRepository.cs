@@ -19,14 +19,14 @@ namespace MusicCatalog.Repositories
 
         public List<MuzickoDelo> _muzickaDela = new List<MuzickoDelo>();
 
-        MuzickoDeloRepository(List<Zanr> zanrovi,string filePath = "Data/muzicka_dela.json")
+        public MuzickoDeloRepository(List<Zanr> zanrovi, string filePath = "Data/muzicka_dela.json")
         {
+            _filePath = filePath;
             _options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
             Load();
-            
         }
         #region Json Load and Save
         private void Load()
@@ -34,7 +34,7 @@ namespace MusicCatalog.Repositories
             if (!File.Exists(_filePath))
             {
                 _muzickaDela = new List<MuzickoDelo>();
-                Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
+                Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace MusicCatalog.Repositories
                     _muzickaDela = new List<MuzickoDelo>();
                     return;
                 }
-                _muzickaDela = JsonSerializer.Deserialize<List<MuzickoDelo>>(json);
+                _muzickaDela = JsonSerializer.Deserialize<List<MuzickoDelo>>(json, _options) ?? new List<MuzickoDelo>();
             }
             catch (JsonException)
             {
@@ -57,6 +57,7 @@ namespace MusicCatalog.Repositories
         private void Save()
         {
             string json = JsonSerializer.Serialize(_muzickaDela, _options);
+            Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
             File.WriteAllText(_filePath, json);
         }
 #endregion
@@ -68,6 +69,10 @@ namespace MusicCatalog.Repositories
             {
                 //treba id samo postaviti   
                 ValidatateMuzickoDelo(muzickoDelo);
+                if (muzickoDelo.Id ==0)
+                {
+                    muzickoDelo.Id = GetNextId();
+                }
                 _muzickaDela.Add(muzickoDelo);
             }
             catch (Exception ex)
@@ -96,7 +101,8 @@ namespace MusicCatalog.Repositories
         }
         public int GetNextId()
         {
-            return _muzickaDela.Last().Id + 1;
+            if (_muzickaDela.Count ==0) return 1;
+            return _muzickaDela.Max(m => m.Id) +1;
         }
 
         public void Update(MuzickoDelo muzickoDelo)
