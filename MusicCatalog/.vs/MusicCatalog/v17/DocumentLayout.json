@@ -1,18 +1,109 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\",
+  "WorkspaceRootPath": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\musiccatalog\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\viewmodels\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:viewmodels\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\views\\loginview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:views\\loginview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\viewmodels\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:viewmodels\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\views\\loginview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:views\\loginview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\views\\registerview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:views\\registerview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\views\\registerview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:views\\registerview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\musiccatalog\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\musiccatalog\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\repositories\\korisnikrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:repositories\\korisnikrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\repositories\\ikorisnikrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:repositories\\ikorisnikrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\models\\registrovanikorisnik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:models\\registrovanikorisnik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\models\\muzickiurednik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:models\\muzickiurednik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\models\\korisnik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:models\\korisnik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\models\\administrator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:models\\administrator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\models\\enums\\uloga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:models\\enums\\uloga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\milan\\AppData\\Local\\Temp\\.vsdbgsrc\\8f80964c6d1660a9bad76c6f478e6f32cc63696afe2675319dbe79c622b57b65\\App.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\utils\\booleantovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:utils\\booleantovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\views\\loginview.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:views\\loginview.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\views\\registerview.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:views\\registerview.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\utils\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:utils\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\utils\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:utils\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\viewmodels\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:viewmodels\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|c:\\users\\milan\\onedrive\\desktop\\sims - final\\music-catalog\\musiccatalog\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A70AF926-8596-4CBE-9BAC-D7D848555E9F}|MusicCatalog.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,28 +113,129 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RegisterView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\RegisterView.xaml.cs",
+              "RelativeDocumentMoniker": "Views\\RegisterView.xaml.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\RegisterView.xaml.cs",
+              "RelativeToolTip": "Views\\RegisterView.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:53:50.843Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoginView.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\LoginView.xaml",
+              "RelativeDocumentMoniker": "Views\\LoginView.xaml",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\LoginView.xaml",
+              "RelativeToolTip": "Views\\LoginView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-28T00:06:10.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RegisterViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\RegisterViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\RegisterViewModel.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\RegisterViewModel.cs",
+              "RelativeToolTip": "ViewModels\\RegisterViewModel.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAswAQAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:53:20.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-27T23:49:23.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "KorisnikRepository.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Repositories\\KorisnikRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\KorisnikRepository.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Repositories\\KorisnikRepository.cs",
+              "RelativeToolTip": "Repositories\\KorisnikRepository.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAuwIAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:42:14.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LoginView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\LoginView.xaml.cs",
+              "RelativeDocumentMoniker": "Views\\LoginView.xaml.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\LoginView.xaml.cs",
+              "RelativeToolTip": "Views\\LoginView.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:53:06.563Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "LoginViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\LoginViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\LoginViewModel.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\LoginViewModel.cs",
+              "RelativeToolTip": "ViewModels\\LoginViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:52:28.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RegisterView.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\RegisterView.xaml",
+              "RelativeDocumentMoniker": "Views\\RegisterView.xaml",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\RegisterView.xaml",
+              "RelativeToolTip": "Views\\RegisterView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-28T00:06:29.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\App.xaml.cs",
               "RelativeDocumentMoniker": "App.xaml.cs",
-              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\App.xaml.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\App.xaml.cs",
               "RelativeToolTip": "App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAwDwAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-27T21:47:54.283Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 8,
               "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-10-27T21:46:23.37Z",
@@ -51,11 +243,206 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 9,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Services\\AuthService.cs",
+              "RelativeToolTip": "Services\\AuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:51:43.679Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\MainViewModel.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\MainViewModel.cs",
+              "RelativeToolTip": "ViewModels\\MainViewModel.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowBUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:52:04.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "RegistrovaniKorisnik.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\RegistrovaniKorisnik.cs",
+              "RelativeDocumentMoniker": "Models\\RegistrovaniKorisnik.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\RegistrovaniKorisnik.cs",
+              "RelativeToolTip": "Models\\RegistrovaniKorisnik.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAiwAAAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T22:24:13.153Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "MuzickiUrednik.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\MuzickiUrednik.cs",
+              "RelativeDocumentMoniker": "Models\\MuzickiUrednik.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\MuzickiUrednik.cs",
+              "RelativeToolTip": "Models\\MuzickiUrednik.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T22:24:56.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IKorisnikRepository.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Repositories\\IKorisnikRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IKorisnikRepository.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Repositories\\IKorisnikRepository.cs",
+              "RelativeToolTip": "Repositories\\IKorisnikRepository.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAYwCgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:41:35.481Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Korisnik.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\Korisnik.cs",
+              "RelativeDocumentMoniker": "Models\\Korisnik.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\Korisnik.cs",
+              "RelativeToolTip": "Models\\Korisnik.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T22:23:49.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Administrator.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\Administrator.cs",
+              "RelativeDocumentMoniker": "Models\\Administrator.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\Administrator.cs",
+              "RelativeToolTip": "Models\\Administrator.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAA/wAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T22:25:38.116Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Uloga.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\Enums\\Uloga.cs",
+              "RelativeDocumentMoniker": "Models\\Enums\\Uloga.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Models\\Enums\\Uloga.cs",
+              "RelativeToolTip": "Models\\Enums\\Uloga.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:40:42.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\AppData\\Local\\Temp\\.vsdbgsrc\\8f80964c6d1660a9bad76c6f478e6f32cc63696afe2675319dbe79c622b57b65\\App.xaml",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\8f80964c6d1660a9bad76c6f478e6f32cc63696afe2675319dbe79c622b57b65\\App.xaml",
+              "ToolTip": "C:\\Users\\milan\\AppData\\Local\\Temp\\.vsdbgsrc\\8f80964c6d1660a9bad76c6f478e6f32cc63696afe2675319dbe79c622b57b65\\App.xaml",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\8f80964c6d1660a9bad76c6f478e6f32cc63696afe2675319dbe79c622b57b65\\App.xaml",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAqwI0AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-28T00:24:33.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "BooleanToVisibilityConverter.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Utils\\BooleanToVisibilityConverter.cs",
+              "RelativeDocumentMoniker": "Utils\\BooleanToVisibilityConverter.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Utils\\BooleanToVisibilityConverter.cs",
+              "RelativeToolTip": "Utils\\BooleanToVisibilityConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T00:05:31.243Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "RegisterView.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\RegisterView.xaml",
+              "RelativeDocumentMoniker": "Views\\RegisterView.xaml",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\RegisterView.xaml",
+              "RelativeToolTip": "Views\\RegisterView.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFAAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-27T23:58:22.695Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "LoginView.xaml",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\LoginView.xaml",
+              "RelativeDocumentMoniker": "Views\\LoginView.xaml",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Views\\LoginView.xaml",
+              "RelativeToolTip": "Views\\LoginView.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD8AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-27T23:58:08.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "PasswordHelper.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Utils\\PasswordHelper.cs",
+              "RelativeDocumentMoniker": "Utils\\PasswordHelper.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Utils\\PasswordHelper.cs",
+              "RelativeToolTip": "Utils\\PasswordHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:51:24.216Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "RelayCommand.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Utils\\RelayCommand.cs",
+              "RelativeDocumentMoniker": "Utils\\RelayCommand.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\Utils\\RelayCommand.cs",
+              "RelativeToolTip": "Utils\\RelayCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:51:08.247Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ViewModelBase.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\ViewModelBase.cs",
+              "RelativeDocumentMoniker": "ViewModels\\ViewModelBase.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\ViewModels\\ViewModelBase.cs",
+              "RelativeToolTip": "ViewModels\\ViewModelBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:50:48.87Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
               "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

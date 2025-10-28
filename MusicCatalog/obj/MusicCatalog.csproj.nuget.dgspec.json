@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MusicCatalog.csproj": {}
+    "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MusicCatalog.csproj": {}
   },
   "projects": {
-    "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MusicCatalog.csproj": {
+    "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MusicCatalog.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MusicCatalog.csproj",
+        "projectUniqueName": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MusicCatalog.csproj",
         "projectName": "MusicCatalog",
-        "projectPath": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\MusicCatalog.csproj",
+        "projectPath": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\MusicCatalog.csproj",
         "packagesPath": "C:\\Users\\milan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\MusicCatalog\\obj\\",
+        "outputPath": "C:\\Users\\milan\\OneDrive\\Desktop\\SIMS - Final\\music-catalog\\MusicCatalog\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,12 @@
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
+          "dependencies": {
+            "MaterialDesignThemes": {
+              "target": "Package",
+              "version": "[5.3.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
