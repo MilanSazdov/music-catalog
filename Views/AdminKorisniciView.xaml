@@ -6,7 +6,93 @@
              xmlns:local="clr-namespace:MusicCatalog.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock>Korisnici View</TextBlock>
+    <Grid Margin="16">
+        <StackPanel>
+
+            <DataGrid ItemsSource="{Binding Korisnici}"
+            SelectedItem="{Binding SelectedKorisnik, Mode=TwoWay}"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            CanUserAddRows="False"
+            MinHeight="300"
+            Background="{StaticResource SurfaceBrush}"
+            RowBackground="{StaticResource SurfaceBrush}"
+            AlternatingRowBackground="{StaticResource SurfaceBrush}"
+            GridLinesVisibility="None"
+            FocusVisualStyle="{x:Null}"
+            BorderBrush="{StaticResource HintBrush}"
+            HeadersVisibility="Column">
+
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="6,2" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                            </Trigger>
+
+                            <DataTrigger Binding="{Binding Blokiran}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="6,4" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="E-Mail" Binding="{Binding Email}" Width="*"/>
+                    <DataGridTextColumn Header="Ime" Binding="{Binding Ime}" Width="*" />
+                    <DataGridTextColumn Header="Prezime" Binding="{Binding Prezime}" Width="*" />
+
+                    <DataGridTemplateColumn Header="Akcije" Width="160">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+  
+                                    <Button Content="Blokiraj"
+                                    Command="{Binding DataContext.BlockCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Background="{StaticResource ErrorBrush}"
+                                    Padding="6"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>

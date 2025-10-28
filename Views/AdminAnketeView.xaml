@@ -31,21 +31,21 @@
         AlternatingRowBackground="{StaticResource SurfaceBrush}"
         GridLinesVisibility="None"
         FocusVisualStyle="{x:Null}"
-        BorderBrush="{StaticResource PrimaryBrush}"
+        BorderBrush="{StaticResource HintBrush}"
         HeadersVisibility="Column">
 
                 <DataGrid.Resources>
                     <Style TargetType="DataGridCell">
                         <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
                         <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
-                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
                         <Setter Property="BorderThickness" Value="0,0,1,1" />
                         <Setter Property="Padding" Value="6,2" />
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
                                 <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
                             </Trigger>
                             
                             <Trigger Property="IsMouseOver" Value="True">
@@ -58,7 +58,7 @@
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
                         <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
-                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
                         <Setter Property="BorderThickness" Value="0,0,1,1" />
                         <Setter Property="Padding" Value="6,4" />
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -67,12 +67,12 @@
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
                         <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
-                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
                         <Setter Property="BorderThickness" Value="0" />
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource HintBrush}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>

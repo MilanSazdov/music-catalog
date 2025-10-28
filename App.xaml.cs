@@ -12,14 +12,18 @@ namespace MusicCatalog
     {
         private readonly AuthService _authService;
         private readonly IKorisnikRepository _korisnikRepository;
-        private readonly AnketaRepository _anketaRepository; // DODATO: Repozitorijum koji nedostaje
+        private readonly AnketaRepository _anketaRepository;
+        private readonly IZanrRepository _zanrRepository;
+
         private readonly MainViewModel _mainViewModel;
 
         public App()
         {
             // 1. Kreiraj servise i repozitorijume
             _korisnikRepository = new KorisnikRepository("Data/korisnici.json");
-            _anketaRepository = new AnketaRepository("Data/ankete.json"); // DODATO: Kreiraj repozitorijum
+            _anketaRepository = new AnketaRepository("Data/ankete.json");
+            _zanrRepository = new ZanrRepository("Data/zanrovi.json");
+
             _authService = new AuthService(_korisnikRepository);
 
             // 2. Kreiraj glavni ViewModel
@@ -63,7 +67,7 @@ namespace MusicCatalog
         {
             // --- ISPRAVLJENO ---
             // 1. Prosledi AnketaRepository koji AdminViewModel traži
-            var adminVM = new AdminViewModel(_anketaRepository);
+            var adminVM = new AdminViewModel(_anketaRepository, _korisnikRepository, _zanrRepository);
 
             // 2. Pretplati se na 'LoggedOut' događaj umesto postavljanja 'ShowLoginView' propertija
             adminVM.LoggedOut += ShowLoginView;

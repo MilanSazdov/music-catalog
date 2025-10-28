@@ -1,0 +1,105 @@
+﻿<Window x:Class="MusicCatalog.Views.UrednikEditView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:MusicCatalog.Views"
+        xmlns:utils="clr-namespace:MusicCatalog.Utils"
+        mc:Ignorable="d"
+        Title="UrednikEditView"
+                
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStyle="None">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8"
+				   Padding="40"
+				   Margin="20"
+				   MaxWidth="450" Effect="{StaticResource ShadowEffect}">
+                <StackPanel>
+                    <TextBlock Text="Kreiraj novi nalog"
+                               FontSize="24" FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,32"/>
+
+                    <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
+                    <TextBox
+                        Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                        Style="{StaticResource ModernTextBox}"
+                        Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
+                    <TextBox
+                        Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                        Style="{StaticResource ModernTextBox}"
+                        Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Email adresa" Style="{StaticResource FormLabel}"/>
+                    <TextBox
+                        Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                        Style="{StaticResource ModernTextBox}"
+                        Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Lozinka" Style="{StaticResource FormLabel}"/>
+                    <PasswordBox
+                        utils:PasswordHelper.Attach="True"
+                        utils:PasswordHelper.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                        Style="{StaticResource ModernPasswordBox}"
+                        Margin="0,0,0,20"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox ItemsSource="{Binding SviZanrovi}"
+                                  SelectedItem="{Binding NewZanr}" Width="150"/>
+
+                        <Button Content="Add" Command="{Binding AddLanguageCommand}" Width="60" IsEnabled="{Binding CanEditLanguages}" Style="{StaticResource PrimaryButton}"/>
+                    </StackPanel>
+                    
+                    <DataGrid ItemsSource="{Binding Specijalizacija}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      Height="150" Margin="0,5,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Naziv" Binding="{Binding Naziv}" Width="*"/>
+                            <DataGridTemplateColumn Header="Actions" Width="70">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Remove"
+                                            Command="{Binding DataContext.RemoveZanrCommand,
+                                            RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Style="{StaticResource PrimaryButton}"
+                                            Background="{StaticResource ErrorBrush}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock
+                        Text="{Binding ErrorMessage}"
+                        Foreground="{StaticResource ErrorBrush}"
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,12"
+                        HorizontalAlignment="Center"
+                        Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+
+                    <Button
+                        Content="REGISTRUJ SE"
+                        Command="{Binding RegisterCommand}"
+                        Style="{StaticResource PrimaryButton}"
+                        Margin="0,16,0,0"
+                        HorizontalAlignment="Stretch"/>
+
+                    <Button
+                        Content="Već imaš nalog? Prijavi se"
+                        Command="{Binding NavigateToLoginCommand}"
+                        Style="{StaticResource TextButton}"
+                        Margin="0,24,0,0"
+                        HorizontalAlignment="Center"/>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Window>
