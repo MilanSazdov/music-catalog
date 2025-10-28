@@ -1,59 +1,97 @@
-﻿using MusicCatalog.Services; // <-- DODAJ OVAJ RED
+﻿using MusicCatalog.Services;
 using MusicCatalog.Utils;
 using System;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 namespace MusicCatalog.ViewModels
 {
-    public class RegisterViewModel : ViewModelBase
+    public class RegisterViewModel : ViewModelBase, IDataErrorInfo
     {
-        // Ova linija sada radi
         private readonly AuthService _authService;
-
         public Action ShowLoginView { get; set; }
 
-        private string _ime;
+        #region Properties
+        private string _ime = string.Empty;
         public string Ime
         {
             get => _ime;
-            set => SetField(ref _ime, value);
+            set
+            {
+                if (SetField(ref _ime, value))
+                {
+                    OnPropertyChanged(nameof(CanRegister));
+                }
+            }
         }
 
-        // (Ostatak tvoje klase ostaje isti)
-        private string _prezime;
+        private string _prezime = string.Empty;
         public string Prezime
         {
             get => _prezime;
-            set => SetField(ref _prezime, value);
+            set
+            {
+                if (SetField(ref _prezime, value))
+                {
+                    OnPropertyChanged(nameof(CanRegister));
+                }
+            }
         }
 
-        private string _email;
+        private string _email = string.Empty;
         public string Email
         {
             get => _email;
-            set => SetField(ref _email, value);
+            set
+            {
+                if (SetField(ref _email, value))
+                {
+                    
+                    if (!string.IsNullOrEmpty(ErrorMessage) && ErrorMessage.Contains("već postoji"))
+                    {
+                        ErrorMessage = string.Empty;
+                    }
+                    OnPropertyChanged(nameof(CanRegister));
+                }
+            }
         }
 
-        private string _password;
+        private string _password = string.Empty;
         public string Password
         {
             get => _password;
-            set => SetField(ref _password, value);
+            set
+            {
+                if (SetField(ref _password, value))
+                {
+                    OnPropertyChanged(nameof(CanRegister));
+                    OnPropertyChanged(nameof(ConfirmPassword));
+                }
+            }
         }
 
-        private string _confirmPassword;
+        private string _confirmPassword = string.Empty;
         public string ConfirmPassword
         {
             get => _confirmPassword;
-            set => SetField(ref _confirmPassword, value);
+            set
+            {
+                if (SetField(ref _confirmPassword, value))
+                {
+                    OnPropertyChanged(nameof(CanRegister));
+                }
+            }
         }
 
-        private string _errorMessage;
+        private string _errorMessage = string.Empty;
         public string ErrorMessage
         {
             get => _errorMessage;
+            
             set => SetField(ref _errorMessage, value);
         }
+        #endregion
 
         public ICommand RegisterCommand { get; }
         public ICommand NavigateToLoginCommand { get; }
@@ -66,38 +104,116 @@ namespace MusicCatalog.ViewModels
             ShowLoginView = () => { };
         }
 
+        
         private bool CanRegister(object? parameter)
         {
-            return !string.IsNullOrEmpty(Ime) &&
-                   !string.IsNullOrEmpty(Prezime) &&
-                   !string.IsNullOrEmpty(Email) &&
-                   !string.IsNullOrEmpty(Password) &&
-                   Password == ConfirmPassword;
+            return IsValid;
         }
 
         private void OnRegister(object? parameter)
         {
-            if (Password != ConfirmPassword)
-            {
-                ErrorMessage = "Lozinke se ne poklapaju.";
-                return;
-            }
+            
+            ErrorMessage = string.Empty;
 
             var noviKorisnik = _authService.Register(Ime, Prezime, Email, Password);
 
             if (noviKorisnik != null)
             {
+                
+
+                
+                ClearFields();
+
+                
                 ShowLoginView?.Invoke();
             }
             else
             {
-                ErrorMessage = "Korisnik sa ovim email-om već postoji.";
+                
+                ErrorMessage = "Korisnik sa ovom email adresom već postoji.";
             }
         }
 
+        private void ClearFields()
+        {
+            Ime = string.Empty;
+            Prezime = string.Empty;
+            Email = string.Empty;
+            Password = string.Empty;
+            ConfirmPassword = string.Empty;
+            ErrorMessage = string.Empty;
+        }
+
+
         private void OnNavigateToLogin(object? parameter)
         {
+            ClearFields();
             ShowLoginView?.Invoke();
         }
+
+        #region IDataErrorInfo Implementacija (Validacija)
+
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string? error = null;
+
+                switch (columnName)
+                {
+                    case nameof(Ime):
+                        if (string.IsNullOrWhiteSpace(Ime))
+                            error = "Ime je obavezno.";
+                        break;
+
+                    case nameof(Prezime):
+                        if (string.IsNullOrWhiteSpace(Prezime))
+                            error = "Prezime je obavezno.";
+                        break;
+
+                    case nameof(Email):
+                        if (string.IsNullOrWhiteSpace(Email))
+                            error = "Email je obavezan.";
+                        else if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                            error = "Email nije u ispravnom formatu.";
+                        break;
+
+                    case nameof(Password):
+                        if (string.IsNullOrWhiteSpace(Password))
+                            error = "Lozinka je obavezna.";
+                        else if (Password.Length < 6)
+                            error = "Lozinka mora imati bar 6 karaktera.";
+                        break;
+
+                    case nameof(ConfirmPassword):
+                        if (string.IsNullOrWhiteSpace(ConfirmPassword))
+                            error = "Potvrda lozinke je obavezna.";
+                        else if (Password != ConfirmPassword)
+                            error = "Lozinke se ne poklapaju.";
+                        break;
+                }
+
+                return error;
+            }
+        }
+
+        private bool IsValid
+        {
+            get
+            {
+                string[] properties = { nameof(Ime), nameof(Prezime), nameof(Email), nameof(Password), nameof(ConfirmPassword) };
+                foreach (var prop in properties)
+                {
+                    if (!string.IsNullOrEmpty(this[prop]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        #endregion
     }
 }

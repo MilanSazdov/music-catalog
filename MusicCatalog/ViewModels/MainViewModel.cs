@@ -1,12 +1,11 @@
-﻿// Nema 'using' izjava, ali pazi na namespace
+﻿
 namespace MusicCatalog.ViewModels
 {
-    // Greška je verovatno bila jer ti je ovde namespace bio pogrešan.
-    // Obe klase, MainViewModel i ViewModelBase, moraju biti u 'MusicCatalog.ViewModels'
 
-    public class MainViewModel : ViewModelBase // <-- Ova linija sada radi
+
+    public class MainViewModel : ViewModelBase
     {
-        private ViewModelBase _trenutniView; // <-- I ova linija sada radi
+        private ViewModelBase _trenutniView;
 
         public ViewModelBase TrenutniView
         {
