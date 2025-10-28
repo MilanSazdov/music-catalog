@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using MusicCatalog.Models.Enums; // <-- DODAJ OVAJ RED
 
-namespace MusicCatalog.Models
+namespace MusicCatalog.Models.Korisnici
 {
     [JsonDerivedType(typeof(Administrator), typeDiscriminator: "admin")]
     [JsonDerivedType(typeof(MuzickiUrednik), typeDiscriminator: "urednik")]

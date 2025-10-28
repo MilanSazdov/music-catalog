@@ -2,7 +2,7 @@
 using MusicCatalog.Models.Enums;
 using System;
 
-namespace MusicCatalog.Models
+namespace MusicCatalog.Models.Korisnici
 {
     // ISPRAVKA: Promenjeno iz 'internal class' u 'public class'
     public class MuzickiUrednik : Korisnik
