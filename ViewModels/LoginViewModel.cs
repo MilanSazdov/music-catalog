@@ -1,6 +1,6 @@
-﻿// Datoteka: ViewModels/LoginViewModel.cs
+// Datoteka: ViewModels/LoginViewModel.cs
 using MusicCatalog.Models;
-using MusicCatalog.Models.Enums; // <-- Dodaj ovo za Uloga
+using MusicCatalog.Models.Enums;
 using MusicCatalog.Services;
 using MusicCatalog.Utils;
 using System;
@@ -11,11 +11,11 @@ namespace MusicCatalog.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private readonly AuthService _authService;
-
-        // Preimenovao sam ShowGlavniAppView u ShowRegistrovaniKorisnikView radi jasnoće
         public Action ShowRegisterView { get; set; }
         public Action ShowRegistrovaniKorisnikView { get; set; }
         public Action ShowAdminView { get; set; }
+
+        public Action ShowMuzickiUrednikView { get; set; }
 
         #region Properties
         private string _email = string.Empty;
@@ -61,10 +61,10 @@ namespace MusicCatalog.ViewModels
             LoginCommand = new RelayCommand(OnLogin, CanLogin);
             NavigateToRegisterCommand = new RelayCommand(OnNavigateToRegister);
 
-            // Inicijalizacija da se izbegne pad aplikacije
             ShowRegisterView = () => { };
             ShowRegistrovaniKorisnikView = () => { };
             ShowAdminView = () => { };
+            ShowMuzickiUrednikView = () => { };
         }
 
         private bool CanLogin(object? parameter)
@@ -82,24 +82,17 @@ namespace MusicCatalog.ViewModels
                 Korisnik ulogovaniKorisnik = _authService.TrenutniKorisnik!;
                 ClearFields();
 
-                // --- ISPRAVLJENA LOGIKA ---
-                // Pokrij sve uloge i dodaj bezbedan podrazumevani slučaj.
-                switch (ulogovaniKorisnik.Uloga)
+                if (ulogovaniKorisnik.Uloga == Uloga.Administrator)
                 {
-                    case Uloga.Administrator:
-                        ShowAdminView?.Invoke();
-                        break;
-
-                    case Uloga.RegistrovaniKorisnik:
-                        ShowRegistrovaniKorisnikView?.Invoke();
-                        break;
-
-                    // TODO: Kada bude dodat View za muzičkog urednika, zameni podrazumevano grananje
-                    // sa: ShowMuzickiUrednikView?.Invoke();
-                    default:
-                        // Privremeno: tretiraj sve ostale uloge kao registrovanog korisnika
-                        ShowRegistrovaniKorisnikView?.Invoke();
-                        break;
+                    ShowAdminView?.Invoke();
+                }
+                else if (ulogovaniKorisnik.Uloga == Uloga.RegistrovaniKorisnik)
+                {
+                    ShowRegistrovaniKorisnikView?.Invoke();
+                }
+                else if (ulogovaniKorisnik.Uloga == Uloga.MuzickiUrednik)
+                {
+                    ShowMuzickiUrednikView?.Invoke();
                 }
             }
             else

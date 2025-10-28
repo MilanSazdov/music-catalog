@@ -5,7 +5,7 @@ using System;
 
 namespace MusicCatalog.Models
 {
-    // ISPRAVKA: Promenjeno iz 'internal class' u 'public class'
+    
     public class MuzickiUrednik : Korisnik
     {
         public MuzickiUrednik(string email, string ime, string prezime, string lozinka)
@@ -16,7 +16,6 @@ namespace MusicCatalog.Models
 
         public List<Zanr> Specijalizacija { get; set; }
 
-        // --- Metode iz UML dijagrama ---
         public void dodavanjeAlbuma() { }
         public void dodavanjeGrupe() { }
         public void dodavanjeIzvodjaca() { }

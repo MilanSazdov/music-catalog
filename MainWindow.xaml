@@ -10,7 +10,8 @@
         
         Title="Music Catalog" 
         Height="600" Width="400"
-        WindowStartupLocation="CenterScreen"
+        
+WindowStartupLocation="CenterScreen"
         WindowStyle="SingleBorderWindow"
         FontFamily="Segoe UI"
         Background="#FFFFFFFF">
@@ -23,7 +24,12 @@
             <views:RegisterView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:AdminViewModel}">
+
             <views:AdminView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:MuzickiUrednikViewModel}">
+            <views:MuzickiUrednikView/>
         </DataTemplate>
 
     </Window.Resources>

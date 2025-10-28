@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MusicCatalog.Models.Umetnici
 {
-    public class Izvodjac: MuzickiUmetnik
+    public class Izvodjac : MuzickiUmetnik
     {
         public string Ime;
         public string Prezime;
