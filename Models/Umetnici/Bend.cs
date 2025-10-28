@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MusicCatalog.Models.Umetnici
 {
-    public class Bend: MuzickiUmetnik
+    public class Bend : MuzickiUmetnik
     {
         public string Naziv;
         public DateOnly DatumNastanka;
         bool Aktivan = true;
-        
-        Bend(string naziv, DateOnly datumNastanka, string opis, string slika,bool aktivan = true)
+
+        Bend(string naziv, DateOnly datumNastanka, string opis, string slika, bool aktivan = true)
         {
             Naziv = naziv;
             DatumNastanka = datumNastanka;
@@ -20,7 +20,7 @@ namespace MusicCatalog.Models.Umetnici
             Opis = opis;
             Slika = slika;
         }
-    
+
 
 
 

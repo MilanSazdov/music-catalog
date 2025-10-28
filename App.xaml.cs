@@ -53,6 +53,10 @@ namespace MusicCatalog
             loginVM.ShowRegisterView = ShowRegisterView;
             loginVM.ShowAdminView = ShowAdminView;
             loginVM.ShowRegistrovaniKorisnikView = ShowRegistrovaniKorisnikView;
+
+            // <-- DODAJ OVAJ RED -->
+            loginVM.ShowMuzickiUrednikView = ShowMuzickiUrednikView;
+
             _mainViewModel.TrenutniView = loginVM;
         }
 
@@ -80,6 +84,14 @@ namespace MusicCatalog
             var korisnikVM = new RegistrovaniKorisnikViewModel(_authService);
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
+        }
+
+        // <-- DODAJ CELU OVU METODU -->
+        private void ShowMuzickiUrednikView()
+        {
+            var urednikVM = new MuzickiUrednikViewModel(_authService);
+            urednikVM.ShowLoginView = ShowLoginView;
+            _mainViewModel.TrenutniView = urednikVM;
         }
     }
 }
