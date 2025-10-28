@@ -36,6 +36,7 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
         {
             MuzickaDelaIDs.Remove(muzickoDelo.Id);
         }
+        /*
         public void DodajIzvodjaca(Izvodjac izvodjac)
         {
             IzvodjaciIDs.Add(izvodjac.ID);
@@ -44,5 +45,6 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
         {
             IzvodjaciIDs.Remove(izvodjac.ID);
         }
+        */
     }
 }

@@ -1,4 +1,4 @@
-﻿using MusicCatalog.Models.Korisnici;
+﻿using MusicCatalog.Models;
 using MusicCatalog.Models.MuzickiSadrzaj;
 using System;
 using System.Collections.Generic;

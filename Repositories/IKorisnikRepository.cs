@@ -1,4 +1,4 @@
-﻿using MusicCatalog.Models.Korisnici;
+﻿using MusicCatalog.Models;
 using System.Collections.Generic;
 
 namespace MusicCatalog.Repositories

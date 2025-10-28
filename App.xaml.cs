@@ -3,7 +3,7 @@ using MusicCatalog.Repositories;
 using MusicCatalog.Services;
 using MusicCatalog.ViewModels;
 using System.Windows;
-using MusicCatalog.Models.Korisnici;
+
 
 namespace MusicCatalog
 {

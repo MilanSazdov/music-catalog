@@ -8,5 +8,8 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
 {
     public class Album : MuzickoDelo
     {
+        public Album(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrovi) : base(id, naziv, trajanje, datumIzdanja, zanrovi)
+        {
+        }
     }
 }
