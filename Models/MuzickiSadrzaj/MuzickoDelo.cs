@@ -19,6 +19,7 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
         public TimeSpan Trajanje { get; set; }
         public DateTime DatumIzdanja { get; set; }
 
+        public string Slika { get; set; } = string.Empty;
 
         public List<int> ZanrIDs { get; set; } = new List<int>();
 

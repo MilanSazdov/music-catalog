@@ -77,33 +77,76 @@
  <ColumnDefinition Width="16"/>
  <ColumnDefinition Width="*"/>
  </Grid.ColumnDefinitions>
- <GroupBox Header="Podzanrovi" Background="{StaticResource SurfaceBrush}">
- <DataGrid ItemsSource="{Binding Podzanrovi}" AutoGenerateColumns="False" CanUserAddRows="False" Background="{StaticResource SurfaceBrush}" RowBackground="{StaticResource SurfaceBrush}" AlternatingRowBackground="{StaticResource SurfaceBrush}" GridLinesVisibility="None" FocusVisualStyle="{x:Null}" BorderBrush="{StaticResource PrimaryBrush}" HeadersVisibility="Column">
+ <!-- Podzanrovi -->
+ <GroupBox Header="Podzanrovi" Background="#000" BorderBrush="#800080" Foreground="White">
+ <DataGrid ItemsSource="{Binding Podzanrovi}" AutoGenerateColumns="False" CanUserAddRows="False" Background="#000" RowBackground="#000" AlternatingRowBackground="#111" GridLinesVisibility="None" FocusVisualStyle="{x:Null}" BorderBrush="#800080" HeadersVisibility="Column" Foreground="White">
+ <DataGrid.Resources>
+ <Style TargetType="DataGridColumnHeader">
+ <Setter Property="Background" Value="#000"/>
+ <Setter Property="Foreground" Value="White"/>
+ <Setter Property="BorderBrush" Value="#800080"/>
+ <Setter Property="BorderThickness" Value="0,0,1,1"/>
+ </Style>
+ <Style TargetType="DataGridCell">
+ <Setter Property="Background" Value="#000"/>
+ <Setter Property="Foreground" Value="White"/>
+ <Setter Property="BorderBrush" Value="#800080"/>
+ <Setter Property="BorderThickness" Value="0,0,1,1"/>
+ </Style>
+ </DataGrid.Resources>
  <DataGrid.Columns>
  <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="60"/>
  <DataGridTextColumn Header="Naziv" Binding="{Binding Naziv}" Width="*"/>
- <DataGridTemplateColumn Header="Akcije" Width="120">
+ <DataGridTemplateColumn Header="Akcije" Width="100">
  <DataGridTemplateColumn.CellTemplate>
  <DataTemplate>
- <Button Content="Ukloni" Command="{Binding DataContext.RemovePodzanrCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Padding="6"/>
+ <Button Content="Ukloni" Command="{Binding DataContext.RemovePodzanrCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Padding="4" Margin="2" FontSize="12">
+ <Button.BorderBrush>#800080</Button.BorderBrush>
+ <Button.Background>#111</Button.Background>
+ <Button.Foreground>White</Button.Foreground>
+ </Button>
  </DataTemplate>
  </DataGridTemplateColumn.CellTemplate>
  </DataGridTemplateColumn>
  </DataGrid.Columns>
  </DataGrid>
  </GroupBox>
+ <!-- Middle add button -->
  <StackPanel Grid.Column="1" VerticalAlignment="Center">
- <Button Content=">>" Command="{Binding AddPodzanrCommand}" Style="{StaticResource PrimaryButton}"/>
+ <Button Content=">>" Command="{Binding AddPodzanrCommand}" Padding="4" FontSize="12" Margin="0,8" Width="40" Height="28">
+ <Button.BorderBrush>#800080</Button.BorderBrush>
+ <Button.Background>#111</Button.Background>
+ <Button.Foreground>White</Button.Foreground>
+ </Button>
  </StackPanel>
- <GroupBox Grid.Column="2" Header="Dostupni podzanrovi" Background="{StaticResource SurfaceBrush}">
- <DataGrid ItemsSource="{Binding DostupniPodzanrovi}" AutoGenerateColumns="False" CanUserAddRows="False" Background="{StaticResource SurfaceBrush}" RowBackground="{StaticResource SurfaceBrush}" AlternatingRowBackground="{StaticResource SurfaceBrush}" GridLinesVisibility="None" FocusVisualStyle="{x:Null}" BorderBrush="{StaticResource PrimaryBrush}" HeadersVisibility="Column">
+ <!-- Dostupni podzanrovi -->
+ <GroupBox Grid.Column="2" Header="Dostupni podzanrovi" Background="#000" BorderBrush="#800080" Foreground="White">
+ <DataGrid ItemsSource="{Binding DostupniPodzanrovi}" AutoGenerateColumns="False" CanUserAddRows="False" Background="#000" RowBackground="#000" AlternatingRowBackground="#111" GridLinesVisibility="None" FocusVisualStyle="{x:Null}" BorderBrush="#800080" HeadersVisibility="Column" Foreground="White">
+ <DataGrid.Resources>
+ <Style TargetType="DataGridColumnHeader">
+ <Setter Property="Background" Value="#000"/>
+ <Setter Property="Foreground" Value="White"/>
+ <Setter Property="BorderBrush" Value="#800080"/>
+ <Setter Property="BorderThickness" Value="0,0,1,1"/>
+ </Style>
+ <Style TargetType="DataGridCell">
+ <Setter Property="Background" Value="#000"/>
+ <Setter Property="Foreground" Value="White"/>
+ <Setter Property="BorderBrush" Value="#800080"/>
+ <Setter Property="BorderThickness" Value="0,0,1,1"/>
+ </Style>
+ </DataGrid.Resources>
  <DataGrid.Columns>
  <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="60"/>
  <DataGridTextColumn Header="Naziv" Binding="{Binding Naziv}" Width="*"/>
- <DataGridTemplateColumn Header="Akcije" Width="120">
+ <DataGridTemplateColumn Header="Akcije" Width="100">
  <DataGridTemplateColumn.CellTemplate>
  <DataTemplate>
- <Button Content="Dodaj" Command="{Binding DataContext.AddPodzanrFromListCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Padding="6"/>
+ <Button Content="Dodaj" Command="{Binding DataContext.AddPodzanrFromListCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Padding="4" Margin="2" FontSize="12">
+ <Button.BorderBrush>#800080</Button.BorderBrush>
+ <Button.Background>#111</Button.Background>
+ <Button.Foreground>White</Button.Foreground>
+ </Button>
  </DataTemplate>
  </DataGridTemplateColumn.CellTemplate>
  </DataGridTemplateColumn>

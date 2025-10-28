@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.IO;
 
 namespace MusicCatalog.ViewModels
 {
@@ -32,8 +33,18 @@ namespace MusicCatalog.ViewModels
 
  AddPesmaCommand = new RelayCommand(_ => OpenEdit(false));
  AddAlbumCommand = new RelayCommand(_ => OpenEdit(true));
- EditCommand = new RelayCommand(_ => OpenEdit(Selected?.Source is Album, Selected?.Id), _ => Selected != null);
- DeleteCommand = new RelayCommand(_ => DeleteSelected(), _ => Selected != null);
+ EditCommand = new RelayCommand(p =>
+ {
+ var item = p as MuzickoDeloView ?? Selected;
+ OpenEdit(item?.Source is Album, item?.Id);
+ }, p => (p as MuzickoDeloView) != null || Selected != null);
+ DeleteCommand = new RelayCommand(p =>
+ {
+ var item = p as MuzickoDeloView ?? Selected;
+ if (item == null) return;
+ Selected = item;
+ DeleteSelected();
+ }, p => (p as MuzickoDeloView) != null || Selected != null);
 
  Load();
  }
@@ -83,6 +94,24 @@ namespace MusicCatalog.ViewModels
  public DateTime DatumIzdanja => Source.DatumIzdanja;
  public string Tip { get; }
  public MuzickoDelo Source { get; }
+ public string Slika => Source.Slika;
+ public string ImagePath
+ {
+ get
+ {
+ if (string.IsNullOrWhiteSpace(Slika)) return string.Empty;
+ // If already rooted, return as is
+ if (Path.IsPathRooted(Slika)) return Slika;
+ // If already under Data, keep it, otherwise combine with Data folder
+ var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+ var candidate = Slika.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+ if (candidate.StartsWith("Data" + Path.DirectorySeparatorChar))
+ {
+ return Path.GetFullPath(Path.Combine(baseDir, candidate));
+ }
+ return Path.GetFullPath(Path.Combine(baseDir, "Data", candidate));
+ }
+ }
  public MuzickoDeloView(MuzickoDelo src, string tip)
  {
  Source = src; Tip = tip;
