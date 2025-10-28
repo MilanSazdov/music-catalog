@@ -1,4 +1,5 @@
-﻿using MusicCatalog.Services;
+﻿// Datoteka: ViewModels/RegisterViewModel.cs
+using MusicCatalog.Services;
 using MusicCatalog.Utils;
 using System;
 using System.ComponentModel;
@@ -47,7 +48,6 @@ namespace MusicCatalog.ViewModels
             {
                 if (SetField(ref _email, value))
                 {
-                    
                     if (!string.IsNullOrEmpty(ErrorMessage) && ErrorMessage.Contains("već postoji"))
                     {
                         ErrorMessage = string.Empty;
@@ -66,7 +66,7 @@ namespace MusicCatalog.ViewModels
                 if (SetField(ref _password, value))
                 {
                     OnPropertyChanged(nameof(CanRegister));
-                    OnPropertyChanged(nameof(ConfirmPassword));
+                    OnPropertyChanged(nameof(ConfirmPassword)); // Ažuriraj i potvrdu
                 }
             }
         }
@@ -88,7 +88,6 @@ namespace MusicCatalog.ViewModels
         public string ErrorMessage
         {
             get => _errorMessage;
-            
             set => SetField(ref _errorMessage, value);
         }
         #endregion
@@ -104,32 +103,24 @@ namespace MusicCatalog.ViewModels
             ShowLoginView = () => { };
         }
 
-        
         private bool CanRegister(object? parameter)
         {
+            // Dozvoli registraciju samo ako su SVI podaci validni
             return IsValid;
         }
 
         private void OnRegister(object? parameter)
         {
-            
             ErrorMessage = string.Empty;
-
             var noviKorisnik = _authService.Register(Ime, Prezime, Email, Password);
 
             if (noviKorisnik != null)
             {
-                
-
-                
                 ClearFields();
-
-                
-                ShowLoginView?.Invoke();
+                ShowLoginView?.Invoke(); // Vrati se na login
             }
             else
             {
-                
                 ErrorMessage = "Korisnik sa ovom email adresom već postoji.";
             }
         }
@@ -144,7 +135,6 @@ namespace MusicCatalog.ViewModels
             ErrorMessage = string.Empty;
         }
 
-
         private void OnNavigateToLogin(object? parameter)
         {
             ClearFields();
@@ -152,7 +142,6 @@ namespace MusicCatalog.ViewModels
         }
 
         #region IDataErrorInfo Implementacija (Validacija)
-
         public string Error => null;
 
         public string this[string columnName]
@@ -160,7 +149,6 @@ namespace MusicCatalog.ViewModels
             get
             {
                 string? error = null;
-
                 switch (columnName)
                 {
                     case nameof(Ime):
@@ -194,7 +182,6 @@ namespace MusicCatalog.ViewModels
                             error = "Lozinke se ne poklapaju.";
                         break;
                 }
-
                 return error;
             }
         }

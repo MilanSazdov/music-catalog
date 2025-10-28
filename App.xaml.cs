@@ -1,4 +1,5 @@
-﻿using MusicCatalog.Models;
+﻿// Datoteka: App.xaml.cs
+using MusicCatalog.Models;
 using MusicCatalog.Repositories;
 using MusicCatalog.Services;
 using MusicCatalog.ViewModels;
@@ -9,60 +10,72 @@ namespace MusicCatalog
 {
     public partial class App : Application
     {
-        private IKorisnikRepository _korisnikRepository;
-        private AnketaRepository _anketaRepository;
-        private AuthService _authService;
+        private readonly AuthService _authService;
+        private readonly IKorisnikRepository _korisnikRepository;
+        private readonly AnketaRepository _anketaRepository; // DODATO: Repozitorijum koji nedostaje
+        private readonly MainViewModel _mainViewModel;
 
-        private MainViewModel _mainViewModel;
-        private LoginViewModel _loginViewModel;
-        private RegisterViewModel _registerViewModel;
-       
+        public App()
+        {
+            // 1. Kreiraj servise i repozitorijume
+            _korisnikRepository = new KorisnikRepository("Data/korisnici.json");
+            _anketaRepository = new AnketaRepository("Data/ankete.json"); // DODATO: Kreiraj repozitorijum
+            _authService = new AuthService(_korisnikRepository);
+
+            // 2. Kreiraj glavni ViewModel
+            _mainViewModel = new MainViewModel(null!);
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
-            
-            _korisnikRepository = new KorisnikRepository();
-            _anketaRepository = new AnketaRepository();
-            _authService = new AuthService(_korisnikRepository);
-
-           
-            SeedAdmin();
-
-            _loginViewModel = new LoginViewModel(_authService);
-            _registerViewModel = new RegisterViewModel(_authService);
-
-            _mainViewModel = new MainViewModel(_loginViewModel);
-
-            _loginViewModel.ShowRegisterView = () => _mainViewModel.TrenutniView = _registerViewModel;
-            _registerViewModel.ShowLoginView = () => _mainViewModel.TrenutniView = _loginViewModel;
-
-            _loginViewModel.ShowAdminView = () =>
-            {
-                var vm = new AdminViewModel(_anketaRepository);
-                vm.LoggedOut += () => _mainViewModel.TrenutniView = _loginViewModel;
-                _mainViewModel.TrenutniView = vm;
-
-            };
-
-
+            // 3. Kreiraj glavni prozor
             MainWindow = new MainWindow
             {
                 DataContext = _mainViewModel
             };
 
+            // 4. Pokaži početni ekran (Login)
+            ShowLoginView();
+
             MainWindow.Show();
+            base.OnStartup(e);
         }
 
-        private void SeedAdmin()
+        // --- METODE ZA NAVIGACIJU ---
+
+        private void ShowLoginView()
         {
-            if (_korisnikRepository.GetByEmail("admin@mc.com") == null)
-            {
-                var admin = new Administrator("admin@mc.com", "Admin", "Adminovic", "admin123");
-                _korisnikRepository.Add(admin);
-                _korisnikRepository.SaveChanges();
-            }
+            var loginVM = new LoginViewModel(_authService);
+            loginVM.ShowRegisterView = ShowRegisterView;
+            loginVM.ShowAdminView = ShowAdminView;
+            loginVM.ShowRegistrovaniKorisnikView = ShowRegistrovaniKorisnikView;
+            _mainViewModel.TrenutniView = loginVM;
+        }
+
+        private void ShowRegisterView()
+        {
+            var registerVM = new RegisterViewModel(_authService);
+            registerVM.ShowLoginView = ShowLoginView;
+            _mainViewModel.TrenutniView = registerVM;
+        }
+
+        private void ShowAdminView()
+        {
+            // --- ISPRAVLJENO ---
+            // 1. Prosledi AnketaRepository koji AdminViewModel traži
+            var adminVM = new AdminViewModel(_anketaRepository);
+
+            // 2. Pretplati se na 'LoggedOut' događaj umesto postavljanja 'ShowLoginView' propertija
+            adminVM.LoggedOut += ShowLoginView;
+
+            _mainViewModel.TrenutniView = adminVM;
+        }
+
+        private void ShowRegistrovaniKorisnikView()
+        {
+            var korisnikVM = new RegistrovaniKorisnikViewModel(_authService);
+            korisnikVM.ShowLoginView = ShowLoginView;
+            _mainViewModel.TrenutniView = korisnikVM;
         }
     }
 }
