@@ -1,12 +1,13 @@
 ﻿using MusicCatalog.Repositories;
 using MusicCatalog.Utils;
-using MusicCatalog.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MusicCatalog.Views;
+
 
 namespace MusicCatalog.ViewModels
 {
@@ -15,6 +16,7 @@ namespace MusicCatalog.ViewModels
         AnketaRepository _anketaRepository;
         IKorisnikRepository _korisnikRepository;
         IZanrRepository _zanrRepository;
+        private readonly IMuzickoDeloRepository _deloRepo;
 
         private object _currentView;
         public object CurrentView { get => _currentView; set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); } }
@@ -23,15 +25,20 @@ namespace MusicCatalog.ViewModels
         public ICommand ShowUredniciCommand { get; }
         public ICommand ShowAnketeCommand { get; }
         public ICommand LogoutCommand { get; }
+        public ICommand ShowZanroviCommand { get; }
+        public ICommand ShowMuzickiSadrzajCommand { get; }
         public AdminViewModel(AnketaRepository anketaRepository, IKorisnikRepository korisnikRepository, IZanrRepository zanrRepository)
         {
             _korisnikRepository = korisnikRepository;
             _anketaRepository = anketaRepository;
             _zanrRepository = zanrRepository;
+            _deloRepo = new MuzickoDeloRepository(_zanrRepository);
             ShowKorisniciCommand = new RelayCommand(_ => ShowKorisnici());
             ShowUredniciCommand = new RelayCommand(_ => ShowUrednici());
 
             ShowAnketeCommand = new RelayCommand(_ => ShowAnkete());
+            ShowMuzickiSadrzajCommand = new RelayCommand(_ => ShowMuzickiSadrzaj());
+            ShowZanroviCommand = new RelayCommand(_ => ShowZanrove());
             LogoutCommand = new RelayCommand(_ => Logout());
 
             ShowKorisnici();
@@ -45,6 +52,16 @@ namespace MusicCatalog.ViewModels
         private void ShowUrednici()
         {
             CurrentView = new AdminUredniciView { DataContext = new AdminUredniciViewModel(_korisnikRepository, _zanrRepository) };
+        }
+
+        private void ShowMuzickiSadrzaj()
+        {
+            CurrentView = new AdminMuzickiSadrzajView { DataContext = new AdminMuzickiSadrzajViewModel(_deloRepo, _zanrRepository) };
+        }
+
+        private void ShowZanrove()
+        {
+            CurrentView = new AdminZanroviView { DataContext = new AdminZanroviViewModel(_zanrRepository) };
         }
 
         private void ShowAnkete()

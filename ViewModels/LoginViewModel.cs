@@ -1,4 +1,4 @@
-﻿// Datoteka: ViewModels/LoginViewModel.cs
+// Datoteka: ViewModels/LoginViewModel.cs
 using MusicCatalog.Models;
 using MusicCatalog.Models.Enums;
 using MusicCatalog.Services;
