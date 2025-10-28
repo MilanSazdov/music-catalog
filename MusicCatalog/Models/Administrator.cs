@@ -1,91 +1,31 @@
-﻿namespace MusicCatalog.Models
+﻿using MusicCatalog.Models.Enums;
+
+
+namespace MusicCatalog.Models
 {
-    // Administrator JE Korisnik
-    internal class Administrator : Korisnik
+    // ISPRAVKA: Promenjeno iz 'internal class' u 'public class'
+    public class Administrator : Korisnik
     {
-        // Prosledjujemo sve parametre baznom konstruktoru
-        // i specificiramo Ulogu.
         public Administrator(string email, string ime, string prezime, string lozinka)
             : base(email, ime, prezime, lozinka, Uloga.Administrator)
         {
-            // Nema dodatnih atributa na dijagramu za Administratora
         }
 
-        // --- Metode specificne za Administratora (iz UML dijagrama) ---
-
-        public void blokiranjeKorisnika()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void kreiranjeAnkete()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void upravljanjeReklamama()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void pregledUrednika()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void uredjivanjePocetneStrane()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void brisanjeRecenzija()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void dodavanjePesme()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void dodavanjeAlbuma()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void dodavanjeGrupe()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void dodavanjeIzvodjaca()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void registracijaUrednika()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void zadavanjeZadatka()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void prihvatanjeZahtevaIzmene()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void napraviTopListu()
-        {
-            // TODO: Implementirati logiku
-        }
-
-        public void dodajClanstvo()
-        {
-            // TODO: Implementirati logiku
-        }
+        // --- Metode iz UML dijagrama ---
+        public void blokiranjeKorisnika() { }
+        public void kreiranjeAnkete() { }
+        public void upravljanjeReklamama() { }
+        public void pregledUrednika() { }
+        public void uredjivanjePocetneStrane() { }
+        public void brisanjeRecenzija() { }
+        public void dodavanjePesme() { }
+        public void dodavanjeAlbuma() { }
+        public void dodavanjeGrupe() { }
+        public void dodavanjeIzvodjaca() { }
+        public void registracijaUrednika() { }
+        public void zadavanjeZadatka() { }
+        public void prihvatanjeZahtevaIzmene() { }
+        public void napraviTopListu() { }
+        public void dodajClanstvo() { }
     }
 }

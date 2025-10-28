@@ -1,6 +1,5 @@
-﻿namespace MusicCatalog.Models
+﻿namespace MusicCatalog.Models.Enums
 {
-    
     public enum Uloga
     {
         Administrator,

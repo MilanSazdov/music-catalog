@@ -9,12 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Utils\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
   </ItemGroup>
 
 </Project>

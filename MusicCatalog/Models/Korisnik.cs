@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using MusicCatalog.Models.Enums; // <-- DODAJ OVAJ RED
 
 namespace MusicCatalog.Models
 {
@@ -11,6 +12,8 @@ namespace MusicCatalog.Models
         public string Ime { get; set; }
         public string Prezime { get; set; }
         public string Lozinka { get; set; }
+
+        // Ova linija sada radi
         public Uloga Uloga { get; set; }
 
         public Korisnik(string email, string ime, string prezime, string lozinka, Uloga uloga)
@@ -22,26 +25,11 @@ namespace MusicCatalog.Models
             Uloga = uloga;
         }
 
-        // --- Metode iz UML dijagrama ---
-        public virtual void logovanje()
-        {
-            // Logika za logovanje
-        }
-
-        public virtual void pregledSadrzaja()
-        {
-            // Logika za pregled sadrzaja
-        }
-
-        public virtual void pretragaSadrzaja()
-        {
-            // Logika za pretragu sadrzaja
-        }
-
-        public virtual void ucestvovanjeAnketa()
-        {
-            // Logika za ucestvovanje u anketi
-        }
+        // (Ostatak tvoje klase ostaje isti)
+        public virtual void logovanje() { }
+        public virtual void pregledSadrzaja() { }
+        public virtual void pretragaSadrzaja() { }
+        public virtual void ucestvovanjeAnketa() { }
 
         public override string ToString()
         {

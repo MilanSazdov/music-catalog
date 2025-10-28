@@ -4,9 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicCatalog"
+        xmlns:viewModels="clr-namespace:MusicCatalog.ViewModels"
+        xmlns:views="clr-namespace:MusicCatalog.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        
+        Title="Music Catalog" 
+        Height="600" Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        FontFamily="Segoe UI"
+        Background="#FFFFFFFF">
 
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+            <views:LoginView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:RegisterViewModel}">
+            <views:RegisterView/>
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid>
+        <ContentControl Content="{Binding TrenutniView}" />
     </Grid>
 </Window>
