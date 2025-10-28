@@ -1,4 +1,5 @@
-﻿using MusicCatalog.Services;
+﻿using MusicCatalog.Models;
+using MusicCatalog.Services;
 using MusicCatalog.Utils;
 using System;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ namespace MusicCatalog.ViewModels
         
         public Action ShowRegisterView { get; set; }
         public Action ShowGlavniAppView { get; set; }
+        public Action ShowAdminView { get; set; }
 
         #region Properties
         private string _email = string.Empty;
@@ -65,6 +67,7 @@ namespace MusicCatalog.ViewModels
             
             ShowRegisterView = () => { };
             ShowGlavniAppView = () => { };
+            ShowAdminView = () => { };
         }
 
         
@@ -85,6 +88,11 @@ namespace MusicCatalog.ViewModels
             {
                 
                 ClearFields();
+
+                if(_authService.TrenutniKorisnik is Administrator)
+                {
+                    ShowAdminView?.Invoke();
+                }
 
                 ShowGlavniAppView?.Invoke();
             }
