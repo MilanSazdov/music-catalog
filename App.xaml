@@ -3,14 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MusicCatalog"
              xmlns:utils="clr-namespace:MusicCatalog.Utils"
-
-    xmlns:viewmodels="clr-namespace:MusicCatalog.ViewModels"
+             xmlns:viewmodels="clr-namespace:MusicCatalog.ViewModels"
              xmlns:views="clr-namespace:MusicCatalog.Views">
 
     <Application.Resources>
         <ResourceDictionary>
 
-            
+
             <SolidColorBrush x:Key="PrimaryBrush" Color="#FFBB86FC"/>
             <SolidColorBrush x:Key="ButtonHoverBrush" Color="#FFD5B3FD"/>
             <SolidColorBrush x:Key="DisabledBrush" Color="#FF555555"/>
@@ -196,7 +195,11 @@
             <DataTemplate DataType="{x:Type viewmodels:RegistrovaniKorisnikViewModel}">
                 <views:RegistrovaniKorisnikView/>
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewmodels:MuzickiUrednikViewModel}">
+                <views:MuzickiUrednikView/>
+            </DataTemplate>
+
 
 
         </ResourceDictionary>
