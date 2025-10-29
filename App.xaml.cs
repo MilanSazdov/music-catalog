@@ -1,4 +1,4 @@
-﻿// Datoteka: App.xaml.cs
+﻿
 using MusicCatalog.Models;
 using MusicCatalog.Repositories;
 using MusicCatalog.Services;
@@ -23,7 +23,7 @@ namespace MusicCatalog
 
         public App()
         {
-            // 1. Kreiraj servise i repozitorijume
+         
             _korisnikRepository = new KorisnikRepository("Data/korisnici.json");
             _anketaRepository = new AnketaRepository("Data/ankete.json");
             _zanrRepository = new ZanrRepository("Data/zanrovi.json");
@@ -34,26 +34,26 @@ namespace MusicCatalog
 
             _authService = new AuthService(_korisnikRepository);
 
-            // 2. Kreiraj glavni ViewModel
+       
             _mainViewModel = new MainViewModel(null!);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            // 3. Kreiraj glavni prozor
+            
             MainWindow = new MainWindow
             {
                 DataContext = _mainViewModel
             };
 
-            // 4. Pokaži početni ekran (Login)
+           
             ShowLoginView();
 
             MainWindow.Show();
             base.OnStartup(e);
         }
 
-        // --- METODE ZA NAVIGACIJU ---
+        
 
         private void ShowLoginView()
         {
@@ -62,7 +62,6 @@ namespace MusicCatalog
             loginVM.ShowAdminView = ShowAdminView;
             loginVM.ShowRegistrovaniKorisnikView = ShowRegistrovaniKorisnikView;
 
-            // OVAJ RED JE SADA ISPRAVAN
             loginVM.ShowMuzickiUrednikView = ShowMuzickiUrednikView;
 
             _mainViewModel.TrenutniView = loginVM;
@@ -75,7 +74,6 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = registerVM;
         }
 
-        // AdminView ostaje netaknut
         private void ShowAdminView()
         {
             var adminVM = new AdminViewModel(_anketaRepository, _korisnikRepository, _zanrRepository, _umetnikRepository, _clanstvoRepository);
@@ -83,20 +81,20 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = adminVM;
         }
 
-        // --- POČETAK IZMENE ---
-        // Ažurirana metoda da prosledi i '_umetnikRepository'
+        
         private void ShowRegistrovaniKorisnikView()
         {
             var korisnikVM = new RegistrovaniKorisnikViewModel(
                 _authService,
                 _deloRepository,
                 _zanrRepository,
-                _umetnikRepository // <-- DODAT JE OVAJ ARGUMENT
+                _umetnikRepository,
+                _clanstvoRepository
             );
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
-        // --- KRAJ IZMENE ---
+       
 
         private void ShowMuzickiUrednikView()
         {

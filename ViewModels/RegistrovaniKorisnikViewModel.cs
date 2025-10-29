@@ -17,7 +17,8 @@ namespace MusicCatalog.ViewModels
 
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
-        private readonly IMuzickiUmetnikRepository _umetnikRepo; // <-- DODATO POLJE
+        private readonly IMuzickiUmetnikRepository _umetnikRepo;
+        private readonly IClanstvoRepository _clanstvoRepo; // <-- DODATO POLJE
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -29,7 +30,7 @@ namespace MusicCatalog.ViewModels
         }
 
         public ICommand PrikaziSadrzajCommand { get; }
-        public ICommand PrikaziUmetnikeCommand { get; } // <-- DODATA KOMANDA
+        public ICommand PrikaziUmetnikeCommand { get; }
         public ICommand IzmeniPodatkeCommand { get; }
         public ICommand ObrisiNalogCommand { get; }
         public ICommand LogoutCommand { get; }
@@ -39,17 +40,19 @@ namespace MusicCatalog.ViewModels
             AuthService authService,
             IMuzickoDeloRepository deloRepo,
             IZanrRepository zanrRepo,
-            IMuzickiUmetnikRepository umetnikRepo) // <-- DODAT ARGUMENT
+            IMuzickiUmetnikRepository umetnikRepo,
+            IClanstvoRepository clanstvoRepo) // <-- DODAT ARGUMENT
         {
             _authService = authService;
             _deloRepo = deloRepo;
             _zanrRepo = zanrRepo;
-            _umetnikRepo = umetnikRepo; // <-- DODELJIVANJE
+            _umetnikRepo = umetnikRepo;
+            _clanstvoRepo = clanstvoRepo; // <-- DODELJIVANJE
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
             PrikaziSadrzajCommand = new RelayCommand(PrikaziSadrzaj);
-            PrikaziUmetnikeCommand = new RelayCommand(PrikaziUmetnike); // <-- INICIJALIZACIJA
+            PrikaziUmetnikeCommand = new RelayCommand(PrikaziUmetnike);
             IzmeniPodatkeCommand = new RelayCommand(IzmeniPodatke);
             ObrisiNalogCommand = new RelayCommand(ObrisiNalog);
             LogoutCommand = new RelayCommand(Logout);
@@ -64,14 +67,14 @@ namespace MusicCatalog.ViewModels
             CurrentContentView = vm;
         }
 
-        // --- POČETAK DODAVANJA (Nova metoda) ---
+        // --- POČETAK IZMENE (Metoda) ---
         private void PrikaziUmetnike(object? parameter)
         {
-            // Kreiramo novi ViewModel za prikaz umetnika
-            var vm = new KorisnikUmetniciViewModel(_umetnikRepo);
+            // Kreiramo novi ViewModel za prikaz umetnika i prosleđujemo SVE repozitorijume
+            var vm = new KorisnikUmetniciViewModel(_umetnikRepo, _clanstvoRepo, _deloRepo);
             CurrentContentView = vm;
         }
-        // --- KRAJ DODAVANJA ---
+        // --- KRAJ IZMENE ---
 
         private void IzmeniPodatke(object? parameter)
         {
