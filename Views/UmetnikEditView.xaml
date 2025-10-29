@@ -51,7 +51,7 @@
                             </StackPanel>
 
                             <TextBlock Text="Članovi" Style="{StaticResource FormLabel}" Margin="0,12,0,6"/>
-                            <DataGrid ItemsSource="{Binding Clanovi}"
+                            <DataGrid ItemsSource="{Binding ClanoviBenda}"
                                       AutoGenerateColumns="False"
                                      CanUserAddRows="False"
                                       Height="160"
@@ -79,53 +79,53 @@
 
                             <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
                             <TextBox Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
-
-                            <Separator Margin="0,15,0,10"/>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Albumi" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
-                                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
-                                            <ItemsControl ItemsSource="{Binding SviAlbumi}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox Content="{Binding Naziv}" 
-                                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                                  Foreground="{StaticResource TextBrush}"
-                                                                  Margin="2"/>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </ScrollViewer>
-                                    </Border>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Pesme" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
-                                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
-                                            <ItemsControl ItemsSource="{Binding SvePesme}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox Content="{Binding Naziv}" 
-                                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                                  Foreground="{StaticResource TextBrush}"
-                                                                  Margin="2"/>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </ScrollViewer>
-                                    </Border>
-                                </StackPanel>
-                            </Grid>
                         </StackPanel>
+
+                        <Separator Margin="0,15,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Albumi" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                        <ItemsControl ItemsSource="{Binding SviAlbumi}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Naziv}" 
+                                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                              Foreground="{StaticResource TextBrush}"
+                                                              Margin="2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Pesme" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                        <ItemsControl ItemsSource="{Binding SvePesme}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Naziv}" 
+                                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                              Foreground="{StaticResource TextBrush}"
+                                                              Margin="2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
 
                         <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap" Margin="0,6,0,12" Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVis}}"/>
 
