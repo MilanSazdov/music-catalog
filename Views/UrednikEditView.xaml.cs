@@ -14,14 +14,21 @@ using System.Windows.Shapes;
 
 namespace MusicCatalog.Views
 {
-    /// <summary>
-    /// Interaction logic for UrednikEditView.xaml
-    /// </summary>
+
     public partial class UrednikEditView : Window
     {
         public UrednikEditView()
         {
             InitializeComponent();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+           
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
     }
 }

@@ -62,14 +62,21 @@ namespace MusicCatalog.Repositories
             }
         }
 
-        public void Add(Clanstvo anketa)
+        
+        public void Add(Clanstvo clanstvo)
         {
-            if (GetById(anketa.Id) != null)
+            if (clanstvo.Id == 0)
             {
+                clanstvo.Id = GetNextId();
+            }
+            else if (GetById(clanstvo.Id) != null)
+            {
+                
                 return;
             }
-            _clanstva.Add(anketa);
+            _clanstva.Add(clanstvo);
         }
+        
 
         public void Delete(int id)
         {
@@ -95,9 +102,14 @@ namespace MusicCatalog.Repositories
             var existing = GetById(clanstvo.Id);
             if (existing != null)
             {
-                _clanstva.Remove(existing);
+                int index = _clanstva.IndexOf(existing);
+                _clanstva[index] = clanstvo;
             }
-            _clanstva.Add(clanstvo);
+            else
+            {
+                
+                Add(clanstvo);
+            }
         }
 
         public void SaveChanges()
@@ -113,6 +125,13 @@ namespace MusicCatalog.Repositories
             File.WriteAllText(_filePath, json);
         }
 
+        
+        public int GetNextId()
+        {
+            if (_clanstva.Count == 0)
+                return 1;
+            return _clanstva.Max(c => c.Id) + 1;
+        }
+        
     }
 }
-

@@ -1,12 +1,12 @@
 ﻿using MusicCatalog.Models;
 using MusicCatalog.Services;
 using MusicCatalog.Utils;
-using MusicCatalog.Views; // <-- OVAJ USING JE VEĆ POSTOJAO
+using MusicCatalog.Views;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using MusicCatalog.Repositories; // <-- DODAJ OVAJ USING
+using MusicCatalog.Repositories;
 
 namespace MusicCatalog.ViewModels
 {
@@ -15,9 +15,11 @@ namespace MusicCatalog.ViewModels
         private readonly AuthService _authService;
         public Action ShowLoginView { get; set; }
 
-        // DODAJ REPOZITORIJUME
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
+        private readonly IMuzickiUmetnikRepository _umetnikRepo;
+        private readonly IClanstvoRepository _clanstvoRepo;
+        private readonly IKorisnikRepository _korisnikRepo;
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -29,56 +31,73 @@ namespace MusicCatalog.ViewModels
         }
 
         public ICommand PrikaziSadrzajCommand { get; }
+        public ICommand PrikaziUmetnikeCommand { get; }
         public ICommand IzmeniPodatkeCommand { get; }
         public ICommand ObrisiNalogCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        // IZMENI KONSTRUKTOR
-        public RegistrovaniKorisnikViewModel(AuthService authService, IMuzickoDeloRepository deloRepo, IZanrRepository zanrRepo)
+        // Konstruktor sada prima svih 6 zavisnosti
+        public RegistrovaniKorisnikViewModel(
+            AuthService authService,
+            IMuzickoDeloRepository deloRepo,
+            IZanrRepository zanrRepo,
+            IMuzickiUmetnikRepository umetnikRepo,
+            IClanstvoRepository clanstvoRepo,
+            IKorisnikRepository korisnikRepo)
         {
             _authService = authService;
-            _deloRepo = deloRepo; // Dodeli
-            _zanrRepo = zanrRepo; // Dodeli
+            _deloRepo = deloRepo;
+            _zanrRepo = zanrRepo;
+            _umetnikRepo = umetnikRepo;
+            _clanstvoRepo = clanstvoRepo;
+            _korisnikRepo = korisnikRepo;
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
             PrikaziSadrzajCommand = new RelayCommand(PrikaziSadrzaj);
+            PrikaziUmetnikeCommand = new RelayCommand(PrikaziUmetnike);
             IzmeniPodatkeCommand = new RelayCommand(IzmeniPodatke);
             ObrisiNalogCommand = new RelayCommand(ObrisiNalog);
             LogoutCommand = new RelayCommand(Logout);
 
-            // Inicijalno prikaži sadržaj
             PrikaziSadrzaj(null);
         }
 
-        // IZMENI OVU METODU
         private void PrikaziSadrzaj(object? parameter)
         {
-            // Kreiraj ViewModel za prikaz sadržaja i prosledi mu repozitorijume
-            var vm = new KorisnikMuzickiSadrzajViewModel(_deloRepo, _zanrRepo);
-
-            // Postavi CurrentContentView na ovaj novi ViewModel
-            // Pogled (KorisnikMuzickiSadrzajView) će biti automatski
-            // kreiran na osnovu DataTemplate-a koji ćemo dodati.
+            // Prosleđujemo korisnika i repo za favorite sadržaja
+            var vm = new KorisnikMuzickiSadrzajViewModel(
+                _deloRepo,
+                _zanrRepo,
+                (RegistrovaniKorisnik)TrenutniKorisnik,
+                _korisnikRepo
+            );
             CurrentContentView = vm;
         }
 
+        private void PrikaziUmetnike(object? parameter)
+        {
+            // Prosleđujemo SVE zavisnosti za favorite umetnika
+            var vm = new KorisnikUmetniciViewModel(
+                _umetnikRepo,
+                _clanstvoRepo,
+                _deloRepo,
+                (RegistrovaniKorisnik)TrenutniKorisnik,
+                _korisnikRepo
+                );
+            CurrentContentView = vm;
+        }
 
         private void IzmeniPodatke(object? parameter)
         {
-            // Kreiraj novi ViewModel za izmenu podataka
             var vm = new IzmeniPodatkeViewModel(_authService, TrenutniKorisnik);
 
-            // Postavi akciju koja će se desiti kada se izmena završi (ili otkaže)
-            // Vraćamo se na "PrikaziSadrzaj"
             vm.ZatvoriView = () =>
             {
-                // Osveži podatke o korisniku na UI (npr. Ime i Prezime u panelu)
                 OnPropertyChanged(nameof(TrenutniKorisnik));
                 PrikaziSadrzaj(null);
             };
 
-            // Postavi CurrentContentView na ovaj novi ViewModel
             CurrentContentView = vm;
         }
 

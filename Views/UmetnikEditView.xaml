@@ -9,16 +9,17 @@
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
         
-        MaxWidth="600">
+        MaxWidth="800"
+        Width="800">
 
     <Window.Resources>
         <utils:BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
-    
+
     <Grid Background="{StaticResource WindowBackgroundBrush}">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="28" MaxWidth="550">
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="28" MaxWidth="750">
                     <StackPanel>
 
                         <TextBlock Text="{Binding TipText}" Style="{StaticResource FormLabel}" FontSize="18" FontWeight="Bold" Margin="0,0,0,12" HorizontalAlignment="Center"/>
@@ -43,16 +44,16 @@
                                 <ComboBox ItemsSource="{Binding sviIzvodjaci}"
                                           SelectedItem="{Binding SelectedIzvodjac}"
                                           DisplayMemberPath="Ime"
-                                          Width="220"
+                                           Width="220"
                                           Margin="0,0,8,0"/>
                                 <DatePicker SelectedDate="{Binding NewDatumUclanjenja}" Width="140" Margin="0,0,8,0"/>
                                 <Button Content="Dodaj" Command="{Binding AddClanCommand}" Style="{StaticResource PrimaryButton}"/>
                             </StackPanel>
 
                             <TextBlock Text="Članovi" Style="{StaticResource FormLabel}" Margin="0,12,0,6"/>
-                            <DataGrid ItemsSource="{Binding Clanovi}"
+                            <DataGrid ItemsSource="{Binding ClanoviBenda}"
                                       AutoGenerateColumns="False"
-                                      CanUserAddRows="False"
+                                     CanUserAddRows="False"
                                       Height="160"
                                       Margin="0,0,0,6">
                                 <DataGrid.Columns>
@@ -62,9 +63,9 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Content="Ukloni"
-                                                        Command="{Binding DataContext.RemoveClanCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                         Command="{Binding DataContext.RemoveClanCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                         CommandParameter="{Binding}"
-                                                        Style="{StaticResource PrimaryButton}"/>
+                                                         Style="{StaticResource PrimaryButton}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -72,7 +73,6 @@
                             </DataGrid>
                         </StackPanel>
 
-                        <!-- Izvođač-specific UI -->
                         <StackPanel Visibility="{Binding IsBend, Converter={StaticResource BoolToVis}, ConverterParameter=inverse}">
                             <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
                             <TextBox Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
@@ -81,11 +81,57 @@
                             <TextBox Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
                         </StackPanel>
 
+                        <Separator Margin="0,15,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Albumi" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                        <ItemsControl ItemsSource="{Binding SviAlbumi}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Naziv}" 
+                                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                              Foreground="{StaticResource TextBrush}"
+                                                              Margin="2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Pesme" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                        <ItemsControl ItemsSource="{Binding SvePesme}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Naziv}" 
+                                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                              Foreground="{StaticResource TextBrush}"
+                                                              Margin="2"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
                         <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap" Margin="0,6,0,12" Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVis}}"/>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,8,0,0">
-                            <Button Content="Potvrdi" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Stretch" Width="220"/>
-                            <Button Content="Otkaži" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Width="220" Margin="8,0,0,0"/>
+                            <Button Content="Potvrdi" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Stretch" Width="Auto" MinWidth="220" HorizontalContentAlignment="Center"/>
+                            <Button Content="Otkaži" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Width="Auto" MinWidth="220" Margin="8,0,0,0" HorizontalContentAlignment="Center"/>
                         </StackPanel>
 
                     </StackPanel>

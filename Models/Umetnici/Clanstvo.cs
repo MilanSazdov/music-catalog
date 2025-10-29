@@ -8,10 +8,11 @@ namespace MusicCatalog.Models.Umetnici
 {
     public class Clanstvo
     {
-        public int Id;
-        public int UmetnikId;
-        public int BendId;
-        public DateOnly datumUclanjenja;
+        
+        public int Id { get; set; }
+        public int UmetnikId { get; set; }
+        public int BendId { get; set; }
+        public DateOnly datumUclanjenja { get; set; }
 
         public Clanstvo() { }
 

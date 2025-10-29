@@ -1,4 +1,5 @@
 ﻿using MusicCatalog.Models.Enums;
+using System.Collections.Generic;
 
 namespace MusicCatalog.Models
 {
@@ -8,6 +9,10 @@ namespace MusicCatalog.Models
         public bool Pretplacen { get; set; }
         public bool Blokiran { get; set; }
 
+        public List<int> FavoritDeloIDs { get; set; } = new List<int>();
+
+        public List<int> FavoritUmetnikIDs { get; set; } = new List<int>();
+
         public RegistrovaniKorisnik(string email, string ime, string prezime, string lozinka)
             : base(email, ime, prezime, lozinka, Uloga.RegistrovaniKorisnik)
         {
@@ -15,7 +20,7 @@ namespace MusicCatalog.Models
             Pretplacen = false;
         }
 
-        // --- Metode iz UML dijagrama ---
+        
         public void stream() { }
         public void download() { }
         public void dodavanjeFavorita() { }

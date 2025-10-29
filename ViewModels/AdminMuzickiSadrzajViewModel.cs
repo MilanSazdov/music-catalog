@@ -87,7 +87,7 @@ namespace MusicCatalog.ViewModels
         }
     }
 
-    public class MuzickoDeloView
+    public class MuzickoDeloView : ViewModelBase
     {
         public int Id => Source.Id;
         public string Naziv => Source.Naziv;
@@ -96,6 +96,14 @@ namespace MusicCatalog.ViewModels
         public string Tip { get; }
         public MuzickoDelo Source { get; }
         public string Slika => Source.Slika;
+
+        private bool _isFavorit;
+        public bool IsFavorit
+        {
+            get => _isFavorit;
+            set => SetField(ref _isFavorit, value); // Koristi SetField da bi se UI ažurirao
+        }
+
         public string ImagePath
         {
             get
