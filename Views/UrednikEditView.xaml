@@ -11,18 +11,13 @@
         AllowsTransparency="True"
         Background="Transparent"
         WindowStyle="None">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <StackPanel>
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8"
 				   Padding="40"
 				   Margin="20"
 				   MaxWidth="450" Effect="{StaticResource ShadowEffect}">
                 <StackPanel>
-                    <TextBlock Text="Kreiraj novi nalog"
-                               FontSize="24" FontWeight="Bold"
-                               Foreground="{StaticResource PrimaryBrush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,32"/>
 
                     <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
                     <TextBox
@@ -43,17 +38,16 @@
                         Margin="0,0,0,20"/>
 
                     <TextBlock Text="Lozinka" Style="{StaticResource FormLabel}"/>
-                    <PasswordBox
-                        utils:PasswordHelper.Attach="True"
-                        utils:PasswordHelper.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                        Style="{StaticResource ModernPasswordBox}"
+                    <TextBox
+                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                        Style="{StaticResource ModernTextBox}"
                         Margin="0,0,0,20"/>
 
                     <StackPanel Orientation="Horizontal">
                         <ComboBox ItemsSource="{Binding SviZanrovi}"
                                   SelectedItem="{Binding NewZanr}" Width="150"/>
 
-                        <Button Content="Add" Command="{Binding AddLanguageCommand}" Width="60" IsEnabled="{Binding CanEditLanguages}" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Add" Command="{Binding AddZanrCommand}" Width="60" Style="{StaticResource PrimaryButton}"/>
                     </StackPanel>
                     
                     <DataGrid ItemsSource="{Binding Specijalizacija}"
@@ -85,21 +79,22 @@
                         Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
 
                     <Button
-                        Content="REGISTRUJ SE"
-                        Command="{Binding RegisterCommand}"
+                        Content="Potvrdi"
+                        Command="{Binding ConfirmCommand}"
                         Style="{StaticResource PrimaryButton}"
                         Margin="0,16,0,0"
                         HorizontalAlignment="Stretch"/>
 
                     <Button
-                        Content="Već imaš nalog? Prijavi se"
-                        Command="{Binding NavigateToLoginCommand}"
-                        Style="{StaticResource TextButton}"
-                        Margin="0,24,0,0"
-                        HorizontalAlignment="Center"/>
+                        Content="Otkazi"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource PrimaryButton}"
+                        Margin="0,16,0,0"
+                        Background="{StaticResource ErrorBrush}"
+                        HorizontalAlignment="Stretch"/>
 
                 </StackPanel>
             </Border>
         </Grid>
-    </ScrollViewer>
+    </StackPanel>
 </Window>

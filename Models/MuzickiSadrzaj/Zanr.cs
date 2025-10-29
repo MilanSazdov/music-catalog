@@ -20,6 +20,11 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
 
         }
 
+        public override string ToString()
+        {
+            return Naziv;
+        }
+
         public void DodajPodzanr(Zanr podzanr)
         {
             ZanrIDs.Add(podzanr.Id);

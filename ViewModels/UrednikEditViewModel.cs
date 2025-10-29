@@ -39,25 +39,25 @@ namespace MusicCatalog.ViewModels
         public string Ime
         {
             get => _ime;
-            set { if (_ime == value) return; _ime = value; OnPropertyChanged(nameof(Ime)); }
+            set { if (_ime == value) return; _ime = value; OnPropertyChanged(nameof(Ime)); OnPropertyChanged(nameof(CanConfirm)); }
         }
 
         public string Prezime
         {
             get => _prezime;
-            set { if (_prezime == value) return; _prezime = value; OnPropertyChanged(nameof(Prezime)); }
+            set { if (_prezime == value) return; _prezime = value; OnPropertyChanged(nameof(Prezime)); OnPropertyChanged(nameof(CanConfirm)); }
         }
 
         public string Email
         {
             get => _email;
-            set { if (_email == value) return; _email = value; OnPropertyChanged(nameof(Email)); }
+            set { if (_email == value) return; _email = value; OnPropertyChanged(nameof(Email)); OnPropertyChanged(nameof(CanConfirm)); }
         }
 
         public string Password
         {
             get => _password;
-            set { if (_password == value) return; _password = value; OnPropertyChanged(nameof(Password)); }
+            set { if (_password == value) return; _password = value; OnPropertyChanged(nameof(Password)); OnPropertyChanged(nameof(CanConfirm)); }
         }
 
         public Zanr? NewZanr
@@ -82,10 +82,9 @@ namespace MusicCatalog.ViewModels
             private set { if (_errorMessage == value) return; _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); }
         }
 
-        // Komande
         public ICommand AddZanrCommand { get; }
         public ICommand RemoveZanrCommand { get; }
-        public ICommand RegisterCommand { get; }
+        public ICommand ConfirmCommand { get; }
         public ICommand CancelCommand { get; }
 
         public UrednikEditViewModel(IZanrRepository zanrRepo, IKorisnikRepository? korisnikRepo = null, MuzickiUrednik? urednik = null)
@@ -94,10 +93,9 @@ namespace MusicCatalog.ViewModels
             _korisnikRepo = korisnikRepo;
             _originalUrednik = urednik;
 
-            // Komande
-            AddZanrCommand = new RelayCommand(_ => AddZanr(), _ => CanAddZanr());
-            RemoveZanrCommand = new RelayCommand(p => RemoveZanr(p as Zanr), p => p is Zanr);
-            RegisterCommand = new RelayCommand(_ => Register(), _ => CanRegister());
+            AddZanrCommand = new RelayCommand(_ => AddZanr());
+            RemoveZanrCommand = new RelayCommand(p => RemoveZanr(p as Zanr));
+            ConfirmCommand = new RelayCommand(_ => Confirm(), _ => CanConfirm());
             CancelCommand = new RelayCommand(_ => Cancel());
 
             LoadAllZanrovi();
@@ -147,11 +145,6 @@ namespace MusicCatalog.ViewModels
             NewZanr = null;
         }
 
-        private bool CanAddZanr()
-        {
-            return NewZanr != null && CanEditLanguages;
-        }
-
         private void AddZanrCommandCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();
@@ -161,28 +154,19 @@ namespace MusicCatalog.ViewModels
         {
             if (z == null) return;
             Specijalizacija.Remove(z);
+            OnPropertyChanged(nameof(Specijalizacija));
         }
 
-        private bool CanRegister()
+        private bool CanConfirm()
         {
-            // Osnovna validacija
-            if (string.IsNullOrWhiteSpace(Ime)) return false;
-            if (string.IsNullOrWhiteSpace(Prezime)) return false;
-            if (string.IsNullOrWhiteSpace(Email)) return false;
-            // Email provera vrlo osnovna
-            if (!Email.Contains("@")) return false;
-            // Ako kreiramo novog, lozinka je obavezna
-            if (!IsEditing && string.IsNullOrWhiteSpace(Password)) return false;
-            // Ako je lozinka dana, neka bude barem 6 chars
-            if (!string.IsNullOrEmpty(Password) && Password.Length < 6) return false;
-            return true;
+            return IsValid;
         }
 
-        private void Register()
+        private void Confirm()
         {
             ErrorMessage = string.Empty;
 
-            if (!CanRegister())
+            if (!CanConfirm())
             {
                 return;
             }
@@ -191,17 +175,14 @@ namespace MusicCatalog.ViewModels
             {
                 if (IsEditing && _originalUrednik != null)
                 {
-                    // Ažuriraj postojeći objekt
                     _originalUrednik.Ime = Ime;
                     _originalUrednik.Prezime = Prezime;
                     _originalUrednik.Email = Email;
                     if (!string.IsNullOrEmpty(Password))
-                        _originalUrednik.Lozinka = Password; // u stvarnoj aplikaciji heširaj lozinku
+                        _originalUrednik.Lozinka = Password;
 
-                    // prekopiraj specijalizaciju
                     _originalUrednik.Specijalizacija = Specijalizacija.ToList();
 
-                    // Ako imamo repo za urednike, snimi
                     if (_korisnikRepo != null)
                     {
                         _korisnikRepo.Update(_originalUrednik);
@@ -210,7 +191,6 @@ namespace MusicCatalog.ViewModels
                 }
                 else
                 {
-                    // Kreiraj novi urednik objekat i dodaj
                     var novi = new MuzickiUrednik(Email, Ime, Prezime, Password)
                     {
                         Specijalizacija = Specijalizacija.ToList()
@@ -262,6 +242,21 @@ namespace MusicCatalog.ViewModels
             }
         }
 
+        private bool IsValid
+        {
+            get
+            {
+                string[] properties = { nameof(Ime), nameof(Prezime), nameof(Email), nameof(Password)};
+                foreach (var prop in properties)
+                {
+                    if (!string.IsNullOrEmpty(this[prop]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
 
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

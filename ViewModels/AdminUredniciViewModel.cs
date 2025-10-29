@@ -21,8 +21,8 @@ namespace MusicCatalog.ViewModels
         private MuzickiUrednik? _selectedUrednik;
 
         public ICommand AddUrednikCommand { get; }
-        public ICommand EditUrednikCommand { get; }
-        public ICommand DeleteUrednikCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         public ObservableCollection<MuzickiUrednik> Urednici { get; } = new ObservableCollection<MuzickiUrednik>();
 
@@ -44,8 +44,8 @@ namespace MusicCatalog.ViewModels
             _zanrRepository = zanrRepository;
 
             AddUrednikCommand = new RelayCommand(_ => OpenEditWindowFor(null));
-            EditUrednikCommand = new RelayCommand(p => OpenEditWindowFor(p as MuzickiUrednik));
-            DeleteUrednikCommand = new RelayCommand(p => DeleteUrednik(p as MuzickiUrednik));
+            EditCommand = new RelayCommand(p => OpenEditWindowFor(p as MuzickiUrednik));
+            DeleteCommand = new RelayCommand(p => DeleteUrednik(p as MuzickiUrednik));
 
             LoadUrednici();
         }
@@ -86,6 +86,7 @@ namespace MusicCatalog.ViewModels
         private void DeleteUrednik(MuzickiUrednik? urednik)
         {
             _korisnikRepository.Delete(urednik.Email);
+            _korisnikRepository.SaveChanges();
             LoadUrednici();
         }
 

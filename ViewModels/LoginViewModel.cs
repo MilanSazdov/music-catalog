@@ -88,7 +88,13 @@ namespace MusicCatalog.ViewModels
                 }
                 else if (ulogovaniKorisnik.Uloga == Uloga.RegistrovaniKorisnik)
                 {
-                    ShowRegistrovaniKorisnikView?.Invoke();
+                    if(ulogovaniKorisnik is RegistrovaniKorisnik regKorisnik && !regKorisnik.Blokiran)
+                        ShowRegistrovaniKorisnikView?.Invoke();
+                    else
+                    {
+                        ErrorMessage = "Nalog je blokiran.";
+                        Password = string.Empty;
+                    }
                 }
                 else if (ulogovaniKorisnik.Uloga == Uloga.MuzickiUrednik)
                 {

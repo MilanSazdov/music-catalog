@@ -16,6 +16,8 @@ namespace MusicCatalog.Models
 
         public List<Zanr> Specijalizacija { get; set; }
 
+        public String SpecijalizacijaString => string.Join(", ", Specijalizacija.Select(z => z.Naziv));
+
         public void dodavanjeAlbuma() { }
         public void dodavanjeGrupe() { }
         public void dodavanjeIzvodjaca() { }
@@ -23,5 +25,6 @@ namespace MusicCatalog.Models
         public void davanjeOcene() { }
         public void pisanjeRecenzije() { }
         public void dodajClanstvo() { }
+
     }
 }
