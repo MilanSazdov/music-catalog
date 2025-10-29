@@ -53,7 +53,9 @@ namespace MusicCatalog.ViewModels
 
         private void ShowUmetnici()
         {
-            CurrentView = new AdminUmetniciView { DataContext = new AdminUmetniciViewModel(_umetnikRepository, _clanstvoRepository) };
+            // --- ISPRAVKA JE OVDE ---
+            // Dodat je '_deloRepo' kao treći argument da bi se rešila greška
+            CurrentView = new AdminUmetniciView { DataContext = new AdminUmetniciViewModel(_umetnikRepository, _clanstvoRepository, _deloRepo) };
         }
 
         private void ShowKorisnici()
@@ -88,4 +90,3 @@ namespace MusicCatalog.ViewModels
 
     }
 }
-

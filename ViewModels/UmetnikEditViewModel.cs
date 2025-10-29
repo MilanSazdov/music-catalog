@@ -12,10 +12,40 @@ using System.Windows.Input;
 
 namespace MusicCatalog.ViewModels
 {
+    // Pomoćna klasa je malo izmenjena da koristi 'MuzickoDelo' kao bazu
+    public class DeloCheckItem : ViewModelBase
+    {
+        public MuzickoDelo Delo { get; }
+        private bool _isSelected;
+        public event Action<DeloCheckItem>? OnSelectionChanged;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (SetField(ref _isSelected, value))
+                {
+                    OnSelectionChanged?.Invoke(this);
+                }
+            }
+        }
+        public string Naziv => Delo.Naziv;
+
+        // --- DODATO ---
+        // Koristićemo ovo u XAML-u da drugačije stilizujemo albume
+        public bool IsAlbum => Delo is Album;
+        // --- KRAJ DODAVANJA ---
+
+        public DeloCheckItem(MuzickoDelo delo) { Delo = delo; }
+    }
+
+
     public class UmetnikEditViewModel : ViewModelBase
     {
         private readonly IMuzickiUmetnikRepository _umetnikRepository;
         private readonly IClanstvoRepository _clanstvoRepository;
+        private readonly IMuzickoDeloRepository _deloRepository;
         private readonly bool _isBend;
         private readonly int? _id;
 
@@ -61,6 +91,9 @@ namespace MusicCatalog.ViewModels
         public string _prezime = string.Empty;
         public string Prezime { get => _prezime; set { _prezime = value; OnPropertyChanged(nameof(Prezime)); UpdateCanSave(); } }
 
+        // --- POČETAK IZMENE (Jedna lista) ---
+        public ObservableCollection<DeloCheckItem> SvaMuzickaDela { get; } = new();
+        // --- KRAJ IZMENE ---
 
 
         private string _errorMessage = string.Empty;
@@ -74,12 +107,14 @@ namespace MusicCatalog.ViewModels
         public Action? OnSaved { get; set; }
         public Action? OnCancelled { get; set; }
 
-        public UmetnikEditViewModel(IMuzickiUmetnikRepository umetnikRepo, IClanstvoRepository clanstvoRepo, bool isBend, int? id = null)
+        public UmetnikEditViewModel(IMuzickiUmetnikRepository umetnikRepo, IClanstvoRepository clanstvoRepo, IMuzickoDeloRepository deloRepo, bool isBend, int? id = null)
         {
             _umetnikRepository = umetnikRepo;
             _clanstvoRepository = clanstvoRepo;
+            _deloRepository = deloRepo;
             _isBend = isBend;
             _id = id;
+
             SaveCommand = new RelayCommand(_ => Save(), _ => CanSave());
             CancelCommand = new RelayCommand(_ => OnCancelled?.Invoke());
             AddClanCommand = new RelayCommand(_ => AddClan(), _ => CanAddClan());
@@ -103,8 +138,69 @@ namespace MusicCatalog.ViewModels
                 }
             }
 
-            if (_isBend) LoadIzvojaci();
+            if (_isBend)
+            {
+                LoadIzvojaci();
+            }
+            else
+            {
+                // --- POČETAK IZMENE (Logika učitavanja) ---
+                LoadDela(); // Učitaj albume i pesme
+
+                if (id.HasValue && _umetnikRepository.GetById(id.Value) is Izvodjac izvodjac)
+                {
+                    // Selektuj dela koje izvođač ima
+                    if (izvodjac.MuzickoDeloIDs != null)
+                    {
+                        var deloIdSet = izvodjac.MuzickoDeloIDs.ToHashSet();
+                        foreach (var item in SvaMuzickaDela.Where(a => deloIdSet.Contains(a.Delo.Id)))
+                        {
+                            item.OnSelectionChanged -= OnDeloSelectionChanged; // Privremeno ukidamo event
+                            item.IsSelected = true;
+                            item.OnSelectionChanged += OnDeloSelectionChanged;
+                        }
+                    }
+                }
+                // --- KRAJ IZMENE ---
+            }
         }
+
+        private void LoadDela()
+        {
+            SvaMuzickaDela.Clear();
+
+            // Učitavamo SVA dela i sortiramo ih tako da Albumi budu na vrhu
+            var dela = _deloRepository.GetAll()
+                .OrderBy(d => d is Pesma) // Albumi (false=0) idu pre Pesama (true=1)
+                .ThenBy(d => d.Naziv);
+
+            foreach (var delo in dela)
+            {
+                var item = new DeloCheckItem(delo);
+                item.OnSelectionChanged += OnDeloSelectionChanged; // Pretplati se na događaj
+                SvaMuzickaDela.Add(item);
+            }
+        }
+
+        // --- POČETAK IZMENE (Logika kaskadnog odčekiranja) ---
+        private void OnDeloSelectionChanged(DeloCheckItem deloItem)
+        {
+            // Kaskadno odčekiranje
+            // Ako je item koji je promenjen Album I ako je odčekiran
+            if (deloItem.Delo is Album album && deloItem.IsSelected == false)
+            {
+                if (album.PesmaIDs == null || !album.PesmaIDs.Any()) return;
+
+                var pesmaIdsToUncheck = album.PesmaIDs.ToHashSet();
+
+                // Prolazimo kroz celu listu i tražimo pesme koje pripadaju tom albumu
+                foreach (var pesmaItem in SvaMuzickaDela.Where(p => p.Delo is Pesma && pesmaIdsToUncheck.Contains(p.Delo.Id)))
+                {
+                    pesmaItem.IsSelected = false; // Ovo će automatski osvežiti UI
+                }
+            }
+        }
+        // --- KRAJ IZMENE ---
 
         private void LoadIzvojaci()
         {
@@ -150,6 +246,9 @@ namespace MusicCatalog.ViewModels
                 {
                     izvodjac.Ime = Ime;
                     izvodjac.Prezime = Prezime;
+                    // --- POČETAK IZMENE (Snimanje ID-jeva) ---
+                    izvodjac.MuzickoDeloIDs = SvaMuzickaDela.Where(a => a.IsSelected).Select(a => a.Delo.Id).ToList();
+                    // --- KRAJ IZMENE ---
                 }
                 _umetnikRepository.Update(existing);
                 _umetnikRepository.SaveChanges();
@@ -165,7 +264,13 @@ namespace MusicCatalog.ViewModels
                 }
                 else
                 {
-                    _umetnikRepository.Add(new Izvodjac(Ime, Prezime, Opis, SlikaPutanja));
+                    // --- POČETAK IZMENE (Snimanje ID-jeva kod kreiranja) ---
+                    var noviIzvodjac = new Izvodjac(Ime, Prezime, Opis, SlikaPutanja)
+                    {
+                        MuzickoDeloIDs = SvaMuzickaDela.Where(a => a.IsSelected).Select(a => a.Delo.Id).ToList()
+                    };
+                    _umetnikRepository.Add(noviIzvodjac);
+                    // --- KRAJ IZMENE ---
                     _umetnikRepository.SaveChanges();
                     OnSaved?.Invoke();
                 }
@@ -175,7 +280,6 @@ namespace MusicCatalog.ViewModels
         private void UpdateCanAddClan() => CommandManager.InvalidateRequerySuggested();
         private bool CanAddClan()
         {
-            // we can add a clan only for existing bend (we need BendId) and a selected izvodjac
             return _isBend && _id.HasValue && SelectedIzvodjac != null;
         }
 
@@ -199,7 +303,6 @@ namespace MusicCatalog.ViewModels
                 return;
             }
 
-            // Avoid duplicate membership
             var already = _clanstvoRepository.GetAll()
                 .FirstOrDefault(c => c.BendId == _id.Value && c.UmetnikId == SelectedIzvodjac.Id);
             if (already != null)
@@ -215,15 +318,12 @@ namespace MusicCatalog.ViewModels
                 datumUclanjenja = DateOnly.FromDateTime(NewDatumUclanjenja.Date)
             };
 
-            // persist
             _clanstvoRepository.Add(novi);
             _clanstvoRepository.SaveChanges();
 
-            // update local collections
             Clanovi.Add(SelectedIzvodjac);
             _clanstva.Add(novi);
 
-            // clear selection
             SelectedIzvodjac = null;
             NewDatumUclanjenja = DateTime.Today;
         }
@@ -249,4 +349,3 @@ namespace MusicCatalog.ViewModels
         }
     }
 }
-

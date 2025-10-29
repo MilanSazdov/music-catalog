@@ -18,6 +18,7 @@ namespace MusicCatalog.ViewModels
     {
         private readonly IMuzickiUmetnikRepository _umetniciRepository;
         private readonly IClanstvoRepository _clanstvoRepository;
+        private readonly IMuzickoDeloRepository _deloRepository; // <-- DODATO
 
         public ObservableCollection<MuzickiUmetnik> Umetnici { get; } = new();
         private MuzickiUmetnik? _selected;
@@ -37,10 +38,14 @@ namespace MusicCatalog.ViewModels
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public AdminUmetniciViewModel(IMuzickiUmetnikRepository umetniciRepo, IClanstvoRepository clanstvoRepo)
+        // --- POČETAK IZMENE (Konstruktor) ---
+        // Dodat je 'IMuzickoDeloRepository deloRepo'
+        public AdminUmetniciViewModel(IMuzickiUmetnikRepository umetniciRepo, IClanstvoRepository clanstvoRepo, IMuzickoDeloRepository deloRepo)
         {
             _umetniciRepository = umetniciRepo;
             _clanstvoRepository = clanstvoRepo;
+            _deloRepository = deloRepo; // <-- DODATO
+                                        // --- KRAJ IZMENE ---
 
             AddIzvodjacCommand = new RelayCommand(_ => OpenEdit(false));
             AddBendCommand = new RelayCommand(_ => OpenEdit(true));
@@ -72,7 +77,10 @@ namespace MusicCatalog.ViewModels
 
         private void OpenEdit(bool isBend, int? id = null)
         {
-            var vm = new UmetnikEditViewModel(_umetniciRepository, _clanstvoRepository, isBend, id);
+            // --- POČETAK IZMENE (Poziv konstruktora) ---
+            // Sada prosleđujemo '_deloRepository' kao treći argument
+            var vm = new UmetnikEditViewModel(_umetniciRepository, _clanstvoRepository, _deloRepository, isBend, id);
+            // --- KRAJ IZMENE ---
 
             var v = new Views.UmetnikEditView
             {
@@ -101,4 +109,3 @@ namespace MusicCatalog.ViewModels
     }
 
 }
-

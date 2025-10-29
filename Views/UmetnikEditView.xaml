@@ -9,12 +9,13 @@
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
         
-        MaxWidth="600">
+        MaxWidth="600"
+        Width="600">
 
     <Window.Resources>
         <utils:BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
-    
+
     <Grid Background="{StaticResource WindowBackgroundBrush}">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
@@ -43,7 +44,7 @@
                                 <ComboBox ItemsSource="{Binding sviIzvodjaci}"
                                           SelectedItem="{Binding SelectedIzvodjac}"
                                           DisplayMemberPath="Ime"
-                                          Width="220"
+                                           Width="220"
                                           Margin="0,0,8,0"/>
                                 <DatePicker SelectedDate="{Binding NewDatumUclanjenja}" Width="140" Margin="0,0,8,0"/>
                                 <Button Content="Dodaj" Command="{Binding AddClanCommand}" Style="{StaticResource PrimaryButton}"/>
@@ -52,7 +53,7 @@
                             <TextBlock Text="Članovi" Style="{StaticResource FormLabel}" Margin="0,12,0,6"/>
                             <DataGrid ItemsSource="{Binding Clanovi}"
                                       AutoGenerateColumns="False"
-                                      CanUserAddRows="False"
+                                     CanUserAddRows="False"
                                       Height="160"
                                       Margin="0,0,0,6">
                                 <DataGrid.Columns>
@@ -62,9 +63,9 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Content="Ukloni"
-                                                        Command="{Binding DataContext.RemoveClanCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                         Command="{Binding DataContext.RemoveClanCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                         CommandParameter="{Binding}"
-                                                        Style="{StaticResource PrimaryButton}"/>
+                                                         Style="{StaticResource PrimaryButton}"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -72,13 +73,46 @@
                             </DataGrid>
                         </StackPanel>
 
-                        <!-- Izvođač-specific UI -->
                         <StackPanel Visibility="{Binding IsBend, Converter={StaticResource BoolToVis}, ConverterParameter=inverse}">
                             <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
                             <TextBox Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
 
                             <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
                             <TextBox Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
+
+                            <Separator Margin="0,15,0,10"/>
+
+                            <TextBlock Text="Muzička Dela (Albumi i Pesme)" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                            <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="250">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                    <ItemsControl ItemsSource="{Binding SvaMuzickaDela}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                          Foreground="{StaticResource TextBrush}"
+                                                          Margin="2">
+                                                    <CheckBox.Content>
+                                                        <TextBlock Text="{Binding Naziv}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="FontWeight" Value="Normal"/>
+                                                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsAlbum}" Value="True">
+                                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                                            <Setter Property="Margin" Value="0,2,0,1"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </CheckBox.Content>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
                         </StackPanel>
 
                         <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap" Margin="0,6,0,12" Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVis}}"/>
