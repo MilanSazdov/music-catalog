@@ -1,0 +1,82 @@
+﻿<Window x:Class="MusicCatalog.Views.AlbumEditView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Album" Height="520" Width="700"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#FFF9F9F9">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Novi/Izmena - Album" FontSize="18" FontWeight="SemiBold"/>
+
+        <Grid Grid.Row="2" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Naziv:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Naziv, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Grid.Column="2" Text="Trajanje (min):" VerticalAlignment="Center" Margin="12,0,8,0"/>
+            <TextBox Grid.Column="3" Text="{Binding TrajanjeMin, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Datum izdanja:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <DatePicker Grid.Column="1"
+                        SelectedDate="{Binding DatumIzdanja, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
+        <GroupBox Grid.Row="6" Header="Pesme u albumu" Padding="8">
+            <Border BorderThickness="1" BorderBrush="#DDD">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Pesme}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Naziv}"
+                                          Margin="4,2"
+                                          IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </GroupBox>
+
+        <!-- Show error text; no converter needed -->
+        <TextBlock Grid.Row="8"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Crimson"
+                   FontWeight="SemiBold"
+                   TextWrapping="Wrap"/>
+
+        <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="Sačuvaj" Width="100" Margin="0,0,8,0"
+                    IsDefault="True"
+                    Command="{Binding SaveCommand}"/>
+            <Button Content="Otkaži" Width="100"
+                    IsCancel="True"
+                    Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

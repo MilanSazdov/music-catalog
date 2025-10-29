@@ -62,7 +62,9 @@ namespace MusicCatalog.ViewModels
  private void OpenEdit(bool isAlbum, int? id = null)
  {
  var vm = new MuzickoDeloEditViewModel(_delaRepo, _zanrRepo, isAlbum, id);
- var v = new MuzickoDeloEditView { DataContext = vm };
+ Window v = isAlbum
+     ? new AlbumEditView { DataContext = vm }
+     : new MuzickoDeloEditView { DataContext = vm };
  vm.OnSaved = () => { v.Close(); Load(); };
  vm.OnCancelled = () => v.Close();
  v.ShowDialog();

@@ -25,7 +25,12 @@ namespace MusicCatalog.ViewModels
  public double TrajanjeMin { get => _trajanjeMin; set { _trajanjeMin = value; OnPropertyChanged(nameof(TrajanjeMin)); UpdateCanSave(); } }
  private DateTime _datumIzdanja = DateTime.Today;
  public DateTime DatumIzdanja { get => _datumIzdanja; set { _datumIzdanja = value; OnPropertyChanged(nameof(DatumIzdanja)); UpdateCanSave(); } }
+
+ // For Pesma editing: select genres
  public ObservableCollection<ZanrOption> Zanrovi { get; } = new();
+
+ // For Album editing: select songs
+ public ObservableCollection<PesmaOption> Pesme { get; } = new();
 
  private string _errorMessage = string.Empty;
  public string ErrorMessage { get => _errorMessage; set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); } }
@@ -49,6 +54,33 @@ namespace MusicCatalog.ViewModels
 
  private void Load()
  {
+ if (_isAlbum)
+ {
+ // Load all songs to choose from
+ Pesme.Clear();
+ var svePesme = _deloRepo.GetAll().OfType<Pesma>().OrderBy(p => p.Naziv).ToList();
+ foreach (var p in svePesme)
+ {
+ Pesme.Add(new PesmaOption(p.Id, p.Naziv));
+ }
+
+ if (_id.HasValue)
+ {
+ var md = _deloRepo.GetById(_id.Value) as Album;
+ if (md != null)
+ {
+ _naziv = md.Naziv;
+ _trajanjeMin = md.Trajanje.TotalMinutes;
+ _datumIzdanja = md.DatumIzdanja;
+
+ var setPesama = md.PesmaIDs?.ToHashSet() ?? new HashSet<int>();
+ foreach (var p in Pesme) p.IsSelected = setPesama.Contains(p.Id);
+ }
+ }
+ }
+ else
+ {
+ // For songs, keep genre selection
  var allZ = _zanrRepo.GetAll();
  Zanrovi.Clear();
  foreach (var z in allZ)
@@ -66,41 +98,94 @@ namespace MusicCatalog.ViewModels
  }
  }
  }
+ }
 
  private void UpdateCanSave() => CommandManager.InvalidateRequerySuggested();
  private bool CanSave()
  {
- return !string.IsNullOrWhiteSpace(Naziv) && TrajanjeMin >0 && DatumIzdanja <= DateTime.Today && Zanrovi.Any(z => z.IsSelected);
+ if (_isAlbum)
+ {
+ return !string.IsNullOrWhiteSpace(Naziv)
+ && TrajanjeMin > 0
+ && DatumIzdanja <= DateTime.Today
+ && Pesme.Any(p => p.IsSelected);
+ }
+ else
+ {
+ return !string.IsNullOrWhiteSpace(Naziv)
+ && TrajanjeMin > 0
+ && DatumIzdanja <= DateTime.Today
+ && Zanrovi.Any(z => z.IsSelected);
+ }
  }
 
  private void Save()
  {
  ErrorMessage = string.Empty;
- var ids = Zanrovi.Where(z => z.IsSelected).Select(z => z.Id).ToList();
+
  var traj = TimeSpan.FromMinutes(TrajanjeMin);
+
  try
  {
- MuzickoDelo entity;
  if (_id.HasValue)
  {
- entity = _deloRepo.GetById(_id.Value)!;
- entity.Naziv = Naziv;
- entity.Trajanje = traj;
- entity.DatumIzdanja = DatumIzdanja;
- entity.ZanrIDs = ids;
- _deloRepo.Update(entity);
+ var existing = _deloRepo.GetById(_id.Value)!;
+
+ if (_isAlbum && existing is Album alb)
+ {
+ var selectedPesmaIds = Pesme.Where(p => p.IsSelected).Select(p => p.Id).ToList();
+ var distinctZanrIds = ComputeAlbumGenresFromSongs(selectedPesmaIds);
+
+ alb.Naziv = Naziv;
+ alb.Trajanje = traj;
+ alb.DatumIzdanja = DatumIzdanja;
+ alb.PesmaIDs = selectedPesmaIds;
+ alb.ZanrIDs = distinctZanrIds;
+
+ _deloRepo.Update(alb);
  }
  else
  {
- entity = _isAlbum ? new Album(0, Naziv, traj, DatumIzdanja, ids) : new Pesma(0, Naziv, traj, DatumIzdanja, ids);
+ // Pesma edit
+ var ids = Zanrovi.Where(z => z.IsSelected).Select(z => z.Id).ToList();
+ existing.Naziv = Naziv;
+ existing.Trajanje = traj;
+ existing.DatumIzdanja = DatumIzdanja;
+ existing.ZanrIDs = ids;
+ _deloRepo.Update(existing);
+ }
+ }
+ else
+ {
+ if (_isAlbum)
+ {
+ var selectedPesmaIds = Pesme.Where(p => p.IsSelected).Select(p => p.Id).ToList();
+ var distinctZanrIds = ComputeAlbumGenresFromSongs(selectedPesmaIds);
+
+ var entity = new Album(0, Naziv, traj, DatumIzdanja, distinctZanrIds, selectedPesmaIds);
  _deloRepo.Add(entity);
  }
+ else
+ {
+ var ids = Zanrovi.Where(z => z.IsSelected).Select(z => z.Id).ToList();
+ MuzickoDelo entity = new Pesma(0, Naziv, traj, DatumIzdanja, ids);
+ _deloRepo.Add(entity);
+ }
+ }
+
  OnSaved?.Invoke();
  }
  catch (Exception ex)
  {
  ErrorMessage = ex.Message;
  }
+ }
+
+ private List<int> ComputeAlbumGenresFromSongs(List<int> selectedPesmaIds)
+ {
+ if (selectedPesmaIds.Count == 0) return new List<int>();
+ var pesme = _deloRepo.GetAll().OfType<Pesma>().Where(p => selectedPesmaIds.Contains(p.Id));
+ return pesme.SelectMany(p => p.ZanrIDs).Distinct().ToList();
  }
  }
 
@@ -111,5 +196,14 @@ namespace MusicCatalog.ViewModels
  private bool _isSelected;
  public bool IsSelected { get => _isSelected; set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
  public ZanrOption(int id, string naziv) { Id = id; Naziv = naziv; }
+ }
+
+ public class PesmaOption : ViewModelBase
+ {
+ public int Id { get; }
+ public string Naziv { get; }
+ private bool _isSelected;
+ public bool IsSelected { get => _isSelected; set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
+ public PesmaOption(int id, string naziv) { Id = id; Naziv = naziv; }
  }
 }

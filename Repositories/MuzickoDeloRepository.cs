@@ -75,16 +75,19 @@ namespace MusicCatalog.Repositories
                 _muzickaDela.Add(muzickoDelo);
                 Save();
 
-                // Link to genres
-                foreach (var zanrId in muzickoDelo.ZanrIDs.Distinct())
+                // Link to genres ONLY for songs (Pesma).
+                if (muzickoDelo is not Album)
                 {
-                    var zanr = _zanrRepo.GetById(zanrId);
-                    if (zanr == null) continue;
-
-                    if (!zanr.MuzickaDelaIDs.Contains(muzickoDelo.Id))
+                    foreach (var zanrId in muzickoDelo.ZanrIDs.Distinct())
                     {
-                        zanr.MuzickaDelaIDs.Add(muzickoDelo.Id);
-                        _zanrRepo.Update(zanr);
+                        var zanr = _zanrRepo.GetById(zanrId);
+                        if (zanr == null) continue;
+
+                        if (!zanr.MuzickaDelaIDs.Contains(muzickoDelo.Id))
+                        {
+                            zanr.MuzickaDelaIDs.Add(muzickoDelo.Id);
+                            _zanrRepo.Update(zanr);
+                        }
                     }
                 }
             }
@@ -127,29 +130,32 @@ namespace MusicCatalog.Repositories
                 var existing = GetById(muzickoDelo.Id);
                 if (existing != null)
                 {
-                    // Sync genre links: remove old, add new
-                    var oldSet = existing.ZanrIDs.Distinct().ToHashSet();
-                    var newSet = muzickoDelo.ZanrIDs.Distinct().ToHashSet();
-
-                    var toRemove = oldSet.Except(newSet);
-                    var toAdd = newSet.Except(oldSet);
-
-                    foreach (var zanrId in toRemove)
+                    // Sync genre links ONLY for songs (Pesma).
+                    if (muzickoDelo is not Album)
                     {
-                        var zanr = _zanrRepo.GetById(zanrId);
-                        if (zanr != null && zanr.MuzickaDelaIDs.Remove(muzickoDelo.Id))
+                        var oldSet = existing.ZanrIDs.Distinct().ToHashSet();
+                        var newSet = muzickoDelo.ZanrIDs.Distinct().ToHashSet();
+
+                        var toRemove = oldSet.Except(newSet);
+                        var toAdd = newSet.Except(oldSet);
+
+                        foreach (var zanrId in toRemove)
                         {
-                            _zanrRepo.Update(zanr);
+                            var zanr = _zanrRepo.GetById(zanrId);
+                            if (zanr != null && zanr.MuzickaDelaIDs.Remove(muzickoDelo.Id))
+                            {
+                                _zanrRepo.Update(zanr);
+                            }
                         }
-                    }
 
-                    foreach (var zanrId in toAdd)
-                    {
-                        var zanr = _zanrRepo.GetById(zanrId);
-                        if (zanr != null && !zanr.MuzickaDelaIDs.Contains(muzickoDelo.Id))
+                        foreach (var zanrId in toAdd)
                         {
-                            zanr.MuzickaDelaIDs.Add(muzickoDelo.Id);
-                            _zanrRepo.Update(zanr);
+                            var zanr = _zanrRepo.GetById(zanrId);
+                            if (zanr != null && !zanr.MuzickaDelaIDs.Contains(muzickoDelo.Id))
+                            {
+                                zanr.MuzickaDelaIDs.Add(muzickoDelo.Id);
+                                _zanrRepo.Update(zanr);
+                            }
                         }
                     }
 
