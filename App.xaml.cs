@@ -1,4 +1,4 @@
-﻿
+﻿// Datoteka: App.xaml.cs
 using MusicCatalog.Models;
 using MusicCatalog.Repositories;
 using MusicCatalog.Services;
@@ -23,7 +23,7 @@ namespace MusicCatalog
 
         public App()
         {
-         
+
             _korisnikRepository = new KorisnikRepository("Data/korisnici.json");
             _anketaRepository = new AnketaRepository("Data/ankete.json");
             _zanrRepository = new ZanrRepository("Data/zanrovi.json");
@@ -34,26 +34,26 @@ namespace MusicCatalog
 
             _authService = new AuthService(_korisnikRepository);
 
-       
+
             _mainViewModel = new MainViewModel(null!);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            
+
             MainWindow = new MainWindow
             {
                 DataContext = _mainViewModel
             };
 
-           
+
             ShowLoginView();
 
             MainWindow.Show();
             base.OnStartup(e);
         }
 
-        
+
 
         private void ShowLoginView()
         {
@@ -81,7 +81,7 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = adminVM;
         }
 
-        
+
         private void ShowRegistrovaniKorisnikView()
         {
             var korisnikVM = new RegistrovaniKorisnikViewModel(
@@ -89,12 +89,13 @@ namespace MusicCatalog
                 _deloRepository,
                 _zanrRepository,
                 _umetnikRepository,
-                _clanstvoRepository
+                _clanstvoRepository,
+                _korisnikRepository
             );
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
-       
+
 
         private void ShowMuzickiUrednikView()
         {

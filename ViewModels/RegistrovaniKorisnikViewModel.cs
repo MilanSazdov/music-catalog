@@ -18,7 +18,8 @@ namespace MusicCatalog.ViewModels
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
         private readonly IMuzickiUmetnikRepository _umetnikRepo;
-        private readonly IClanstvoRepository _clanstvoRepo; // <-- DODATO POLJE
+        private readonly IClanstvoRepository _clanstvoRepo;
+        private readonly IKorisnikRepository _korisnikRepo;
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -35,19 +36,21 @@ namespace MusicCatalog.ViewModels
         public ICommand ObrisiNalogCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        // --- POČETAK IZMENE (Konstruktor) ---
+        // Konstruktor sada prima svih 6 zavisnosti
         public RegistrovaniKorisnikViewModel(
             AuthService authService,
             IMuzickoDeloRepository deloRepo,
             IZanrRepository zanrRepo,
             IMuzickiUmetnikRepository umetnikRepo,
-            IClanstvoRepository clanstvoRepo) // <-- DODAT ARGUMENT
+            IClanstvoRepository clanstvoRepo,
+            IKorisnikRepository korisnikRepo)
         {
             _authService = authService;
             _deloRepo = deloRepo;
             _zanrRepo = zanrRepo;
             _umetnikRepo = umetnikRepo;
-            _clanstvoRepo = clanstvoRepo; // <-- DODELJIVANJE
+            _clanstvoRepo = clanstvoRepo;
+            _korisnikRepo = korisnikRepo;
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
@@ -59,22 +62,31 @@ namespace MusicCatalog.ViewModels
 
             PrikaziSadrzaj(null);
         }
-        // --- KRAJ IZMENE ---
 
         private void PrikaziSadrzaj(object? parameter)
         {
-            var vm = new KorisnikMuzickiSadrzajViewModel(_deloRepo, _zanrRepo);
+            // Prosleđujemo korisnika i repo za favorite sadržaja
+            var vm = new KorisnikMuzickiSadrzajViewModel(
+                _deloRepo,
+                _zanrRepo,
+                (RegistrovaniKorisnik)TrenutniKorisnik,
+                _korisnikRepo
+            );
             CurrentContentView = vm;
         }
 
-        // --- POČETAK IZMENE (Metoda) ---
         private void PrikaziUmetnike(object? parameter)
         {
-            // Kreiramo novi ViewModel za prikaz umetnika i prosleđujemo SVE repozitorijume
-            var vm = new KorisnikUmetniciViewModel(_umetnikRepo, _clanstvoRepo, _deloRepo);
+            // Prosleđujemo SVE zavisnosti za favorite umetnika
+            var vm = new KorisnikUmetniciViewModel(
+                _umetnikRepo,
+                _clanstvoRepo,
+                _deloRepo,
+                (RegistrovaniKorisnik)TrenutniKorisnik,
+                _korisnikRepo
+                );
             CurrentContentView = vm;
         }
-        // --- KRAJ IZMENE ---
 
         private void IzmeniPodatke(object? parameter)
         {

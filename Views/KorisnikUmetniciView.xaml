@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MusicCatalog.Views"
              xmlns:models="clr-namespace:MusicCatalog.Models.Umetnici"
+             xmlns:vms="clr-namespace:MusicCatalog.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="1000">
 
 	<UserControl.Resources>
 
-		<DataTemplate DataType="{x:Type models:Bend}">
+		<DataTemplate DataType="{x:Type vms:UmetnikView}">
 			<Border Width="220" MinHeight="380" Margin="8" Padding="10" CornerRadius="10"
                     Background="{StaticResource SurfaceBrush}"
                     BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
@@ -30,59 +31,48 @@
 					</Border>
 
 					<StackPanel Grid.Row="1" Margin="0,0,0,8">
-						<TextBlock Text="{Binding Naziv}" FontWeight="Bold" FontSize="14" Margin="0,0,0,4" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
-						<TextBlock FontSize="12" Foreground="Gray" Margin="0,0,0,6" TextTrimming="CharacterEllipsis">
-							<Run Text="Bend — "/>
-							<Run Text="{Binding Aktivan, StringFormat='Aktivan: {0}'}"/>
-						</TextBlock>
-						<TextBlock Text="{Binding DatumNastanka, StringFormat='Osnovan: {0:dd.MM.yyyy}'}" FontSize="12" Margin="0,0,0,6"/>
+
+						<StackPanel Visibility="{Binding IsBend, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<TextBlock Text="{Binding Naziv}" FontWeight="Bold" FontSize="14" Margin="0,0,0,4" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+							<TextBlock FontSize="12" Foreground="Gray" Margin="0,0,0,6" TextTrimming="CharacterEllipsis">
+								<Run Text="Bend — "/>
+								<Run Text="{Binding Aktivan, StringFormat='Aktivan: {0}', Mode=OneWay}"/>
+							</TextBlock>
+							<TextBlock Text="{Binding DatumNastanka, StringFormat='Osnovan: {0:dd.MM.yyyy}'}" FontSize="12" Margin="0,0,0,6"/>
+						</StackPanel>
+
+						<StackPanel Visibility="{Binding IsBend, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}">
+							<StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+								<TextBlock Text="{Binding Ime}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+								<TextBlock Text=" " FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+								<TextBlock Text="{Binding Prezime}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+							</StackPanel>
+							<TextBlock Text="Izvođač" FontSize="12" Foreground="Gray" Margin="0,4,0,6"/>
+						</StackPanel>
+
 						<TextBlock Text="{Binding Opis}" FontSize="12" TextWrapping="Wrap" MaxHeight="56" TextTrimming="CharacterEllipsis" ToolTip="{Binding Opis}"/>
 					</StackPanel>
 
-					<Button Grid.Row="2" Content="Info"
-                            Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            CommandParameter="{Binding}"
-							VerticalAlignment="Bottom"
-                            Style="{StaticResource PrimaryButton}" Margin="0,8,0,0" Padding="6"/>
-				</Grid>
-			</Border>
-		</DataTemplate>
+					<Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="0,8,0,0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
 
-		<DataTemplate DataType="{x:Type models:Izvodjac}">
-			<Border Width="220" MinHeight="380" Margin="8" Padding="10" CornerRadius="10"
-                    Background="{StaticResource SurfaceBrush}"
-                    BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
-				<Border.Effect>
-					<DropShadowEffect ShadowDepth="1" BlurRadius="10" Color="Gray" Opacity="0.18"/>
-				</Border.Effect>
+						<ToggleButton Grid.Column="0"
+                                      Style="{StaticResource HeartToggleButton}"
+                                      IsChecked="{Binding IsFavorit, Mode=OneWay}"
+                                      Command="{Binding DataContext.ToggleFavoritCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      CommandParameter="{Binding}"
+                                      VerticalAlignment="Center"/>
 
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="*"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
-
-					<Border Grid.Row="0" Height="120" CornerRadius="6" Background="#111" Margin="0,0,0,8" ClipToBounds="True">
-						<Image Source="{Binding Slika, TargetNullValue=/Assets/placeholder.png}" Stretch="UniformToFill"/>
-					</Border>
-
-					<StackPanel Grid.Row="1" Margin="0,0,0,8">
-
-						<StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-							<TextBlock Text="{Binding Ime}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
-							<TextBlock Text=" " FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
-							<TextBlock Text="{Binding Prezime}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
-						</StackPanel>
-						<TextBlock Text="Izvođač" FontSize="12" Foreground="Gray" Margin="0,4,0,6"/>
-						<TextBlock Text="{Binding Opis}" FontSize="12" TextWrapping="Wrap" MaxHeight="72" TextTrimming="CharacterEllipsis" ToolTip="{Binding Opis}"/>
-					</StackPanel>
-
-					<Button Grid.Row="2" Content="Info"
-                            Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            CommandParameter="{Binding}"
-							VerticalAlignment="Bottom"
-                            Style="{StaticResource PrimaryButton}" Margin="0,8,0,0" Padding="6"/>
+						<Button Grid.Column="1" Content="Info"
+                                Command="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding}"
+                                Style="{StaticResource PrimaryButton}"
+                                Padding="6"
+                                HorizontalAlignment="Right"/>
+					</Grid>
 				</Grid>
 			</Border>
 		</DataTemplate>
