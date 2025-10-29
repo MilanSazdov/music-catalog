@@ -12,12 +12,12 @@ using System.Windows.Input;
 
 namespace MusicCatalog.ViewModels
 {
-    // Pomoćna klasa je malo izmenjena da koristi 'MuzickoDelo' kao bazu
-    public class DeloCheckItem : ViewModelBase
+    // --- POČETAK IZMENE (Vraćamo generičku pomoćnu klasu) ---
+    public class DeloCheckItem<T> : ViewModelBase where T : MuzickoDelo
     {
-        public MuzickoDelo Delo { get; }
+        public T Delo { get; }
         private bool _isSelected;
-        public event Action<DeloCheckItem>? OnSelectionChanged;
+        public event Action<DeloCheckItem<T>>? OnSelectionChanged;
 
         public bool IsSelected
         {
@@ -32,13 +32,9 @@ namespace MusicCatalog.ViewModels
         }
         public string Naziv => Delo.Naziv;
 
-        // --- DODATO ---
-        // Koristićemo ovo u XAML-u da drugačije stilizujemo albume
-        public bool IsAlbum => Delo is Album;
-        // --- KRAJ DODAVANJA ---
-
-        public DeloCheckItem(MuzickoDelo delo) { Delo = delo; }
+        public DeloCheckItem(T delo) { Delo = delo; }
     }
+    // --- KRAJ IZMENE ---
 
 
     public class UmetnikEditViewModel : ViewModelBase
@@ -91,8 +87,9 @@ namespace MusicCatalog.ViewModels
         public string _prezime = string.Empty;
         public string Prezime { get => _prezime; set { _prezime = value; OnPropertyChanged(nameof(Prezime)); UpdateCanSave(); } }
 
-        // --- POČETAK IZMENE (Jedna lista) ---
-        public ObservableCollection<DeloCheckItem> SvaMuzickaDela { get; } = new();
+        // --- POČETAK IZMENE (Vraćamo dve liste za UI) ---
+        public ObservableCollection<DeloCheckItem<Album>> SviAlbumi { get; } = new();
+        public ObservableCollection<DeloCheckItem<Pesma>> SvePesme { get; } = new();
         // --- KRAJ IZMENE ---
 
 
@@ -144,63 +141,69 @@ namespace MusicCatalog.ViewModels
             }
             else
             {
-                // --- POČETAK IZMENE (Logika učitavanja) ---
-                LoadDela(); // Učitaj albume i pesme
+                LoadDela();
 
                 if (id.HasValue && _umetnikRepository.GetById(id.Value) is Izvodjac izvodjac)
                 {
-                    // Selektuj dela koje izvođač ima
                     if (izvodjac.MuzickoDeloIDs != null)
                     {
                         var deloIdSet = izvodjac.MuzickoDeloIDs.ToHashSet();
-                        foreach (var item in SvaMuzickaDela.Where(a => deloIdSet.Contains(a.Delo.Id)))
+
+                        // Selektuj albume
+                        foreach (var item in SviAlbumi.Where(a => deloIdSet.Contains(a.Delo.Id)))
                         {
-                            item.OnSelectionChanged -= OnDeloSelectionChanged; // Privremeno ukidamo event
+                            item.OnSelectionChanged -= OnAlbumSelectionChanged; // Privremeno ukidamo event
                             item.IsSelected = true;
-                            item.OnSelectionChanged += OnDeloSelectionChanged;
+                            item.OnSelectionChanged += OnAlbumSelectionChanged;
+                        }
+                        // Selektuj pesme
+                        foreach (var item in SvePesme.Where(p => deloIdSet.Contains(p.Delo.Id)))
+                        {
+                            item.IsSelected = true;
                         }
                     }
                 }
-                // --- KRAJ IZMENE ---
             }
         }
 
         private void LoadDela()
         {
-            SvaMuzickaDela.Clear();
+            var dela = _deloRepository.GetAll();
+            SviAlbumi.Clear();
+            SvePesme.Clear();
 
-            // Učitavamo SVA dela i sortiramo ih tako da Albumi budu na vrhu
-            var dela = _deloRepository.GetAll()
-                .OrderBy(d => d is Pesma) // Albumi (false=0) idu pre Pesama (true=1)
-                .ThenBy(d => d.Naziv);
-
-            foreach (var delo in dela)
+            // Učitaj Albume
+            foreach (var album in dela.OfType<Album>().OrderBy(a => a.Naziv))
             {
-                var item = new DeloCheckItem(delo);
-                item.OnSelectionChanged += OnDeloSelectionChanged; // Pretplati se na događaj
-                SvaMuzickaDela.Add(item);
+                var item = new DeloCheckItem<Album>(album);
+                item.OnSelectionChanged += OnAlbumSelectionChanged; // Pretplati se na događaj
+                SviAlbumi.Add(item);
+            }
+
+            // Učitaj Pesme
+            foreach (var pesma in dela.OfType<Pesma>().OrderBy(p => p.Naziv))
+            {
+                var item = new DeloCheckItem<Pesma>(pesma);
+                SvePesme.Add(item);
             }
         }
 
-        // --- POČETAK IZMENE (Logika kaskadnog odčekiranja) ---
-        private void OnDeloSelectionChanged(DeloCheckItem deloItem)
+        private void OnAlbumSelectionChanged(DeloCheckItem<Album> albumItem)
         {
-            // Kaskadno odčekiranje
-            // Ako je item koji je promenjen Album I ako je odčekiran
-            if (deloItem.Delo is Album album && deloItem.IsSelected == false)
+            // --- POČETAK IZMENE (Logika kaskadnog ČEKIRANJA i ODČEKIRANJA) ---
+            var album = albumItem.Delo;
+            if (album.PesmaIDs == null || !album.PesmaIDs.Any()) return;
+
+            var pesmaIdsToUpdate = album.PesmaIDs.ToHashSet();
+
+            // Prolazimo kroz listu pesama i postavljamo njihovo stanje (čekirano/odčekirano)
+            // na isto stanje kao i album.
+            foreach (var pesmaItem in SvePesme.Where(p => pesmaIdsToUpdate.Contains(p.Delo.Id)))
             {
-                if (album.PesmaIDs == null || !album.PesmaIDs.Any()) return;
-
-                var pesmaIdsToUncheck = album.PesmaIDs.ToHashSet();
-
-                // Prolazimo kroz celu listu i tražimo pesme koje pripadaju tom albumu
-                foreach (var pesmaItem in SvaMuzickaDela.Where(p => p.Delo is Pesma && pesmaIdsToUncheck.Contains(p.Delo.Id)))
-                {
-                    pesmaItem.IsSelected = false; // Ovo će automatski osvežiti UI
-                }
+                pesmaItem.IsSelected = albumItem.IsSelected; // Postavi na isto stanje kao album
             }
+            // --- KRAJ IZMENE ---
         }
-        // --- KRAJ IZMENE ---
 
         private void LoadIzvojaci()
         {
@@ -246,8 +249,14 @@ namespace MusicCatalog.ViewModels
                 {
                     izvodjac.Ime = Ime;
                     izvodjac.Prezime = Prezime;
-                    // --- POČETAK IZMENE (Snimanje ID-jeva) ---
-                    izvodjac.MuzickoDeloIDs = SvaMuzickaDela.Where(a => a.IsSelected).Select(a => a.Delo.Id).ToList();
+
+                    // --- POČETAK IZMENE (Logika snimanja) ---
+                    // Skupljamo ID-jeve iz OBE liste i spajamo ih u jednu
+                    var albumIDs = SviAlbumi.Where(a => a.IsSelected).Select(a => a.Delo.Id);
+                    var pesmaIDs = SvePesme.Where(p => p.IsSelected).Select(p => p.Delo.Id);
+
+                    // Spajamo liste i osiguravamo da nema duplikata
+                    izvodjac.MuzickoDeloIDs = albumIDs.Concat(pesmaIDs).Distinct().ToList();
                     // --- KRAJ IZMENE ---
                 }
                 _umetnikRepository.Update(existing);
@@ -264,19 +273,22 @@ namespace MusicCatalog.ViewModels
                 }
                 else
                 {
-                    // --- POČETAK IZMENE (Snimanje ID-jeva kod kreiranja) ---
-                    var noviIzvodjac = new Izvodjac(Ime, Prezime, Opis, SlikaPutanja)
-                    {
-                        MuzickoDeloIDs = SvaMuzickaDela.Where(a => a.IsSelected).Select(a => a.Delo.Id).ToList()
-                    };
-                    _umetnikRepository.Add(noviIzvodjac);
+                    var noviIzvodjac = new Izvodjac(Ime, Prezime, Opis, SlikaPutanja);
+
+                    // --- POČETAK IZMENE (Logika snimanja za novog) ---
+                    var albumIDs = SviAlbumi.Where(a => a.IsSelected).Select(a => a.Delo.Id);
+                    var pesmaIDs = SvePesme.Where(p => p.IsSelected).Select(p => p.Delo.Id);
+                    noviIzvodjac.MuzickoDeloIDs = albumIDs.Concat(pesmaIDs).Distinct().ToList();
                     // --- KRAJ IZMENE ---
+
+                    _umetnikRepository.Add(noviIzvodjac);
                     _umetnikRepository.SaveChanges();
                     OnSaved?.Invoke();
                 }
             }
         }
 
+        // ... (Ostatak klase: AddClan, RemoveClan, UpdateCanAddClan... ostaje isti)
         private void UpdateCanAddClan() => CommandManager.InvalidateRequerySuggested();
         private bool CanAddClan()
         {

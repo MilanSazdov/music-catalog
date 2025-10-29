@@ -9,8 +9,8 @@
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
         
-        MaxWidth="600"
-        Width="600">
+        MaxWidth="800"
+        Width="800">
 
     <Window.Resources>
         <utils:BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -19,7 +19,7 @@
     <Grid Background="{StaticResource WindowBackgroundBrush}">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="28" MaxWidth="550">
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="28" MaxWidth="750">
                     <StackPanel>
 
                         <TextBlock Text="{Binding TipText}" Style="{StaticResource FormLabel}" FontSize="18" FontWeight="Bold" Margin="0,0,0,12" HorizontalAlignment="Center"/>
@@ -82,44 +82,56 @@
 
                             <Separator Margin="0,15,0,10"/>
 
-                            <TextBlock Text="Muzička Dela (Albumi i Pesme)" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
-                            <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="250">
-                                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
-                                    <ItemsControl ItemsSource="{Binding SvaMuzickaDela}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                          Foreground="{StaticResource TextBrush}"
-                                                          Margin="2">
-                                                    <CheckBox.Content>
-                                                        <TextBlock Text="{Binding Naziv}">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Setter Property="FontWeight" Value="Normal"/>
-                                                                    <Setter Property="Margin" Value="0,0,0,0"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsAlbum}" Value="True">
-                                                                            <Setter Property="FontWeight" Value="Bold"/>
-                                                                            <Setter Property="Margin" Value="0,2,0,1"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
-                                                    </CheckBox.Content>
-                                                </CheckBox>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
-                            </Border>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Albumi" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                            <ItemsControl ItemsSource="{Binding SviAlbumi}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Content="{Binding Naziv}" 
+                                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                                  Foreground="{StaticResource TextBrush}"
+                                                                  Margin="2"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Pesme" Style="{StaticResource FormLabel}" FontWeight="SemiBold"/>
+                                    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="200">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5">
+                                            <ItemsControl ItemsSource="{Binding SvePesme}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Content="{Binding Naziv}" 
+                                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                                  Foreground="{StaticResource TextBrush}"
+                                                                  Margin="2"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
 
                         <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap" Margin="0,6,0,12" Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVis}}"/>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,8,0,0">
-                            <Button Content="Potvrdi" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Stretch" Width="220"/>
-                            <Button Content="Otkaži" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Width="220" Margin="8,0,0,0"/>
+                            <Button Content="Potvrdi" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Stretch" Width="Auto" MinWidth="220" HorizontalContentAlignment="Center"/>
+                            <Button Content="Otkaži" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Width="Auto" MinWidth="220" Margin="8,0,0,0" HorizontalContentAlignment="Center"/>
                         </StackPanel>
 
                     </StackPanel>
