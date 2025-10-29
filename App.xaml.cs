@@ -75,7 +75,7 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = registerVM;
         }
 
-        // AdminView ostaje netaknut, kao što ste tražili
+        // AdminView ostaje netaknut
         private void ShowAdminView()
         {
             var adminVM = new AdminViewModel(_anketaRepository, _korisnikRepository, _zanrRepository, _umetnikRepository, _clanstvoRepository);
@@ -83,17 +83,21 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = adminVM;
         }
 
+        // --- POČETAK IZMENE ---
+        // Ažurirana metoda da prosledi i '_umetnikRepository'
         private void ShowRegistrovaniKorisnikView()
         {
-            var korisnikVM = new RegistrovaniKorisnikViewModel(_authService, _deloRepository, _zanrRepository);
+            var korisnikVM = new RegistrovaniKorisnikViewModel(
+                _authService,
+                _deloRepository,
+                _zanrRepository,
+                _umetnikRepository // <-- DODAT JE OVAJ ARGUMENT
+            );
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
+        // --- KRAJ IZMENE ---
 
-        //
-        // ========= IZMENA JE OVDE =========
-        //
-        // Ažuriramo ovu metodu da prosledi repozitorijume
         private void ShowMuzickiUrednikView()
         {
             var urednikVM = new MuzickiUrednikViewModel(_authService, _deloRepository, _zanrRepository);
