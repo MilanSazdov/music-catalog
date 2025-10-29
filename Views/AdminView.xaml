@@ -25,7 +25,10 @@
             <DataTemplate DataType="{x:Type viewmodels:AdminZanroviViewModel}">
                 <local:AdminZanroviView/>
             </DataTemplate>
-        </UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:AdminUmetniciViewModel}">
+            <local:AdminUmetniciView/>
+        </DataTemplate>
+    </UserControl.Resources>
 
         <Grid>
             <Border CornerRadius="15">
@@ -52,6 +55,7 @@
                         <Button Content="Prikazi Ankete" Command="{Binding ShowAnketeCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Muzicki sadrzaj" Command="{Binding ShowMuzickiSadrzajCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Zanrovi" Command="{Binding ShowZanroviCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Umetnici" Command="{Binding ShowUmetniciCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
 
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Bottom" Margin="10">

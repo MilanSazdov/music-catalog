@@ -8,7 +8,14 @@ namespace MusicCatalog.Models.Umetnici
 {
     public class Izvodjac : MuzickiUmetnik
     {
-        public string Ime;
-        public string Prezime;
+        public string Ime { get; set; }
+        public string Prezime { get; set; }
+
+        public Izvodjac(string ime, string prezime, string opis, string slika) : base(opis, slika)
+        {
+            Ime = ime;
+            Prezime = prezime;
+
+        }
     }
 }

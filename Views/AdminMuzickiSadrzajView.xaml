@@ -4,56 +4,55 @@
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  mc:Ignorable="d">
- <Grid Margin="16">
- <StackPanel>
+    <Grid Margin="16">
+        <StackPanel>
 
- <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
- <Button Content="Dodaj novu pesmu" Command="{Binding AddPesmaCommand}" Width="160" Margin="0,0,10,10" Style="{StaticResource PrimaryButton}" Padding="8"/>
- <Button Content="Dodaj novi album" Command="{Binding AddAlbumCommand}" Width="160" Margin="0,0,10,10" Style="{StaticResource PrimaryButton}" Padding="8"/>
- </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
+                <Button Content="Dodaj novu pesmu" Command="{Binding AddPesmaCommand}" Width="160" Margin="0,0,10,10" Style="{StaticResource PrimaryButton}" Padding="8"/>
+                <Button Content="Dodaj novi album" Command="{Binding AddAlbumCommand}" Width="160" Margin="0,0,10,10" Style="{StaticResource PrimaryButton}" Padding="8"/>
+            </StackPanel>
 
- <!-- Card grid instead of DataGrid -->
- <ScrollViewer VerticalScrollBarVisibility="Auto">
- <ItemsControl ItemsSource="{Binding Dela}">
- <ItemsControl.ItemsPanel>
- <ItemsPanelTemplate>
- <WrapPanel IsItemsHost="True" />
- </ItemsPanelTemplate>
- </ItemsControl.ItemsPanel>
- <ItemsControl.ItemTemplate>
- <DataTemplate>
- <Border Width="220" Margin="8" Padding="10" CornerRadius="10"
- Background="{StaticResource SurfaceBrush}"
- BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
- <StackPanel>
- <Grid Height="120">
- <Border Background="#111" CornerRadius="6">
- <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
- </Border>
- </Grid>
- <TextBlock Text="{Binding Naziv}" FontWeight="Bold" FontSize="14" Margin="0,8,0,2" Foreground="{StaticResource PrimaryBrush}"/>
- <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
- <TextBlock Text="Tip: " Foreground="{StaticResource PrimaryBrush}"/>
- <TextBlock Text="{Binding Tip}" Foreground="{StaticResource PrimaryBrush}"/>
- </StackPanel>
- <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
- <TextBlock Text="Trajanje: " Foreground="{StaticResource PrimaryBrush}"/>
- <TextBlock Text="{Binding Trajanje}" Foreground="{StaticResource PrimaryBrush}"/>
- </StackPanel>
- <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
- <TextBlock Text="Datum: " Foreground="{StaticResource PrimaryBrush}"/>
- <TextBlock Text="{Binding DatumIzdanja, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{StaticResource PrimaryBrush}"/>
- </StackPanel>
- <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
- <Button Content="Izmeni" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Padding="4" Margin="0,0,6,0"/>
- <Button Content="Obrisi" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Padding="4"/>
- </StackPanel>
- </StackPanel>
- </Border>
- </DataTemplate>
- </ItemsControl.ItemTemplate>
- </ItemsControl>
- </ScrollViewer>
- </StackPanel>
- </Grid>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Dela}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="220" Margin="8" Padding="10" CornerRadius="10"
+                             Background="{StaticResource SurfaceBrush}"
+                             BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
+                                <StackPanel>
+                                    <Grid Height="120">
+                                        <Border Background="#111" CornerRadius="6">
+                                            <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
+                                        </Border>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Naziv}" FontWeight="Bold" FontSize="14" Margin="0,8,0,2" Foreground="{StaticResource PrimaryBrush}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <TextBlock Text="Tip: " Foreground="{StaticResource PrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Tip}" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <TextBlock Text="Trajanje: " Foreground="{StaticResource PrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Trajanje}" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                        <TextBlock Text="Datum: " Foreground="{StaticResource PrimaryBrush}"/>
+                                        <TextBlock Text="{Binding DatumIzdanja, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                        <Button Content="Izmeni" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Padding="4" Margin="0,0,6,0"/>
+                                        <Button Content="Obrisi" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Padding="4"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
 </UserControl>

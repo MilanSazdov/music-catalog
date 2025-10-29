@@ -1,0 +1,96 @@
+﻿<Window x:Class="MusicCatalog.Views.UmetnikEditView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MusicCatalog.Views"
+        xmlns:utils="clr-namespace:MusicCatalog.Utils"
+        Title="UmetnikEditView"
+
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        
+        MaxWidth="600">
+
+    <Window.Resources>
+        <utils:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    
+    <Grid Background="{StaticResource WindowBackgroundBrush}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="28" MaxWidth="550">
+                    <StackPanel>
+
+                        <TextBlock Text="{Binding TipText}" Style="{StaticResource FormLabel}" FontSize="18" FontWeight="Bold" Margin="0,0,0,12" HorizontalAlignment="Center"/>
+
+                        <TextBlock Text="Opis" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding Opis, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}" AcceptsReturn="True" Height="80"/>
+
+                        <TextBlock Text="Slika (putanja)" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding SlikaPutanja, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
+
+                        <StackPanel Visibility="{Binding IsBend, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="Naziv" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding Naziv, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
+
+                            <TextBlock Text="Datum nastanka" Style="{StaticResource FormLabel}"/>
+                            <DatePicker SelectedDate="{Binding DatumNastankaDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
+
+                            <Separator Margin="0,6,0,10"/>
+
+                            <TextBlock Text="Dodaj člana" Style="{StaticResource FormLabel}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ComboBox ItemsSource="{Binding sviIzvodjaci}"
+                                          SelectedItem="{Binding SelectedIzvodjac}"
+                                          DisplayMemberPath="Ime"
+                                          Width="220"
+                                          Margin="0,0,8,0"/>
+                                <DatePicker SelectedDate="{Binding NewDatumUclanjenja}" Width="140" Margin="0,0,8,0"/>
+                                <Button Content="Dodaj" Command="{Binding AddClanCommand}" Style="{StaticResource PrimaryButton}"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Članovi" Style="{StaticResource FormLabel}" Margin="0,12,0,6"/>
+                            <DataGrid ItemsSource="{Binding Clanovi}"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      Height="160"
+                                      Margin="0,0,0,6">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Ime" Binding="{Binding Ime}" Width="*"/>
+                                    <DataGridTextColumn Header="Prezime" Binding="{Binding Prezime}" Width="*"/>
+                                    <DataGridTemplateColumn Header="Akcija" Width="90">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="Ukloni"
+                                                        Command="{Binding DataContext.RemoveClanCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource PrimaryButton}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+
+                        <!-- Izvođač-specific UI -->
+                        <StackPanel Visibility="{Binding IsBend, Converter={StaticResource BoolToVis}, ConverterParameter=inverse}">
+                            <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
+
+                            <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
+                            <TextBox Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBox}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap" Margin="0,6,0,12" Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVis}}"/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,8,0,0">
+                            <Button Content="Potvrdi" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Stretch" Width="220"/>
+                            <Button Content="Otkaži" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}" Width="220" Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>
