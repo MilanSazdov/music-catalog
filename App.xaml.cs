@@ -96,12 +96,18 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = korisnikVM;
         }
 
-
         private void ShowMuzickiUrednikView()
         {
-            var urednikVM = new MuzickiUrednikViewModel(_authService, _deloRepository, _zanrRepository);
+            var urednikVM = new MuzickiUrednikViewModel(
+                _authService,
+                _deloRepository,
+                _zanrRepository,
+                _umetnikRepository,    
+                _clanstvoRepository    
+                );
             urednikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = urednikVM;
         }
+        
     }
 }

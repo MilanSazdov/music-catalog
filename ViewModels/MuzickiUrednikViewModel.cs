@@ -6,7 +6,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using MusicCatalog.Repositories; // <-- DODAJ OVAJ USING
+using MusicCatalog.Repositories;
 
 namespace MusicCatalog.ViewModels
 {
@@ -15,9 +15,11 @@ namespace MusicCatalog.ViewModels
         private readonly AuthService _authService;
         public Action ShowLoginView { get; set; }
 
-        // DODAJ REPOZITORIJUME
+        
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
+        private readonly IMuzickiUmetnikRepository _umetnikRepo; 
+        private readonly IClanstvoRepository _clanstvoRepo; 
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -33,15 +35,19 @@ namespace MusicCatalog.ViewModels
         public ICommand LogoutCommand { get; }
         public ICommand DodajUmetnikaCommand { get; }
 
-        //
-        // ========= IZMENA JE OVDE (Konstruktor) =========
-        //
-        public MuzickiUrednikViewModel(AuthService authService, IMuzickoDeloRepository deloRepo, IZanrRepository zanrRepo)
+
+        public MuzickiUrednikViewModel(
+            AuthService authService,
+            IMuzickoDeloRepository deloRepo,
+            IZanrRepository zanrRepo,
+            IMuzickiUmetnikRepository umetnikRepo, 
+            IClanstvoRepository clanstvoRepo)      
         {
             _authService = authService;
-            // Dodeli primljene repozitorijume
             _deloRepo = deloRepo;
             _zanrRepo = zanrRepo;
+            _umetnikRepo = umetnikRepo;       
+            _clanstvoRepo = clanstvoRepo;     
 
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
@@ -54,16 +60,11 @@ namespace MusicCatalog.ViewModels
             DodajUmetnikaCommand = new RelayCommand(DodajUmetnika);
 
 
-            PrikaziSadrzaj(null); // Prikazi sadrzaj odmah
+            PrikaziSadrzaj(null);
         }
 
-        //
-        // ========= IZMENA JE OVDE (Metoda) =========
-        //
         private void PrikaziSadrzaj(object? parameter)
         {
-            // Umesto placeholdera, kreiramo isti ViewModel
-            // koji koristi i registrovani korisnik
             var vm = new KorisnikMuzickiSadrzajViewModel(_deloRepo, _zanrRepo);
             CurrentContentView = vm;
         }
@@ -73,7 +74,6 @@ namespace MusicCatalog.ViewModels
 
             var vm = new IzmeniPodatkeViewModel(_authService, TrenutniKorisnik);
 
-            // Kada se zatvori, vraća se na PrikaziSadrzaj (koji sada radi ispravno)
             vm.ZatvoriView = () =>
             {
                 OnPropertyChanged(nameof(TrenutniKorisnik));
@@ -85,16 +85,9 @@ namespace MusicCatalog.ViewModels
 
         private void DodajUmetnika(object? parameter)
         {
-            // Ovo ostaje placeholder kao što je i bilo
-            var placeholder = new System.Windows.Controls.TextBlock
-            {
-                Text = "Ovde će biti forma za dodavanje umetnika...",
-                FontSize = 16,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Foreground = (Brush)Application.Current.Resources["HintBrush"]
-            };
-            CurrentContentView = placeholder;
+            
+            var vm = new AdminUmetniciViewModel(_umetnikRepo, _clanstvoRepo, _deloRepo);
+            CurrentContentView = vm;
         }
 
         private void ObrisiNalog(object? parameter)

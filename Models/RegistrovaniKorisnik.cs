@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MusicCatalog.Models
 {
-    // ISPRAVKA: Promenjeno iz 'internal class' u 'public class'
+    
     public class RegistrovaniKorisnik : Korisnik
     {
         public bool Pretplacen { get; set; }
