@@ -24,5 +24,10 @@ namespace MusicCatalog.Models.Umetnici
             Slika = slika;
         }
 
+        public MuzickiUmetnik()
+        {
+            
+        }
+
     }
 }

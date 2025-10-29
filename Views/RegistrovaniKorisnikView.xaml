@@ -13,6 +13,11 @@
         <DataTemplate DataType="{x:Type viewmodels:IzmeniPodatkeViewModel}">
             <local:IzmeniPodatkeView/>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewmodels:KorisnikMuzickiSadrzajViewModel}">
+            <local:KorisnikMuzickiSadrzajView/>
+        </DataTemplate>
+        
     </UserControl.Resources>
 
     <Grid>

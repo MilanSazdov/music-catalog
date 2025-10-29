@@ -13,5 +13,7 @@ namespace MusicCatalog.Models.Umetnici
         public int BendId;
         public DateOnly datumUclanjenja;
 
+        public Clanstvo() { }
+
     }
 }

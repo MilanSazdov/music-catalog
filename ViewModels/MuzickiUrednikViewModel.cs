@@ -1,19 +1,23 @@
 ﻿using MusicCatalog.Models;
 using MusicCatalog.Services;
 using MusicCatalog.Utils;
-using MusicCatalog.Views; // Dodaj ovaj using
+using MusicCatalog.Views;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using MusicCatalog.Repositories; // <-- DODAJ OVAJ USING
 
 namespace MusicCatalog.ViewModels
 {
-    // OVA KLASA JE ZNAČAJNO IZMENJENA DA LIČI NA RegistrovaniKorisnikViewModel
     public class MuzickiUrednikViewModel : ViewModelBase
     {
         private readonly AuthService _authService;
         public Action ShowLoginView { get; set; }
+
+        // DODAJ REPOZITORIJUME
+        private readonly IMuzickoDeloRepository _deloRepo;
+        private readonly IZanrRepository _zanrRepo;
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -29,59 +33,59 @@ namespace MusicCatalog.ViewModels
         public ICommand LogoutCommand { get; }
         public ICommand DodajUmetnikaCommand { get; }
 
-        public MuzickiUrednikViewModel(AuthService authService)
+        //
+        // ========= IZMENA JE OVDE (Konstruktor) =========
+        //
+        public MuzickiUrednikViewModel(AuthService authService, IMuzickoDeloRepository deloRepo, IZanrRepository zanrRepo)
         {
             _authService = authService;
+            // Dodeli primljene repozitorijume
+            _deloRepo = deloRepo;
+            _zanrRepo = zanrRepo;
+
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
-            
+
             PrikaziSadrzajCommand = new RelayCommand(PrikaziSadrzaj);
             IzmeniPodatkeCommand = new RelayCommand(IzmeniPodatke);
             ObrisiNalogCommand = new RelayCommand(ObrisiNalog);
             LogoutCommand = new RelayCommand(Logout);
             DodajUmetnikaCommand = new RelayCommand(DodajUmetnika);
 
-            
-            PrikaziSadrzaj(null);
+
+            PrikaziSadrzaj(null); // Prikazi sadrzaj odmah
         }
 
+        //
+        // ========= IZMENA JE OVDE (Metoda) =========
+        //
         private void PrikaziSadrzaj(object? parameter)
         {
-            
-            var placeholder = new System.Windows.Controls.TextBlock
-            {
-                Text = "Ovde će biti prikazan sadržaj za Urednika...",
-                FontSize = 16,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Foreground = (Brush)Application.Current.Resources["HintBrush"]
-            };
-            CurrentContentView = placeholder;
+            // Umesto placeholdera, kreiramo isti ViewModel
+            // koji koristi i registrovani korisnik
+            var vm = new KorisnikMuzickiSadrzajViewModel(_deloRepo, _zanrRepo);
+            CurrentContentView = vm;
         }
 
         private void IzmeniPodatke(object? parameter)
         {
-            
+
             var vm = new IzmeniPodatkeViewModel(_authService, TrenutniKorisnik);
 
-            
+            // Kada se zatvori, vraća se na PrikaziSadrzaj (koji sada radi ispravno)
             vm.ZatvoriView = () =>
             {
-                // Osveži podatke o korisniku na UI (npr. Ime i Prezime u panelu)
                 OnPropertyChanged(nameof(TrenutniKorisnik));
                 PrikaziSadrzaj(null);
             };
 
-            // Postavi CurrentContentView na ovaj novi ViewModel
             CurrentContentView = vm;
         }
 
-        // NOVO: Metoda za dodavanje umetnika (za sada prazna)
         private void DodajUmetnika(object? parameter)
         {
-            // Trenutno ne radi ništa, kao što je traženo
-            // Ovde bi kasnije išla logika za otvaranje view-a za dodavanje umetnika
+            // Ovo ostaje placeholder kao što je i bilo
             var placeholder = new System.Windows.Controls.TextBlock
             {
                 Text = "Ovde će biti forma za dodavanje umetnika...",
@@ -103,7 +107,6 @@ namespace MusicCatalog.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                // MuzickiUrednik se takođe može blokirati
                 bool uspeh = _authService.BlokirajNalog(TrenutniKorisnik);
                 if (uspeh)
                 {

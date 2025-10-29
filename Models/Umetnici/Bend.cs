@@ -19,7 +19,7 @@ namespace MusicCatalog.Models.Umetnici
             Aktivan = aktivan;
         }
 
-
+        public Bend() { }
 
 
     }

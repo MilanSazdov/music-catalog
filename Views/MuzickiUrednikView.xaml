@@ -13,6 +13,10 @@
         <DataTemplate DataType="{x:Type viewmodels:IzmeniPodatkeViewModel}">
             <local:IzmeniPodatkeView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:KorisnikMuzickiSadrzajViewModel}">
+            <local:KorisnikMuzickiSadrzajView/>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -42,7 +46,7 @@
 
                 <StackPanel DockPanel.Dock="Top" Margin="10">
                     <Button Content="Prikaži Sadržaj"
-                            Command="{Binding PrikaziSadrzajCommand}"
+                             Command="{Binding PrikaziSadrzajCommand}"
                             Margin="5"
                             Style="{StaticResource PrimaryButton}"/>
 
@@ -50,11 +54,11 @@
                             Command="{Binding DodajUmetnikaCommand}"
                             Margin="5"
                             Style="{StaticResource PrimaryButton}"/>
-                    
+
                     <Button Content="Izmeni Podatke"
                             Command="{Binding IzmeniPodatkeCommand}"
                             Margin="5"
-                            Style="{StaticResource PrimaryButton}"
+                             Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource DisabledBrush}"/>
                 </StackPanel>
 
@@ -63,11 +67,11 @@
                     <Button Content="Odjavi se"
                             Command="{Binding LogoutCommand}"
                             Margin="5"
-                            Style="{StaticResource PrimaryButton}"
+                             Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource DisabledBrush}"/>
                     <Button Content="Obriši Nalog"
                             Command="{Binding ObrisiNalogCommand}"
-                            Margin="5"
+                             Margin="5"
                             Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource ErrorBrush}"/>
                 </StackPanel>
@@ -76,7 +80,8 @@
 
         <Grid Grid.Column="1" Margin="40">
             <ContentControl 
-                Content="{Binding CurrentContentView}"/> </Grid>
+                Content="{Binding CurrentContentView}"/>
+        </Grid>
 
     </Grid>
 </UserControl>

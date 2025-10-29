@@ -17,5 +17,7 @@ namespace MusicCatalog.Models.Umetnici
             Prezime = prezime;
 
         }
+
+        public Izvodjac() { }
     }
 }
