@@ -106,7 +106,7 @@ namespace MusicCatalog.ViewModels
             CurrentContentView = placeholder;
 
             
-            var vm = new AdminUmetniciViewModel(_umetnikRepo, _clanstvoRepo, _deloRepo);
+            var vm = new AdminUmetniciViewModel(_umetnikRepo, _clanstvoRepo, _deloRepo, _recRepo, _ocenaRepo);
             CurrentContentView = vm;
         }
 

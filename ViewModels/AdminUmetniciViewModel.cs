@@ -19,6 +19,8 @@ namespace MusicCatalog.ViewModels
         private readonly IMuzickiUmetnikRepository _umetniciRepository;
         private readonly IClanstvoRepository _clanstvoRepository;
         private readonly IMuzickoDeloRepository _deloRepository;
+        private readonly IRecenzijaRepository _recenzijaRepository;
+        private readonly IOcenaRepository _ocenaRepository;
 
         // === Koristimo UmetnikView ===
         public ObservableCollection<UmetnikView> Umetnici { get; } = new();
@@ -41,11 +43,18 @@ namespace MusicCatalog.ViewModels
         public ICommand DeleteCommand { get; }
         public ICommand ShowInfoCommand { get; }
 
-        public AdminUmetniciViewModel(IMuzickiUmetnikRepository umetniciRepo, IClanstvoRepository clanstvoRepo, IMuzickoDeloRepository deloRepo)
+        public AdminUmetniciViewModel(
+            IMuzickiUmetnikRepository umetniciRepo,
+            IClanstvoRepository clanstvoRepo,
+            IMuzickoDeloRepository deloRepo,
+            IRecenzijaRepository recenzijaRepo,
+            IOcenaRepository ocenaRepo)
         {
             _umetniciRepository = umetniciRepo;
             _clanstvoRepository = clanstvoRepo;
             _deloRepository = deloRepo;
+            _recenzijaRepository = recenzijaRepo;
+            _ocenaRepository = ocenaRepo;
 
             AddIzvodjacCommand = new RelayCommand(_ => OpenEdit(false));
             AddBendCommand = new RelayCommand(_ => OpenEdit(true));
@@ -111,7 +120,13 @@ namespace MusicCatalog.ViewModels
         {
             if (parameter is UmetnikView umetnikView)
             {
-                var vm = new UmetnikInfoViewModel(umetnikView.Umetnik, _umetniciRepository, _clanstvoRepository, _deloRepository);
+                var vm = new UmetnikInfoViewModel(
+                    umetnikView.Umetnik,
+                    _umetniciRepository,
+                    _clanstvoRepository,
+                    _deloRepository,
+                    _recenzijaRepository,
+                    _ocenaRepository);
 
                 var view = new UmetnikInfoView
                 {

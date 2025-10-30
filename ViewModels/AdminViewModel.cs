@@ -69,7 +69,15 @@ namespace MusicCatalog.ViewModels
 
         private void ShowUmetnici()
         {
-            CurrentView = new AdminUmetniciView { DataContext = new AdminUmetniciViewModel(_umetnikRepository, _clanstvoRepository, _deloRepo) };
+            CurrentView = new AdminUmetniciView
+            {
+                DataContext = new AdminUmetniciViewModel(
+                    _umetnikRepository,
+                    _clanstvoRepository,
+                    _deloRepo,
+                    _recRepo,
+                    _ocenaRepo)
+            };
         }
 
         private void ShowKorisnici()
