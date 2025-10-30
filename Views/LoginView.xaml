@@ -8,57 +8,63 @@
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800"
              Background="{StaticResource WindowBackgroundBrush}">
-	<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-		<Border Background="{StaticResource SurfaceBrush}" CornerRadius="8"
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8"
                 Padding="40"
                 Margin="20"
                 MaxWidth="450" Effect="{StaticResource ShadowEffect}">
-			<StackPanel>
-				<TextBlock Text="Music Catalog"
+            <StackPanel>
+                <TextBlock Text="Music Catalog"
                            FontSize="32" FontWeight="Bold"
                            Foreground="{StaticResource PrimaryBrush}"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,8"/>
 
-				<TextBlock Text="Prijavljivanje"
+                <TextBlock Text="Prijavljivanje"
                            FontSize="20"
                            Foreground="{StaticResource TextBrush}" HorizontalAlignment="Center"
                            Margin="0,0,0,32"/>
 
-				<TextBlock Text="Email adresa" Style="{StaticResource FormLabel}"/>
-				<TextBox
+                <TextBlock Text="Email adresa" Style="{StaticResource FormLabel}"/>
+                <TextBox
                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                     Style="{StaticResource ModernTextBox}"
                     Margin="0,0,0,20"/>
 
-				<TextBlock Text="Lozinka" Style="{StaticResource FormLabel}"/>
-				<PasswordBox
+                <TextBlock Text="Lozinka" Style="{StaticResource FormLabel}"/>
+                <PasswordBox
                     utils:PasswordHelper.Attach="True"
                     utils:PasswordHelper.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Style="{StaticResource ModernPasswordBox}"
                     Margin="0,0,0,20"/>
 
-				<TextBlock
+                <TextBlock
                     Text="{Binding ErrorMessage}"
                     Foreground="{StaticResource ErrorBrush}"
                     TextWrapping="Wrap"
                     Margin="0,0,0,12"
                     HorizontalAlignment="Center"
                     Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
-				<Button
+                <Button
                     Content="PRIJAVI SE"
                     Command="{Binding LoginCommand}"
                     IsEnabled="{Binding LoginCommand.CanExecute, Mode=OneWay}" Style="{StaticResource PrimaryButton}"
                     Margin="0,16,0,0"
                     HorizontalAlignment="Stretch"/>
-				<Button
+                <Button
                     Content="Nemaš nalog? Registruj se"
                     Command="{Binding NavigateToRegisterCommand}"
                     Style="{StaticResource TextButton}"
                     Margin="0,24,0,0"
                     HorizontalAlignment="Center"/>
 
-			</StackPanel>
-		</Border>
-	</Grid>
+                <Button
+                    Content="Nastavi kao gost (Pregledaj sadržaj)"
+                    Command="{Binding ShowGuestViewCommand}"
+                    Style="{StaticResource TextButton}"
+                    Margin="0,12,0,0"
+                    HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
