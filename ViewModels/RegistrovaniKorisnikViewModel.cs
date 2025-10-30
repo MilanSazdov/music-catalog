@@ -20,8 +20,9 @@ namespace MusicCatalog.ViewModels
         private readonly IMuzickiUmetnikRepository _umetnikRepo;
         private readonly IClanstvoRepository _clanstvoRepo;
         private readonly IKorisnikRepository _korisnikRepo;
-        private readonly IRecenzijaRepository _recenzijaRepo; // Add this
-        private readonly IOcenaRepository _ocenaRepo; // Add this
+        private readonly IRecenzijaRepository _recenzijaRepo;
+        private readonly IOcenaRepository _ocenaRepo;
+        private readonly IZahtevZaIzmenuRepository _zahtevRepo; 
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -38,7 +39,7 @@ namespace MusicCatalog.ViewModels
         public ICommand ObrisiNalogCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        // Konstruktor sada prima svih 8 zavisnosti
+
         public RegistrovaniKorisnikViewModel(
             AuthService authService,
             IMuzickoDeloRepository deloRepo,
@@ -46,8 +47,9 @@ namespace MusicCatalog.ViewModels
             IMuzickiUmetnikRepository umetnikRepo,
             IClanstvoRepository clanstvoRepo,
             IKorisnikRepository korisnikRepo,
-            IRecenzijaRepository recenzijaRepo, // Add this
-            IOcenaRepository ocenaRepo // Add this
+            IRecenzijaRepository recenzijaRepo,
+            IOcenaRepository ocenaRepo,
+            IZahtevZaIzmenuRepository zahtevRepo
             )
         {
             _authService = authService;
@@ -56,8 +58,9 @@ namespace MusicCatalog.ViewModels
             _umetnikRepo = umetnikRepo;
             _clanstvoRepo = clanstvoRepo;
             _korisnikRepo = korisnikRepo;
-            _recenzijaRepo = recenzijaRepo; // Add this
-            _ocenaRepo = ocenaRepo; // Add this
+            _recenzijaRepo = recenzijaRepo;
+            _ocenaRepo = ocenaRepo;
+            _zahtevRepo = zahtevRepo;
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
@@ -72,27 +75,30 @@ namespace MusicCatalog.ViewModels
 
         private void PrikaziSadrzaj(object? parameter)
         {
-            // Prosleđujemo korisnika i repo za favorite sadržaja
             var vm = new KorisnikMuzickiSadrzajViewModel(
                 _deloRepo,
                 _zanrRepo,
                 (RegistrovaniKorisnik)TrenutniKorisnik,
-                _korisnikRepo
+                _korisnikRepo,
+                _authService,       
+                _recenzijaRepo,     
+                _ocenaRepo,         
+                _zahtevRepo         
             );
             CurrentContentView = vm;
         }
 
         private void PrikaziUmetnike(object? parameter)
         {
-            // Prosleđujemo SVE zavisnosti za favorite umetnika
+
             var vm = new KorisnikUmetniciViewModel(
                 _umetnikRepo,
                 _clanstvoRepo,
                 _deloRepo,
                 (RegistrovaniKorisnik)TrenutniKorisnik,
                 _korisnikRepo,
-                _recenzijaRepo, // Pass this
-                _ocenaRepo // Pass this
+                _recenzijaRepo,
+                _ocenaRepo
                 );
             CurrentContentView = vm;
         }
