@@ -1,4 +1,4 @@
-using MusicCatalog.Models.MuzickiSadrzaj;
+﻿using MusicCatalog.Models.MuzickiSadrzaj;
 using MusicCatalog.Repositories;
 using MusicCatalog.Utils;
 using System;
@@ -23,8 +23,12 @@ namespace MusicCatalog.ViewModels
 
         private string _naziv = string.Empty;
         public string Naziv { get => _naziv; set { _naziv = value; OnPropertyChanged(nameof(Naziv)); UpdateCanSave(); } }
-        private double _trajanjeMin = 3;
-        public double TrajanjeMin { get => _trajanjeMin; set { _trajanjeMin = value; OnPropertyChanged(nameof(TrajanjeMin)); UpdateCanSave(); } }
+
+        // === IZMENA: Uklonjeno podrazumevano trajanje, set-er je sada javan ===
+        private double _trajanjeMin;
+        public double TrajanjeMin { get => _trajanjeMin; set { SetField(ref _trajanjeMin, value); UpdateCanSave(); } }
+        // =================================================================
+
         private DateTime _datumIzdanja = DateTime.Today;
         public DateTime DatumIzdanja { get => _datumIzdanja; set { _datumIzdanja = value; OnPropertyChanged(nameof(DatumIzdanja)); UpdateCanSave(); } }
 
@@ -32,7 +36,6 @@ namespace MusicCatalog.ViewModels
 
         public ObservableCollection<PesmaOption> Pesme { get; } = new();
 
-        // New: available artists (bands and performers) selection for songs
         public ObservableCollection<UmetnikOption> Umetnici { get; } = new();
 
         private string _errorMessage = string.Empty;
@@ -60,12 +63,12 @@ namespace MusicCatalog.ViewModels
         {
             if (_isAlbum)
             {
-                // Load all songs to choose from
                 Pesme.Clear();
                 var svePesme = _deloRepo.GetAll().OfType<Pesma>().OrderBy(p => p.Naziv).ToList();
                 foreach (var p in svePesme)
                 {
-                    Pesme.Add(new PesmaOption(p.Id, p.Naziv));
+                    // === IZMENA: Prosleđujemo trajanje i callback funkciju ===
+                    Pesme.Add(new PesmaOption(p.Id, p.Naziv, p.Trajanje, RecalculateAlbumDuration));
                 }
 
                 if (_id.HasValue)
@@ -78,18 +81,23 @@ namespace MusicCatalog.ViewModels
                         _datumIzdanja = md.DatumIzdanja;
 
                         var setPesama = md.PesmaIDs?.ToHashSet() ?? new HashSet<int>();
-                        foreach (var p in Pesme) p.IsSelected = setPesama.Contains(p.Id);
+                        foreach (var p in Pesme)
+                        {
+                            p.IsSelected = setPesama.Contains(p.Id);
+                        }
+
+                        // === DODATO: Preračunaj trajanje odmah nakon učitavanja ===
+                        RecalculateAlbumDuration();
                     }
                 }
             }
-            else
+            else // Ista logika kao pre za Pesme
             {
                 var allZ = _zanrRepo.GetAll();
                 Zanrovi.Clear();
                 foreach (var z in allZ)
                     Zanrovi.Add(new ZanrOption(z.Id, z.Naziv));
 
-                // Load all artists
                 Umetnici.Clear();
                 foreach (var u in _umetnikRepo.GetAll().OrderBy(u => u is Bend ? (u as Bend)!.Naziv : (u as Izvodjac)!.Ime))
                 {
@@ -103,13 +111,16 @@ namespace MusicCatalog.ViewModels
                     if (md != null)
                     {
                         _naziv = md.Naziv;
-                        _trajanjeMin = md.Trajanje.TotalMinutes;
+                        _trajanjeMin = md.Trajanje.TotalMinutes; // Postavi inicijalno trajanje za pesmu
                         _datumIzdanja = md.DatumIzdanja;
                         foreach (var z in Zanrovi) z.IsSelected = md.ZanrIDs.Contains(z.Id);
-                        // preselect artists
                         var setU = (md.UmetnikIDs ?? new List<int>()).ToHashSet();
                         foreach (var u in Umetnici) u.IsSelected = setU.Contains(u.Id);
                     }
+                }
+                else
+                {
+                    _trajanjeMin = 3; // Podrazumevano za novu pesmu
                 }
             }
             OnPropertyChanged(nameof(Naziv));
@@ -117,15 +128,28 @@ namespace MusicCatalog.ViewModels
             OnPropertyChanged(nameof(DatumIzdanja));
         }
 
+        // === DODATO: Novi metod za kalkulaciju ===
+        private void RecalculateAlbumDuration()
+        {
+            if (!_isAlbum) return; // Radi samo za albume
+
+            var totalDuration = TimeSpan.Zero;
+            foreach (var p in Pesme.Where(p => p.IsSelected))
+            {
+                totalDuration += p.Trajanje;
+            }
+            TrajanjeMin = totalDuration.TotalMinutes; // Ovo će automatski ažurirati UI
+        }
+        // =========================================
+
         private void UpdateCanSave() => CommandManager.InvalidateRequerySuggested();
         private bool CanSave()
         {
             if (_isAlbum)
             {
                 return !string.IsNullOrWhiteSpace(Naziv)
-                && TrajanjeMin > 0
                 && DatumIzdanja <= DateTime.Today
-                && Pesme.Any(p => p.IsSelected);
+                && Pesme.Any(p => p.IsSelected); // Trajanje se sada samo računa, ali mora biti bar jedna pesma
             }
             else
             {
@@ -133,7 +157,6 @@ namespace MusicCatalog.ViewModels
                 && TrajanjeMin > 0
                 && DatumIzdanja <= DateTime.Today
                 && Zanrovi.Any(z => z.IsSelected);
-                // Note: artist selection is optional in validation, but will be persisted if selected
             }
         }
 
@@ -141,6 +164,7 @@ namespace MusicCatalog.ViewModels
         {
             ErrorMessage = string.Empty;
 
+            // Trajanje je već izračunato i nalazi se u TrajanjeMin
             var traj = TimeSpan.FromMinutes(TrajanjeMin);
 
             try
@@ -156,7 +180,7 @@ namespace MusicCatalog.ViewModels
                         var distinctUmetnikIds = ComputeAlbumArtistsFromSongs(selectedPesmaIds);
 
                         alb.Naziv = Naziv;
-                        alb.Trajanje = traj;
+                        alb.Trajanje = traj; // Koristi izračunato trajanje
                         alb.DatumIzdanja = DatumIzdanja;
                         alb.PesmaIDs = selectedPesmaIds;
                         alb.ZanrIDs = distinctZanrIds;
@@ -166,7 +190,6 @@ namespace MusicCatalog.ViewModels
                     }
                     else
                     {
-                        // Pesma edit
                         var ids = Zanrovi.Where(z => z.IsSelected).Select(z => z.Id).ToList();
                         var umetnikIds = Umetnici.Where(u => u.IsSelected).Select(u => u.Id).ToList();
                         existing.Naziv = Naziv;
@@ -235,14 +258,36 @@ namespace MusicCatalog.ViewModels
         public ZanrOption(int id, string naziv) { Id = id; Naziv = naziv; }
     }
 
+    // === IZMENA: PesmaOption sada sadrži Trajanje i callback ===
     public class PesmaOption : ViewModelBase
     {
         public int Id { get; }
         public string Naziv { get; }
+        public TimeSpan Trajanje { get; } // Čuva trajanje pesme
+        private readonly Action? _onSelectionChanged; // Callback
         private bool _isSelected;
-        public bool IsSelected { get => _isSelected; set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
-        public PesmaOption(int id, string naziv) { Id = id; Naziv = naziv; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (SetField(ref _isSelected, value))
+                {
+                    _onSelectionChanged?.Invoke(); // Pozovi callback
+                }
+            }
+        }
+
+        public PesmaOption(int id, string naziv, TimeSpan trajanje, Action? onSelectionChanged = null)
+        {
+            Id = id;
+            Naziv = naziv;
+            Trajanje = trajanje;
+            _onSelectionChanged = onSelectionChanged;
+        }
     }
+    // ========================================================
 
     public class UmetnikOption : ViewModelBase
     {
