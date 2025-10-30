@@ -1,6 +1,11 @@
 ﻿<UserControl x:Class="MusicCatalog.Views.AdminZahteviView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -8,13 +13,77 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Zahtevi za izmenu" FontSize="16" FontWeight="Bold"/>
-            <Button Content="Osveži" Command="{Binding RefreshCommand}" Margin="12,0,0,0"/>
-        </StackPanel>
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <Button Content="Osveži" 
+                    Command="{Binding RefreshCommand}" 
+                    DockPanel.Dock="Right" 
+                    Style="{StaticResource PrimaryButton}"
+                    Padding="6"
+                    VerticalAlignment="Center"/>
+            <TextBlock Text="Zahtevi za izmenu" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="{StaticResource PrimaryBrush}"
+                       VerticalAlignment="Center"/>
+        </DockPanel>
 
-        <GroupBox Grid.Row="1" Header="Na čekanju">
-            <DataGrid ItemsSource="{Binding NaCekanju}" AutoGenerateColumns="False" IsReadOnly="True">
+        <GroupBox Grid.Row="1" Header="Na čekanju"
+                  Background="{StaticResource SurfaceBrush}" 
+                  BorderBrush="{StaticResource PrimaryBrush}" 
+                  Foreground="{StaticResource PrimaryBrush}"
+                  FontWeight="Bold">
+
+            <DataGrid ItemsSource="{Binding NaCekanju}" AutoGenerateColumns="False" IsReadOnly="True"
+                      Background="{StaticResource SurfaceBrush}" 
+                      RowBackground="{StaticResource SurfaceBrush}" 
+                      AlternatingRowBackground="{StaticResource SurfaceBrush}" 
+                      GridLinesVisibility="None" 
+                      FocusVisualStyle="{x:Null}" 
+                      BorderBrush="{StaticResource HintBrush}" 
+                      HeadersVisibility="Column"
+                      Foreground="{StaticResource PrimaryBrush}">
+
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="6,2" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="6,4" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                     <DataGridTextColumn Header="RecenzijaId" Binding="{Binding RecenzijaId}" Width="Auto"/>
@@ -25,9 +94,19 @@
                     <DataGridTemplateColumn Header="Akcije" Width="160">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <Button Content="Prihvati" Command="{Binding DataContext.PrihvatiCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
-                                    <Button Content="Odbij" Command="{Binding DataContext.OdbijCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="6,0,0,0"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="Prihvati" 
+                                            Command="{Binding DataContext.PrihvatiCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource PrimaryButton}"
+                                            Padding="6"/>
+                                    <Button Content="Odbij" 
+                                            Command="{Binding DataContext.OdbijCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            CommandParameter="{Binding}" 
+                                            Margin="6,0,0,0"
+                                            Style="{StaticResource PrimaryButton}"
+                                            Background="{StaticResource ErrorBrush}"
+                                            Padding="6"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -36,8 +115,63 @@
             </DataGrid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Obrađeni">
-            <DataGrid ItemsSource="{Binding Obradjeni}" AutoGenerateColumns="False" IsReadOnly="True">
+        <GroupBox Grid.Row="2" Header="Obrađeni" Margin="0,8,0,0"
+                  Background="{StaticResource SurfaceBrush}" 
+                  BorderBrush="{StaticResource PrimaryBrush}" 
+                  Foreground="{StaticResource PrimaryBrush}"
+                  FontWeight="Bold">
+
+            <DataGrid ItemsSource="{Binding Obradjeni}" AutoGenerateColumns="False" IsReadOnly="True"
+                      Background="{StaticResource SurfaceBrush}" 
+                      RowBackground="{StaticResource SurfaceBrush}" 
+                      AlternatingRowBackground="{StaticResource SurfaceBrush}" 
+                      GridLinesVisibility="None" 
+                      FocusVisualStyle="{x:Null}" 
+                      BorderBrush="{StaticResource HintBrush}" 
+                      HeadersVisibility="Column"
+                      Foreground="{StaticResource PrimaryBrush}">
+
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="6,2" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="6,4" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource HintBrush}" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource HintBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="Auto"/>
                     <DataGridTextColumn Header="RecenzijaId" Binding="{Binding RecenzijaId}" Width="Auto"/>

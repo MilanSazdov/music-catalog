@@ -4,6 +4,9 @@ using MusicCatalog.Models;
 using MusicCatalog.Models.MuzickiSadrzaj;
 using MusicCatalog.Models.Recenzije;
 using MusicCatalog.Repositories;
+using System.Windows.Input;
+using MusicCatalog.Utils;
+using System;
 
 namespace MusicCatalog.ViewModels
 {
@@ -25,12 +28,19 @@ namespace MusicCatalog.ViewModels
         public string DeloNaziv => _delo.Naziv;
         public ObservableCollection<RecenzijaPrikaz> Stavke { get; } = new();
 
+        public ICommand CloseCommand { get; }
+        public Action? CloseWindow { get; set; }
+        
+
         public PrikaziOceneViewModel(IKorisnikRepository korisnikRepo, IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, MuzickoDelo delo)
         {
             _korisnikRepo = korisnikRepo;
             _recRepo = recRepo;
             _ocenaRepo = ocenaRepo;
             _delo = delo;
+
+            CloseCommand = new RelayCommand(_ => CloseWindow?.Invoke());
+
             Load();
         }
 

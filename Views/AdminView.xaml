@@ -9,68 +9,70 @@
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800"
              Background="{StaticResource WindowBackgroundBrush}">
-        <UserControl.Resources>
-            <DataTemplate DataType="{x:Type viewmodels:AdminUredniciViewModel}">
-                <local:AdminUredniciView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AdminAnketeViewModel}">
-                <local:AdminAnketeView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AdminKorisniciViewModel}">
-                <local:AdminKorisniciView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AdminMuzickiSadrzajViewModel}">
-                <local:AdminMuzickiSadrzajView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AdminZanroviViewModel}">
-                <local:AdminZanroviView/>
-            </DataTemplate>
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:AdminUredniciViewModel}">
+            <local:AdminUredniciView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AdminAnketeViewModel}">
+            <local:AdminAnketeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AdminKorisniciViewModel}">
+            <local:AdminKorisniciView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AdminMuzickiSadrzajViewModel}">
+            <local:AdminMuzickiSadrzajView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AdminZanroviViewModel}">
+            <local:AdminZanroviView/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:AdminUmetniciViewModel}">
             <local:AdminUmetniciView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AdminZahteviViewModel}">
+            <local:AdminZahteviView/>
+        </DataTemplate>
     </UserControl.Resources>
 
+    <Grid>
+        <Border CornerRadius="15">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="1" BlurRadius="15" Color="Gray" Opacity="0.3"/>
+            </Border.Effect>
+        </Border>
+
         <Grid>
-            <Border CornerRadius="15">
-                <Border.Effect>
-                    <DropShadowEffect ShadowDepth="1" BlurRadius="15" Color="Gray" Opacity="0.3"/>
-                </Border.Effect>
-            </Border>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Grid>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="280"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}"  CornerRadius="15,0,0,15">
-                    <DockPanel>
-
-                        <TextBlock Text="Admin" Foreground="{StaticResource PrimaryBrush}" FontSize="28" FontWeight="Bold" Margin="20,20,20,10" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
-                        <Separator DockPanel.Dock="Top"/>
-                        <StackPanel DockPanel.Dock="Top" Margin="10">
+            <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}"  CornerRadius="15,0,0,15">
+                <DockPanel>
+                    <TextBlock Text="Admin" Foreground="{StaticResource PrimaryBrush}" FontSize="28" FontWeight="Bold" Margin="20,20,20,10" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
+                    <Separator DockPanel.Dock="Top"/>
+                    <StackPanel DockPanel.Dock="Top" Margin="10">
                         <Button Content="Prikazi Korisnike" Command="{Binding ShowKorisniciCommand}" Margin="5"  Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Prikazi Urednike" Command="{Binding ShowUredniciCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Prikazi Ankete" Command="{Binding ShowAnketeCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Muzicki sadrzaj" Command="{Binding ShowMuzickiSadrzajCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Zanrovi" Command="{Binding ShowZanroviCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Umetnici" Command="{Binding ShowUmetniciCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
-                        <Button Content="Zahtevi za izmenu" Command="{Binding ShowZahteviZaIzmenuCommand}" Background="{DynamicResource PrimaryBrush}" />
 
+                        <Button Content="Zahtevi za izmenu" 
+                                Command="{Binding ShowZahteviZaIzmenuCommand}" 
+                                Margin="5" 
+                                Style="{StaticResource PrimaryButton}" />
                     </StackPanel>
-                        <StackPanel DockPanel.Dock="Bottom" Margin="10">
-
-                            <Separator/>
+                    <StackPanel DockPanel.Dock="Bottom" Margin="10">
+                        <Separator/>
                         <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}"/>
-                        </StackPanel>
-                    </DockPanel>
-                </Border>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
 
-                <Grid Grid.Column="1" Margin="40">
-                    <ContentControl Content="{Binding CurrentView}"/>
-                </Grid>
-
+            <Grid Grid.Column="1" Margin="40">
+                <ContentControl Content="{Binding CurrentView}"/>
             </Grid>
         </Grid>
+    </Grid>
 </UserControl>
