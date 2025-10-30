@@ -88,7 +88,7 @@ namespace MusicCatalog
                 _zanrRepository,
                 _umetnikRepository,
                 _clanstvoRepository,
-                _deloRepository, // <-- Add this missing argument
+                _deloRepository,
                 _recenzijaRepository,
                 _ocenaRepository,
                 _zahtevRepository);
@@ -97,6 +97,8 @@ namespace MusicCatalog
         }
 
 
+        // === POČETAK IZMENE ===
+        // Sada prima svih 9 zavisnosti
         private void ShowRegistrovaniKorisnikView()
         {
 
@@ -107,26 +109,18 @@ namespace MusicCatalog
                 _umetnikRepository,
                 _clanstvoRepository,
                 _korisnikRepository,
-                _recenzijaRepository, // <-- Add this missing argument
-                _ocenaRepository      // <-- Add this missing argument
+                _recenzijaRepository,
+                _ocenaRepository,
+                _zahtevRepository      // <-- DODATO
             );
 
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
+        // === KRAJ IZMENE ===
 
         private void ShowMuzickiUrednikView()
         {
-            //public MuzickiUrednikViewModel(
-            //AuthService authService,
-            //IMuzickoDeloRepository deloRepo,
-            //IZanrRepository zanrRepo,
-            //IRecenzijaRepository recRepo,
-            //IOcenaRepository ocenaRepo,
-            //IZahtevZaIzmenuRepository zahtevRepo,
-            //IKorisnikRepository korisnikRepo,
-            //IMuzickiUmetnikRepository umetnikRepo,
-            //IClanstvoRepository clanstvoRepo)
             var urednikVM = new MuzickiUrednikViewModel(
                 _authService,
                 _deloRepository,
@@ -135,12 +129,12 @@ namespace MusicCatalog
                 _ocenaRepository,
                 _zahtevRepository,
                 _korisnikRepository,
-                _umetnikRepository,    
-                _clanstvoRepository    
+                _umetnikRepository,
+                _clanstvoRepository
                 );
             urednikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = urednikVM;
         }
-        
+
     }
 }
