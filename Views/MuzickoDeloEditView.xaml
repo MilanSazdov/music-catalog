@@ -1,49 +1,64 @@
 ﻿<Window x:Class="MusicCatalog.Views.MuzickoDeloEditView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- Title="Muzicko delo" Height="420" Width="560" WindowStartupLocation="CenterOwner" Background="{StaticResource SurfaceBrush}">
-    <Grid Margin="16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+ Title="Muzicko delo" Height="520" Width="640" WindowStartupLocation="CenterOwner" Background="{StaticResource SurfaceBrush}">
+ <Grid Margin="16">
+ <Grid.RowDefinitions>
+ <RowDefinition Height="*"/>
+ <RowDefinition Height="Auto"/>
+ </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+ <Grid>
+ <Grid.ColumnDefinitions>
+ <ColumnDefinition Width="180"/>
+ <ColumnDefinition Width="*"/>
+ </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Tip" Grid.Column="0" Margin="74,10,306,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" Grid.ColumnSpan="2" FontSize="16" FontFamily="Noto Sans" FontWeight="Bold"/>
-            <TextBlock Text="{Binding TipText}" Grid.Column="1" Margin="0,0,0,8" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+ <StackPanel Grid.ColumnSpan="2">
+ <TextBlock Text="Tip" Margin="0,0,0,4" Foreground="{StaticResource PrimaryBrush}" FontSize="16" FontFamily="Noto Sans" FontWeight="Bold"/>
+ <TextBlock Text="{Binding TipText}" Margin="0,0,0,8" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+ </StackPanel>
 
-            <TextBlock Text="Naziv" Grid.Column="0" Margin="74,44,306,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" Grid.ColumnSpan="2" FontWeight="Bold"/>
-            <TextBox Text="{Binding Naziv, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,32,0,8" Background="#FF212121" BorderBrush="{DynamicResource PrimaryBrush}" Foreground="White"/>
+ <TextBlock Text="Naziv" Grid.Column="0" Margin="0,70,0,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold"/>
+ <TextBox Text="{Binding Naziv, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,60,0,8" Background="#FF212121" BorderBrush="{DynamicResource PrimaryBrush}" Foreground="White"/>
 
-            <TextBlock Text="Trajanje (min)" Grid.Column="0" Margin="74,87,306,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" Grid.ColumnSpan="2" FontWeight="Bold"/>
-            <TextBox Text="{Binding TrajanjeMin, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,72,0,8" Background="#FF1E1E1E" BorderBrush="{DynamicResource PrimaryBrush}" Foreground="White"/>
+ <TextBlock Text="Trajanje (min)" Grid.Column="0" Margin="0,112,0,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold"/>
+ <TextBox Text="{Binding TrajanjeMin, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,104,0,8" Background="#FF1E1E1E" BorderBrush="{DynamicResource PrimaryBrush}" Foreground="White"/>
 
-            <TextBlock Text="Datum izdanja" Grid.Column="0" Margin="74,115,306,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" Grid.ColumnSpan="2" FontWeight="Bold"/>
-            <DatePicker SelectedDate="{Binding DatumIzdanja}" Grid.Column="1" Margin="0,112,0,8" Background="#FF1A1A1A" Foreground="Black" BorderBrush="{DynamicResource PrimaryBrush}" FontWeight="Bold"/>
+ <TextBlock Text="Datum izdanja" Grid.Column="0" Margin="0,154,0,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold"/>
+ <DatePicker SelectedDate="{Binding DatumIzdanja}" Grid.Column="1" Margin="0,148,0,8" Background="#FF1A1A1A" Foreground="Black" BorderBrush="{DynamicResource PrimaryBrush}" FontWeight="Bold"/>
 
-            <TextBlock Text="Zanrovi" Grid.Column="0" Margin="98,197,282,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}" Grid.ColumnSpan="2"/>
-            <Border Grid.Column="1" Margin="0,152,0,8" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
-                <ScrollViewer Height="180">
-                    <ItemsControl ItemsSource="{Binding Zanrovi}" Foreground="White">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox Content="{Binding Naziv}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Foreground="{StaticResource PrimaryBrush}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
-        </Grid>
+ <TextBlock Text="Zanrovi" Grid.Column="0" Margin="0,196,0,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}"/>
+ <Border Grid.Column="1" Margin="0,188,0,8" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
+ <ScrollViewer Height="120">
+ <ItemsControl ItemsSource="{Binding Zanrovi}" Foreground="White">
+ <ItemsControl.ItemTemplate>
+ <DataTemplate>
+ <CheckBox Content="{Binding Naziv}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Foreground="{StaticResource PrimaryBrush}"/>
+ </DataTemplate>
+ </ItemsControl.ItemTemplate>
+ </ItemsControl>
+ </ScrollViewer>
+ </Border>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" VerticalAlignment="Center" Margin="0,0,16,0"/>
-            <Button Content="Sacuvaj" Width="120" Margin="0,0,8,0" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
-            <Button Content="Otkazi" Width="120" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}"/>
-        </StackPanel>
-    </Grid>
+ <TextBlock Text="Umetnici" Grid.Column="0" Margin="0,324,0,0" VerticalAlignment="Top" Foreground="{StaticResource PrimaryBrush}"/>
+ <Border Grid.Column="1" Margin="0,316,0,8" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
+ <ScrollViewer Height="120">
+ <ItemsControl ItemsSource="{Binding Umetnici}" Foreground="White">
+ <ItemsControl.ItemTemplate>
+ <DataTemplate>
+ <CheckBox Content="{Binding Naziv}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Foreground="{StaticResource PrimaryBrush}"/>
+ </DataTemplate>
+ </ItemsControl.ItemTemplate>
+ </ItemsControl>
+ </ScrollViewer>
+ </Border>
+ </Grid>
+
+ <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+ <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" VerticalAlignment="Center" Margin="0,0,16,0"/>
+ <Button Content="Sacuvaj" Width="120" Margin="0,0,8,0" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
+ <Button Content="Otkazi" Width="120" Command="{Binding CancelCommand}" Style="{StaticResource PrimaryButton}" Background="{StaticResource ErrorBrush}"/>
+ </StackPanel>
+ </Grid>
 </Window>

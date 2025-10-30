@@ -1,0 +1,19 @@
+<UserControl x:Class="MusicCatalog.Views.PrikaziOceneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding DeloNaziv}" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Stavke}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Korisnik" Binding="{Binding KorisnikIme}" />
+                <DataGridTextColumn Header="Tip" Binding="{Binding KorisnikTip}" />
+                <DataGridTextColumn Header="Ocena" Binding="{Binding Vrednost}" />
+                <DataGridTextColumn Header="Opis" Binding="{Binding Opis}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -9,7 +9,7 @@
     <Application.Resources>
         <ResourceDictionary>
 
-
+            
             <SolidColorBrush x:Key="PrimaryBrush" Color="#FFBB86FC"/>
             <SolidColorBrush x:Key="ButtonHoverBrush" Color="#FFD5B3FD"/>
             <SolidColorBrush x:Key="DisabledBrush" Color="#FF555555"/>

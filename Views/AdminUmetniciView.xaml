@@ -26,7 +26,7 @@
                     <TextBlock Text="{Binding Naziv}" FontWeight="Bold" FontSize="14" Margin="0,0,0,4" Foreground="{StaticResource PrimaryBrush}" TextTrimming="CharacterEllipsis"/>
                     <TextBlock FontSize="12" Foreground="Gray" Margin="0,0,0,6" TextTrimming="CharacterEllipsis">
                         <Run Text="Bend — "/>
-                        <Run Text="{Binding Aktivan, StringFormat='Aktivan: {0}'}"/>
+                        <Run Text="{Binding Aktivan, StringFormat='Aktivan: {0}', FallbackValue='Aktivan: N/A'}"/>
                     </TextBlock>
                     <TextBlock Text="{Binding DatumNastanka, StringFormat='Osnovan: {0:dd.MM.yyyy}'}" FontSize="12" Margin="0,0,0,6"/>
                     <TextBlock Text="{Binding Opis}" FontSize="12" TextWrapping="Wrap" MaxHeight="56" TextTrimming="CharacterEllipsis" ToolTip="{Binding Opis}"/>

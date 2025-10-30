@@ -16,6 +16,12 @@ namespace MusicCatalog.ViewModels
     {
         private readonly IMuzickoDeloRepository _delaRepo;
         private readonly IZanrRepository _zanrRepo;
+        private readonly IMuzickiUmetnikRepository? _umetnikRepo;
+
+        // Inject these for cascade delete
+        private readonly IRecenzijaRepository? _recRepo;
+        private readonly IOcenaRepository? _ocenaRepo;
+        private readonly IZahtevZaIzmenuRepository? _zahtevRepo;
 
         public ObservableCollection<MuzickoDeloView> Dela { get; } = new();
         private MuzickoDeloView? _selected;
@@ -26,10 +32,11 @@ namespace MusicCatalog.ViewModels
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public AdminMuzickiSadrzajViewModel(IMuzickoDeloRepository delaRepo, IZanrRepository zanrRepo)
+        public AdminMuzickiSadrzajViewModel(IMuzickoDeloRepository delaRepo, IZanrRepository zanrRepo, IMuzickiUmetnikRepository? umetnikRepo = null)
         {
             _delaRepo = delaRepo;
             _zanrRepo = zanrRepo;
+            _umetnikRepo = umetnikRepo;
 
             AddPesmaCommand = new RelayCommand(_ => OpenEdit(false));
             AddAlbumCommand = new RelayCommand(_ => OpenEdit(true));
@@ -49,6 +56,12 @@ namespace MusicCatalog.ViewModels
             Load();
         }
 
+        public AdminMuzickiSadrzajViewModel(IMuzickoDeloRepository delaRepo, IZanrRepository zanrRepo, IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, IZahtevZaIzmenuRepository zahtevRepo, IMuzickiUmetnikRepository? umetnikRepo = null)
+        : this(delaRepo, zanrRepo, umetnikRepo)
+        {
+            _recRepo = recRepo; _ocenaRepo = ocenaRepo; _zahtevRepo = zahtevRepo;
+        }
+
         private void Load()
         {
             Dela.Clear();
@@ -61,7 +74,7 @@ namespace MusicCatalog.ViewModels
 
         private void OpenEdit(bool isAlbum, int? id = null)
         {
-            var vm = new MuzickoDeloEditViewModel(_delaRepo, _zanrRepo, isAlbum, id);
+            var vm = new MuzickoDeloEditViewModel(_delaRepo, _zanrRepo, _umetnikRepo!, isAlbum, id);
             Window v = isAlbum
                 ? new AlbumEditView { DataContext = vm }
                 : new MuzickoDeloEditView { DataContext = vm };
@@ -75,14 +88,15 @@ namespace MusicCatalog.ViewModels
             if (Selected == null) return;
             var md = Selected.Source;
             if (MessageBox.Show($"Obrisati '{md.Naziv}'?", "Potvrda", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
-            foreach (var z in _zanrRepo.GetAll().ToList())
+
+            if (_recRepo != null && _ocenaRepo != null && _zahtevRepo != null)
             {
-                if (z.MuzickaDelaIDs.Remove(md.Id))
-                {
-                    _zanrRepo.Update(z);
-                }
+                _delaRepo.DeleteWithCascade(md.Id, _recRepo, _ocenaRepo, _zahtevRepo);
             }
-            _delaRepo.Delete(md.Id);
+            else
+            {
+                _delaRepo.Delete(md.Id);
+            }
             Load();
         }
     }

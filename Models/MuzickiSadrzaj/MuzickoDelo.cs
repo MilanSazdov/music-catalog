@@ -23,6 +23,9 @@ namespace MusicCatalog.Models.MuzickiSadrzaj
 
         public List<int> ZanrIDs { get; set; } = new List<int>();
 
+        // Link to artists (bands or performers) by IDs
+        public List<int> UmetnikIDs { get; set; } = new List<int>();
+
         protected MuzickoDelo() { }
 
         protected MuzickoDelo(int id, string naziv, TimeSpan trajanje, DateTime datumIzdanja, List<int> zanrovi)

@@ -3,6 +3,7 @@ using MusicCatalog.Models.Enums; // <-- DODAJ OVAJ RED
 
 namespace MusicCatalog.Models
 {
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
     [JsonDerivedType(typeof(Administrator), typeDiscriminator: "admin")]
     [JsonDerivedType(typeof(MuzickiUrednik), typeDiscriminator: "urednik")]
     [JsonDerivedType(typeof(RegistrovaniKorisnik), typeDiscriminator: "registrovani")]
@@ -15,6 +16,16 @@ namespace MusicCatalog.Models
 
         // Ova linija sada radi
         public Uloga Uloga { get; set; }
+
+        // Parameterless ctor for JSON/WPF
+        protected Korisnik()
+        {
+            Email = string.Empty;
+            Ime = string.Empty;
+            Prezime = string.Empty;
+            Lozinka = string.Empty;
+            Uloga = Uloga.RegistrovaniKorisnik;
+        }
 
         public Korisnik(string email, string ime, string prezime, string lozinka, Uloga uloga)
         {

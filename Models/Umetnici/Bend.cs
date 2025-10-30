@@ -10,7 +10,7 @@ namespace MusicCatalog.Models.Umetnici
     {
         public string Naziv { get; set; }
         public DateOnly DatumNastanka { get; set; }
-        bool Aktivan = true;
+        public bool Aktivan { get; set; } = true;
 
         public Bend(string naziv, DateOnly datumNastanka, string opis, string slika, bool aktivan = true) : base(opis, slika)
         {
@@ -20,7 +20,5 @@ namespace MusicCatalog.Models.Umetnici
         }
 
         public Bend() { }
-
-
     }
 }
