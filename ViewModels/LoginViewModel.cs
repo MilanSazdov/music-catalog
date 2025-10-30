@@ -1,4 +1,3 @@
-// Datoteka: ViewModels/LoginViewModel.cs
 using MusicCatalog.Models;
 using MusicCatalog.Models.Enums;
 using MusicCatalog.Services;
@@ -14,8 +13,8 @@ namespace MusicCatalog.ViewModels
         public Action ShowRegisterView { get; set; }
         public Action ShowRegistrovaniKorisnikView { get; set; }
         public Action ShowAdminView { get; set; }
-
         public Action ShowMuzickiUrednikView { get; set; }
+        public Action ShowGuestView { get; set; } 
 
         #region Properties
         private string _email = string.Empty;
@@ -54,17 +53,20 @@ namespace MusicCatalog.ViewModels
 
         public ICommand LoginCommand { get; }
         public ICommand NavigateToRegisterCommand { get; }
+        public ICommand ShowGuestViewCommand { get; } 
 
         public LoginViewModel(AuthService authService)
         {
             _authService = authService;
             LoginCommand = new RelayCommand(OnLogin, CanLogin);
             NavigateToRegisterCommand = new RelayCommand(OnNavigateToRegister);
+            ShowGuestViewCommand = new RelayCommand(OnShowGuestView); 
 
             ShowRegisterView = () => { };
             ShowRegistrovaniKorisnikView = () => { };
             ShowAdminView = () => { };
             ShowMuzickiUrednikView = () => { };
+            ShowGuestView = () => { }; 
         }
 
         private bool CanLogin(object? parameter)
@@ -72,8 +74,17 @@ namespace MusicCatalog.ViewModels
             return !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         }
 
+        
+        private void OnShowGuestView(object? parameter)
+        {
+            ClearFields();
+            ShowGuestView?.Invoke();
+        }
+        
+
         private void OnLogin(object? parameter)
         {
+            
             ErrorMessage = string.Empty;
             bool success = _authService.Login(Email, Password);
 
@@ -88,7 +99,7 @@ namespace MusicCatalog.ViewModels
                 }
                 else if (ulogovaniKorisnik.Uloga == Uloga.RegistrovaniKorisnik)
                 {
-                    if(ulogovaniKorisnik is RegistrovaniKorisnik regKorisnik && !regKorisnik.Blokiran)
+                    if (ulogovaniKorisnik is RegistrovaniKorisnik regKorisnik && !regKorisnik.Blokiran)
                         ShowRegistrovaniKorisnikView?.Invoke();
                     else
                     {

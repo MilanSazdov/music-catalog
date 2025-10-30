@@ -12,28 +12,17 @@ using System.Windows.Input;
 
 namespace MusicCatalog.ViewModels
 {
-    // =================================================================
-    // == OVA KLASA JE IZAZIVALA GREŠKU JER JE VEROVATNO NEDOSTAJALA ==
-    // =================================================================
-    /// <summary>
-    /// Wrapper klasa za MuzickiUmetnik koja dodaje IsFavorit property.
-    /// </summary>
     public class UmetnikView : ViewModelBase
     {
         public MuzickiUmetnik Umetnik { get; }
         public int Id => Umetnik.Id;
         public string Opis => Umetnik.Opis;
         public string Slika => Umetnik.Slika;
-
-        // Specifični property-ji za Bend
         public string? Naziv => (Umetnik as Bend)?.Naziv;
         public DateOnly? DatumNastanka => (Umetnik as Bend)?.DatumNastanka;
         public bool? Aktivan => (Umetnik as Bend)?.Aktivan;
-
-        // Specifični property-ji za Izvodjaca
         public string? Ime => (Umetnik as Izvodjac)?.Ime;
         public string? Prezime => (Umetnik as Izvodjac)?.Prezime;
-
         public bool IsBend => Umetnik is Bend;
 
         private bool _isFavorit;
@@ -48,7 +37,6 @@ namespace MusicCatalog.ViewModels
             Umetnik = umetnik;
         }
     }
-    // =================================================================
 
 
     public class KorisnikUmetniciViewModel : ViewModelBase
@@ -56,18 +44,45 @@ namespace MusicCatalog.ViewModels
         private readonly IMuzickiUmetnikRepository _umetniciRepository;
         private readonly IClanstvoRepository _clanstvoRepo;
         private readonly IMuzickoDeloRepository _deloRepo;
-        private readonly RegistrovaniKorisnik _korisnik;
-        private readonly IKorisnikRepository _korisnikRepo;
         private readonly IRecenzijaRepository _recenzijaRepo;
         private readonly IOcenaRepository _ocenaRepo;
 
-        // Kolekcija sada koristi 'UmetnikView'
+        
+        private readonly RegistrovaniKorisnik? _korisnik;
+        private readonly IKorisnikRepository? _korisnikRepo;
+        
+
         public ObservableCollection<UmetnikView> Umetnici { get; } = new();
 
         public ICommand ShowInfoCommand { get; }
-        public ICommand ToggleFavoritCommand { get; } // Komanda za srce
+        public ICommand ToggleFavoritCommand { get; }
 
-        // Konstruktor prima svih 5 argumenata
+        
+        public bool CanManageFavorites => _korisnik != null;
+        
+        public KorisnikUmetniciViewModel(
+            IMuzickiUmetnikRepository umetniciRepo,
+            IClanstvoRepository clanstvoRepo,
+            IMuzickoDeloRepository deloRepo,
+            IRecenzijaRepository recenzijaRepo,
+            IOcenaRepository ocenaRepo)
+        {
+            _umetniciRepository = umetniciRepo;
+            _clanstvoRepo = clanstvoRepo;
+            _deloRepo = deloRepo;
+            _recenzijaRepo = recenzijaRepo;
+            _ocenaRepo = ocenaRepo;
+
+            _korisnik = null; 
+            _korisnikRepo = null; 
+
+            ShowInfoCommand = new RelayCommand(ShowInfo);
+            ToggleFavoritCommand = new RelayCommand(ToggleFavorit);
+
+            Load();
+        }
+
+        
         public KorisnikUmetniciViewModel(
             IMuzickiUmetnikRepository umetniciRepo,
             IClanstvoRepository clanstvoRepo,
@@ -94,54 +109,51 @@ namespace MusicCatalog.ViewModels
         private void Load()
         {
             Umetnici.Clear();
-            // Proveravamo listu favorita korisnika
-            var favoritiSet = _korisnik.FavoritUmetnikIDs.ToHashSet();
+
+            
+            var favoritiSet = _korisnik?.FavoritUmetnikIDs.ToHashSet() ?? new HashSet<int>();
+            
 
             foreach (var umetnik in _umetniciRepository.GetAll().OrderBy(d => d is Bend))
             {
-                // Kreiramo 'UmetnikView'
                 var umetnikView = new UmetnikView(umetnik)
                 {
-                    // Postavljamo da li je srce popunjeno
                     IsFavorit = favoritiSet.Contains(umetnik.Id)
                 };
                 Umetnici.Add(umetnikView);
             }
         }
 
-        // Metod koji se poziva klikom na srce
         private void ToggleFavorit(object? parameter)
         {
-            if (parameter is UmetnikView umetnikView)
+            
+            if (_korisnik == null || _korisnikRepo == null || parameter is not UmetnikView umetnikView)
+                return;
+            
+
+            umetnikView.IsFavorit = !umetnikView.IsFavorit;
+
+            if (umetnikView.IsFavorit)
             {
-                // 1. Promeni stanje u UI
-                umetnikView.IsFavorit = !umetnikView.IsFavorit;
-
-                // 2. Ažuriraj listu u modelu korisnika
-                if (umetnikView.IsFavorit)
+                if (!_korisnik.FavoritUmetnikIDs.Contains(umetnikView.Id))
                 {
-                    if (!_korisnik.FavoritUmetnikIDs.Contains(umetnikView.Id))
-                    {
-                        _korisnik.FavoritUmetnikIDs.Add(umetnikView.Id);
-                    }
+                    _korisnik.FavoritUmetnikIDs.Add(umetnikView.Id);
                 }
-                else
-                {
-                    _korisnik.FavoritUmetnikIDs.Remove(umetnikView.Id);
-                }
-
-                // 3. Sačuvaj promene u JSON fajl
-                _korisnikRepo.Update(_korisnik);
-                _korisnikRepo.SaveChanges();
             }
+            else
+            {
+                _korisnik.FavoritUmetnikIDs.Remove(umetnikView.Id);
+            }
+
+            _korisnikRepo.Update(_korisnik);
+            _korisnikRepo.SaveChanges();
         }
 
-        // Metod za "Info" dugme
         private void ShowInfo(object? parameter)
         {
             if (parameter is UmetnikView umetnikView)
             {
-                // Prosleđujemo originalni model, ne wrapper
+                
                 var vm = new UmetnikInfoViewModel(
                     umetnikView.Umetnik,
                     _umetniciRepository,

@@ -1,4 +1,4 @@
-﻿// Datoteka: App.xaml.cs
+﻿
 using MusicCatalog.Models;
 using MusicCatalog.Repositories;
 using MusicCatalog.Services;
@@ -18,7 +18,6 @@ namespace MusicCatalog
         private readonly IClanstvoRepository _clanstvoRepository;
         private readonly IMuzickoDeloRepository _deloRepository;
 
-        // NEW
         private readonly IRecenzijaRepository _recenzijaRepository;
         private readonly IOcenaRepository _ocenaRepository;
         private readonly IZahtevZaIzmenuRepository _zahtevRepository;
@@ -35,7 +34,6 @@ namespace MusicCatalog
             _clanstvoRepository = new ClanstvoRepository("Data/clanstva.json");
             _deloRepository = new MuzickoDeloRepository(_zanrRepository);
 
-            // NEW
             _recenzijaRepository = new RecenzijaRepository("Data/recenzije.json");
             _ocenaRepository = new OcenaRepository("Data/ocene.json");
             _zahtevRepository = new ZahtevZaIzmenuRepository("Data/zahtevi_izmene.json");
@@ -48,20 +46,15 @@ namespace MusicCatalog
 
         protected override void OnStartup(StartupEventArgs e)
         {
-
+            
             MainWindow = new MainWindow
             {
                 DataContext = _mainViewModel
             };
-
-
             ShowLoginView();
-
             MainWindow.Show();
             base.OnStartup(e);
         }
-
-
 
         private void ShowLoginView()
         {
@@ -70,11 +63,13 @@ namespace MusicCatalog
             loginVM.ShowAdminView = ShowAdminView;
             loginVM.ShowRegistrovaniKorisnikView = ShowRegistrovaniKorisnikView;
             loginVM.ShowMuzickiUrednikView = ShowMuzickiUrednikView;
+            loginVM.ShowGuestView = ShowGuestView; 
             _mainViewModel.TrenutniView = loginVM;
         }
 
         private void ShowRegisterView()
         {
+            
             var registerVM = new RegisterViewModel(_authService);
             registerVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = registerVM;
@@ -82,6 +77,7 @@ namespace MusicCatalog
 
         private void ShowAdminView()
         {
+            
             var adminVM = new AdminViewModel(
                 _anketaRepository,
                 _korisnikRepository,
@@ -96,12 +92,9 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = adminVM;
         }
 
-
-        // === POČETAK IZMENE ===
-        // Sada prima svih 9 zavisnosti
         private void ShowRegistrovaniKorisnikView()
         {
-
+            
             var korisnikVM = new RegistrovaniKorisnikViewModel(
                 _authService,
                 _deloRepository,
@@ -111,16 +104,30 @@ namespace MusicCatalog
                 _korisnikRepository,
                 _recenzijaRepository,
                 _ocenaRepository,
-                _zahtevRepository      // <-- DODATO
+                _zahtevRepository
             );
-
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
-        // === KRAJ IZMENE ===
+
+        private void ShowGuestView()
+        {
+            var guestVM = new GuestViewModel(
+                _deloRepository,
+                _zanrRepository,
+                _umetnikRepository,
+                _clanstvoRepository,
+                _recenzijaRepository,
+                _ocenaRepository
+            );
+            guestVM.ShowLoginView = ShowLoginView;
+            _mainViewModel.TrenutniView = guestVM;
+        }
+        
 
         private void ShowMuzickiUrednikView()
         {
+            
             var urednikVM = new MuzickiUrednikViewModel(
                 _authService,
                 _deloRepository,
@@ -135,6 +142,5 @@ namespace MusicCatalog
             urednikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = urednikVM;
         }
-
     }
 }

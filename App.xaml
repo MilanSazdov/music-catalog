@@ -9,7 +9,7 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            
+
             <SolidColorBrush x:Key="PrimaryBrush" Color="#FFBB86FC"/>
             <SolidColorBrush x:Key="ButtonHoverBrush" Color="#FFD5B3FD"/>
             <SolidColorBrush x:Key="DisabledBrush" Color="#FF555555"/>
@@ -178,21 +178,17 @@
                 </Setter>
             </Style>
 
-            <!-- === POČETAK IZMENE: DODAT STIL ZA SRCE === -->
             <Style x:Key="HeartToggleButton" TargetType="ToggleButton">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Content" Value="♥"/>
-                <!-- Unicode srce -->
                 <Setter Property="FontSize" Value="22"/>
                 <Setter Property="Foreground" Value="{StaticResource HintBrush}"/>
-                <!-- Sivo kad nije čekirano -->
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ToggleButton">
-                            <!-- Omogućava da se klikne na providnu pozadinu -->
                             <Border Background="Transparent">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
@@ -200,41 +196,36 @@
                     </Setter.Value>
                 </Setter>
                 <Style.Triggers>
-                    <!-- Kada je čekirano (favorit) -->
                     <Trigger Property="IsChecked" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
-                        <!-- Crveno -->
                     </Trigger>
-                    <!-- Efekat kad se pređe mišem -->
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Opacity" Value="0.7"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <!-- === KRAJ IZMENE === -->
 
             <DropShadowEffect x:Key="ShadowEffect" ShadowDepth="2" Color="Black" Opacity="0.4" BlurRadius="8"/>
 
             <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
                 <views:LoginView/>
             </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewmodels:RegisterViewModel}">
                 <views:RegisterView/>
             </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewmodels:AdminViewModel}">
                 <views:AdminView/>
             </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewmodels:RegistrovaniKorisnikViewModel}">
                 <views:RegistrovaniKorisnikView/>
             </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewmodels:MuzickiUrednikViewModel}">
                 <views:MuzickiUrednikView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewmodels:GuestViewModel}">
+                <views:GuestView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
