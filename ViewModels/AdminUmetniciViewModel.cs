@@ -18,11 +18,12 @@ namespace MusicCatalog.ViewModels
     {
         private readonly IMuzickiUmetnikRepository _umetniciRepository;
         private readonly IClanstvoRepository _clanstvoRepository;
-        private readonly IMuzickoDeloRepository _deloRepository; // <-- DODATO
+        private readonly IMuzickoDeloRepository _deloRepository;
 
-        public ObservableCollection<MuzickiUmetnik> Umetnici { get; } = new();
-        private MuzickiUmetnik? _selected;
-        public MuzickiUmetnik? Selected
+        // === Koristimo UmetnikView ===
+        public ObservableCollection<UmetnikView> Umetnici { get; } = new();
+        private UmetnikView? _selected;
+        public UmetnikView? Selected
         {
             get => _selected;
             set
@@ -32,36 +33,38 @@ namespace MusicCatalog.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }
         }
+        
 
         public ICommand AddIzvodjacCommand { get; }
         public ICommand AddBendCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand ShowInfoCommand { get; }
 
-        // --- POČETAK IZMENE (Konstruktor) ---
-        // Dodat je 'IMuzickoDeloRepository deloRepo'
         public AdminUmetniciViewModel(IMuzickiUmetnikRepository umetniciRepo, IClanstvoRepository clanstvoRepo, IMuzickoDeloRepository deloRepo)
         {
             _umetniciRepository = umetniciRepo;
             _clanstvoRepository = clanstvoRepo;
-            _deloRepository = deloRepo; // <-- DODATO
-                                        // --- KRAJ IZMENE ---
+            _deloRepository = deloRepo;
 
             AddIzvodjacCommand = new RelayCommand(_ => OpenEdit(false));
             AddBendCommand = new RelayCommand(_ => OpenEdit(true));
+
             EditCommand = new RelayCommand(p =>
             {
-                var item = p as MuzickiUmetnik ?? Selected;
-                OpenEdit(item is Bend, item?.Id);
-            });
+                var item = p as UmetnikView ?? Selected;
+                if (item == null) return;
+                OpenEdit(item.IsBend, item.Id);
+            }, p => (p as UmetnikView) != null || Selected != null);
 
             DeleteCommand = new RelayCommand(p =>
             {
-                var item = p as MuzickiUmetnik ?? Selected;
+                var item = p as UmetnikView ?? Selected;
                 if (item == null) return;
-                Selected = item;
-                DeleteSelected();
-            });
+                DeleteSelected(item);
+            }, p => (p as UmetnikView) != null || Selected != null);
+
+            ShowInfoCommand = new RelayCommand(ShowInfo);
 
             Load();
         }
@@ -71,17 +74,13 @@ namespace MusicCatalog.ViewModels
             Umetnici.Clear();
             foreach (var d in _umetniciRepository.GetAll().OrderBy(d => d is Bend))
             {
-                Umetnici.Add(d);
+                Umetnici.Add(new UmetnikView(d));
             }
         }
 
         private void OpenEdit(bool isBend, int? id = null)
         {
-            // --- POČETAK IZMENE (Poziv konstruktora) ---
-            // Sada prosleđujemo '_deloRepository' kao treći argument
             var vm = new UmetnikEditViewModel(_umetniciRepository, _clanstvoRepository, _deloRepository, isBend, id);
-            // --- KRAJ IZMENE ---
-
             var v = new Views.UmetnikEditView
             {
                 DataContext = vm,
@@ -98,14 +97,30 @@ namespace MusicCatalog.ViewModels
             v.ShowDialog();
         }
 
-        private void DeleteSelected()
+        private void DeleteSelected(UmetnikView? item)
         {
-            if (Selected == null) return;
-            var md = Selected;
-            if (MessageBox.Show("Da li ste sigurni?", "Potvrda", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
-            _umetniciRepository.Delete(md.Id);
+            if (item == null) return;
+            if (MessageBox.Show($"Da li ste sigurni da želite da obrišete umetnika?", "Potvrda", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+
+            _umetniciRepository.Delete(item.Id);
+            _umetniciRepository.SaveChanges();
             Load();
         }
-    }
 
+        private void ShowInfo(object? parameter)
+        {
+            if (parameter is UmetnikView umetnikView)
+            {
+                var vm = new UmetnikInfoViewModel(umetnikView.Umetnik, _umetniciRepository, _clanstvoRepository, _deloRepository);
+
+                var view = new UmetnikInfoView
+                {
+                    DataContext = vm,
+                    Owner = Application.Current?.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive)
+                };
+
+                view.ShowDialog();
+            }
+        }
+    }
 }
