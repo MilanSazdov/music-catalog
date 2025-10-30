@@ -24,17 +24,16 @@ namespace MusicCatalog.ViewModels
         public string DeloNaziv => _delo.Naziv;
         public bool IsCreate => _existingRec == null;
 
-        // Create fields
         private int? _vrednost;
         public int? Vrednost { get => _vrednost; set { _vrednost = value; OnPropertyChanged(nameof(Vrednost)); } }
         public string? Opis { get; set; }
 
-        // Edit fields
         public int? NovaOcenaVrednost { get; set; }
 
         public ICommand SaveCreateCommand { get; }
         public ICommand PosaljiZahtevCommand { get; }
         public ICommand IzbrisiRecenzijuCommand { get; }
+        public ICommand CloseCommand { get; }
         public Action? Close { get; set; }
 
         public RecenzijaEditViewModel(AuthService auth, IKorisnikRepository korisnikRepo, IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, IZahtevZaIzmenuRepository reqRepo, MuzickoDelo delo, Recenzija? existingRec)
@@ -51,9 +50,13 @@ namespace MusicCatalog.ViewModels
             PosaljiZahtevCommand = new RelayCommand(_ => PosaljiZahtev(), _ => CanPosaljiZahtev());
             IzbrisiRecenzijuCommand = new RelayCommand(_ => IzbrisiRecenziju());
 
+           
+            CloseCommand = new RelayCommand(_ => Close?.Invoke());
+            
+
             if (!IsCreate)
             {
-                // Pre-populate for edit view
+                
                 var ocena = _ocenaRepo.GetByRecenzijaId(_existingRec!.Id);
                 NovaOcenaVrednost = ocena?.Vrednost ?? null;
                 Opis = _existingRec!.Opis;
@@ -103,7 +106,7 @@ namespace MusicCatalog.ViewModels
 
             var zahtev = new ZahtevZaIzmenu
             {
-                // Id will be set as last+1 by repo
+                
                 RecenzijaId = _existingRec!.Id,
                 TipZahteva = TipZahteva.IZMENA,
                 Status = StatusZahteva.NA_CEKANJU,
