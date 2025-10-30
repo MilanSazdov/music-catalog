@@ -27,7 +27,7 @@ namespace MusicCatalog
 
         public App()
         {
-            // 1. Kreiraj servise i repozitorijume
+
             _korisnikRepository = new KorisnikRepository("Data/korisnici.json");
             _anketaRepository = new AnketaRepository("Data/ankete.json");
             _zanrRepository = new ZanrRepository("Data/zanrovi.json");
@@ -42,26 +42,26 @@ namespace MusicCatalog
 
             _authService = new AuthService(_korisnikRepository);
 
-            // 2. Kreiraj glavni ViewModel
+
             _mainViewModel = new MainViewModel(null!);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            // 3. Kreiraj glavni prozor
+
             MainWindow = new MainWindow
             {
                 DataContext = _mainViewModel
             };
 
-            // 4. Pokaži početni ekran (Login)
+
             ShowLoginView();
 
             MainWindow.Show();
             base.OnStartup(e);
         }
 
-        // --- METODE ZA NAVIGACIJU ---
+
 
         private void ShowLoginView()
         {
@@ -96,18 +96,51 @@ namespace MusicCatalog
             _mainViewModel.TrenutniView = adminVM;
         }
 
+
         private void ShowRegistrovaniKorisnikView()
         {
-            var korisnikVM = new RegistrovaniKorisnikViewModel(_authService, _deloRepository, _zanrRepository, _recenzijaRepository, _ocenaRepository, _zahtevRepository, _korisnikRepository);
+
+            var korisnikVM = new RegistrovaniKorisnikViewModel(
+                _authService,
+                _deloRepository,
+                _zanrRepository,
+                _umetnikRepository,
+                _clanstvoRepository,
+                _korisnikRepository,
+                _recenzijaRepository, // <-- Add this missing argument
+                _ocenaRepository      // <-- Add this missing argument
+            );
+
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
 
         private void ShowMuzickiUrednikView()
         {
-            var urednikVM = new MuzickiUrednikViewModel(_authService, _deloRepository, _zanrRepository, _recenzijaRepository, _ocenaRepository, _zahtevRepository, _korisnikRepository, _umetnikRepository);
+            //public MuzickiUrednikViewModel(
+            //AuthService authService,
+            //IMuzickoDeloRepository deloRepo,
+            //IZanrRepository zanrRepo,
+            //IRecenzijaRepository recRepo,
+            //IOcenaRepository ocenaRepo,
+            //IZahtevZaIzmenuRepository zahtevRepo,
+            //IKorisnikRepository korisnikRepo,
+            //IMuzickiUmetnikRepository umetnikRepo,
+            //IClanstvoRepository clanstvoRepo)
+            var urednikVM = new MuzickiUrednikViewModel(
+                _authService,
+                _deloRepository,
+                _zanrRepository,
+                _recenzijaRepository,
+                _ocenaRepository,
+                _zahtevRepository,
+                _korisnikRepository,
+                _umetnikRepository,    
+                _clanstvoRepository    
+                );
             urednikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = urednikVM;
         }
+        
     }
 }

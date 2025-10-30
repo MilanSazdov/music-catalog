@@ -15,14 +15,17 @@ namespace MusicCatalog.ViewModels
         private readonly AuthService _authService;
         public Action ShowLoginView { get; set; }
 
+
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
+        private readonly IMuzickiUmetnikRepository _umetnikRepo; 
+        private readonly IClanstvoRepository _clanstvoRepo; 
 
         private readonly IRecenzijaRepository _recRepo;
         private readonly IOcenaRepository _ocenaRepo;
         private readonly IZahtevZaIzmenuRepository _zahtevRepo;
         private readonly IKorisnikRepository _korisnikRepo;
-        private readonly IMuzickiUmetnikRepository? _umetnikRepo;
+
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -40,11 +43,16 @@ namespace MusicCatalog.ViewModels
 
         public MuzickiUrednikViewModel(AuthService authService, IMuzickoDeloRepository deloRepo, IZanrRepository zanrRepo,
             IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, IZahtevZaIzmenuRepository zahtevRepo, IKorisnikRepository korisnikRepo,
-            IMuzickiUmetnikRepository? umetnikRepo = null)
+            IMuzickiUmetnikRepository umetnikRepo,
+            IClanstvoRepository clanstvoRepo)
+        
+
         {
             _authService = authService;
             _deloRepo = deloRepo;
             _zanrRepo = zanrRepo;
+            _umetnikRepo = umetnikRepo;       
+            _clanstvoRepo = clanstvoRepo;     
 
             _recRepo = recRepo;
             _ocenaRepo = ocenaRepo;
@@ -66,6 +74,7 @@ namespace MusicCatalog.ViewModels
 
         private void PrikaziSadrzaj(object? parameter)
         {
+            // Fix: Use the correct constructor for UrednikMuzickiSadrzajViewModel (8 arguments)
             CurrentContentView = new UrednikMuzickiSadrzajView
             {
                 DataContext = new UrednikMuzickiSadrzajViewModel(_deloRepo, _zanrRepo, _recRepo, _ocenaRepo, _zahtevRepo, _korisnikRepo, _authService, _umetnikRepo)
@@ -75,6 +84,7 @@ namespace MusicCatalog.ViewModels
         private void IzmeniPodatke(object? parameter)
         {
             var vm = new IzmeniPodatkeViewModel(_authService, TrenutniKorisnik);
+
             vm.ZatvoriView = () =>
             {
                 OnPropertyChanged(nameof(TrenutniKorisnik));
@@ -94,6 +104,10 @@ namespace MusicCatalog.ViewModels
                 Foreground = (Brush)Application.Current.Resources["HintBrush"]
             };
             CurrentContentView = placeholder;
+
+            
+            var vm = new AdminUmetniciViewModel(_umetnikRepo, _clanstvoRepo, _deloRepo);
+            CurrentContentView = vm;
         }
 
         private void ObrisiNalog(object? parameter)

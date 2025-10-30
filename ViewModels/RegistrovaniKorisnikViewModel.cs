@@ -5,6 +5,7 @@ using MusicCatalog.Views;
 using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using MusicCatalog.Repositories;
 
 namespace MusicCatalog.ViewModels
@@ -16,11 +17,11 @@ namespace MusicCatalog.ViewModels
 
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
-
-        private readonly IRecenzijaRepository _recRepo;
-        private readonly IOcenaRepository _ocenaRepo;
-        private readonly IZahtevZaIzmenuRepository _zahtevRepo;
+        private readonly IMuzickiUmetnikRepository _umetnikRepo;
+        private readonly IClanstvoRepository _clanstvoRepo;
         private readonly IKorisnikRepository _korisnikRepo;
+        private readonly IRecenzijaRepository _recenzijaRepo; // Add this
+        private readonly IOcenaRepository _ocenaRepo; // Add this
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -32,32 +33,36 @@ namespace MusicCatalog.ViewModels
         }
 
         public ICommand PrikaziSadrzajCommand { get; }
+        public ICommand PrikaziUmetnikeCommand { get; }
         public ICommand IzmeniPodatkeCommand { get; }
         public ICommand ObrisiNalogCommand { get; }
         public ICommand LogoutCommand { get; }
 
+        // Konstruktor sada prima svih 8 zavisnosti
         public RegistrovaniKorisnikViewModel(
             AuthService authService,
             IMuzickoDeloRepository deloRepo,
             IZanrRepository zanrRepo,
-            IRecenzijaRepository recRepo,
-            IOcenaRepository ocenaRepo,
-            IZahtevZaIzmenuRepository zahtevRepo,
-            IKorisnikRepository korisnikRepo)
+            IMuzickiUmetnikRepository umetnikRepo,
+            IClanstvoRepository clanstvoRepo,
+            IKorisnikRepository korisnikRepo,
+            IRecenzijaRepository recenzijaRepo, // Add this
+            IOcenaRepository ocenaRepo // Add this
+            )
         {
             _authService = authService;
             _deloRepo = deloRepo;
             _zanrRepo = zanrRepo;
-
-            _recRepo = recRepo;
-            _ocenaRepo = ocenaRepo;
-            _zahtevRepo = zahtevRepo;
+            _umetnikRepo = umetnikRepo;
+            _clanstvoRepo = clanstvoRepo;
             _korisnikRepo = korisnikRepo;
-
+            _recenzijaRepo = recenzijaRepo; // Add this
+            _ocenaRepo = ocenaRepo; // Add this
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
             PrikaziSadrzajCommand = new RelayCommand(PrikaziSadrzaj);
+            PrikaziUmetnikeCommand = new RelayCommand(PrikaziUmetnike);
             IzmeniPodatkeCommand = new RelayCommand(IzmeniPodatke);
             ObrisiNalogCommand = new RelayCommand(ObrisiNalog);
             LogoutCommand = new RelayCommand(Logout);
@@ -67,26 +72,48 @@ namespace MusicCatalog.ViewModels
 
         private void PrikaziSadrzaj(object? parameter)
         {
-            // Use the end-user list (supports Oceni/Izmeni/PrikaziOcene)
-            var vm = new KorisnikMuzickiSadrzajViewModel(_deloRepo, _zanrRepo, _recRepo, _ocenaRepo, _zahtevRepo, _korisnikRepo, _authService);
-            CurrentContentView = new KorisnikMuzickiSadrzajView { DataContext = vm };
+            // Prosleđujemo korisnika i repo za favorite sadržaja
+            var vm = new KorisnikMuzickiSadrzajViewModel(
+                _deloRepo,
+                _zanrRepo,
+                (RegistrovaniKorisnik)TrenutniKorisnik,
+                _korisnikRepo
+            );
+            CurrentContentView = vm;
+        }
+
+        private void PrikaziUmetnike(object? parameter)
+        {
+            // Prosleđujemo SVE zavisnosti za favorite umetnika
+            var vm = new KorisnikUmetniciViewModel(
+                _umetnikRepo,
+                _clanstvoRepo,
+                _deloRepo,
+                (RegistrovaniKorisnik)TrenutniKorisnik,
+                _korisnikRepo,
+                _recenzijaRepo, // Pass this
+                _ocenaRepo // Pass this
+                );
+            CurrentContentView = vm;
         }
 
         private void IzmeniPodatke(object? parameter)
         {
             var vm = new IzmeniPodatkeViewModel(_authService, TrenutniKorisnik);
+
             vm.ZatvoriView = () =>
             {
                 OnPropertyChanged(nameof(TrenutniKorisnik));
                 PrikaziSadrzaj(null);
             };
+
             CurrentContentView = vm;
         }
 
         private void ObrisiNalog(object? parameter)
         {
-            var result = MessageBox.Show(
-                "Da li ste sigurni da želite da obrišete nalog? Vaš nalog će biti blokiran.",
+            MessageBoxResult result = MessageBox.Show(
+                "Da li ste sigurni da želite da obrišete nalog? Vaš nalog će biti blokiran i moći ćete da ga reaktivirate ponovnom registracijom.",
                 "Potvrda brisanja naloga",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
@@ -94,8 +121,14 @@ namespace MusicCatalog.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 bool uspeh = _authService.BlokirajNalog(TrenutniKorisnik);
-                if (uspeh) ShowLoginView?.Invoke();
-                else MessageBox.Show("Došlo je do greške prilikom brisanja naloga.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (uspeh)
+                {
+                    ShowLoginView?.Invoke();
+                }
+                else
+                {
+                    MessageBox.Show("Došlo je do greške prilikom brisanja naloga.", "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

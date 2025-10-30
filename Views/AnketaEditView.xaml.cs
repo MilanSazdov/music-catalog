@@ -15,14 +15,19 @@ using System.Windows.Shapes;
 
 namespace MusicCatalog.Views
 {
-    /// <summary>
-    /// Interaction logic for AnketaEditView.xaml
-    /// </summary>
     public partial class AnketaEditView : Window
     {
         public AnketaEditView()
         {
             InitializeComponent();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
     }
 }

@@ -10,91 +10,179 @@
                 
         AllowsTransparency="True"
         Background="Transparent"
-        WindowStyle="None">
-    <StackPanel>
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8"
-				   Padding="40"
-				   Margin="20"
-				   MaxWidth="450" Effect="{StaticResource ShadowEffect}">
-                <StackPanel>
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight">
 
-                    <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
-                    <TextBox
-                        Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                        Style="{StaticResource ModernTextBox}"
-                        Margin="0,0,0,20"/>
+    <Window.Resources>
+        <Style x:Key="ChipRemoveButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource HintBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Content" Value="X"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-                    <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
-                    <TextBox
-                        Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                        Style="{StaticResource ModernTextBox}"
-                        Margin="0,0,0,20"/>
+    <Grid MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8"
+			    Padding="40"
+			    Margin="20"
+			    MaxWidth="500" Effect="{StaticResource ShadowEffect}">
 
-                    <TextBlock Text="Email adresa" Style="{StaticResource FormLabel}"/>
-                    <TextBox
-                        Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                        Style="{StaticResource ModernTextBox}"
-                        Margin="0,0,0,20"/>
+            <StackPanel>
+                <TextBlock Text="{Binding Title, FallbackValue='Urednik'}" 
+                           Foreground="{StaticResource PrimaryBrush}"
+                           FontSize="24" FontWeight="Bold" 
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,24"/>
 
-                    <TextBlock Text="Lozinka" Style="{StaticResource FormLabel}"/>
-                    <TextBox
-                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                        Style="{StaticResource ModernTextBox}"
-                        Margin="0,0,0,20"/>
+                <TextBlock Text="Ime" Style="{StaticResource FormLabel}"/>
+                <TextBox
+                    Text="{Binding Ime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Style="{StaticResource ModernTextBox}"
+                    Margin="0,0,0,20"/>
 
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding SviZanrovi}"
-                                  SelectedItem="{Binding NewZanr}" Width="150"/>
+                <TextBlock Text="Prezime" Style="{StaticResource FormLabel}"/>
+                <TextBox
+                    Text="{Binding Prezime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Style="{StaticResource ModernTextBox}"
+                    Margin="0,0,0,20"/>
 
-                        <Button Content="Add" Command="{Binding AddZanrCommand}" Width="60" Style="{StaticResource PrimaryButton}"/>
-                    </StackPanel>
-                    
-                    <DataGrid ItemsSource="{Binding Specijalizacija}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      Height="150" Margin="0,5,0,0">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Naziv" Binding="{Binding Naziv}" Width="*"/>
-                            <DataGridTemplateColumn Header="Actions" Width="70">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Remove"
-                                            Command="{Binding DataContext.RemoveZanrCommand,
-                                            RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            Style="{StaticResource PrimaryButton}"
-                                            Background="{StaticResource ErrorBrush}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <TextBlock Text="Email adresa" Style="{StaticResource FormLabel}"/>
+                <TextBox
+                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Style="{StaticResource ModernTextBox}"
+                    Margin="0,0,0,20"/>
 
-                    <TextBlock
-                        Text="{Binding ErrorMessage}"
-                        Foreground="{StaticResource ErrorBrush}"
-                        TextWrapping="Wrap"
-                        Margin="0,0,0,12"
-                        HorizontalAlignment="Center"
-                        Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                <TextBlock>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource FormLabel}">
+                            <Setter Property="Text" Value="Nova Lozinka (ostavi prazno da zadržiš staru)"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditing}" Value="False">
+                                    <Setter Property="Text" Value="Lozinka"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
 
+                <PasswordBox
+                    utils:PasswordHelper.Attach="True"
+                    utils:PasswordHelper.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Style="{StaticResource ModernPasswordBox}"
+                    Margin="0,0,0,20"/>
+
+                <TextBlock>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource FormLabel}">
+                            <Setter Property="Text" Value="Potvrdi Novu Lozinku"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditing}" Value="False">
+                                    <Setter Property="Text" Value="Potvrdi Lozinku"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <PasswordBox
+                    utils:PasswordHelper.Attach="True"
+                    utils:PasswordHelper.Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Style="{StaticResource ModernPasswordBox}"
+                    Margin="0,0,0,20"/>
+
+
+                <TextBlock Text="Specijalizacija (Žanrovi)" Style="{StaticResource FormLabel}"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox ItemsSource="{Binding SviZanrovi}"
+                              SelectedItem="{Binding NewZanr}" 
+                              Width="332"
+                              DisplayMemberPath="Naziv"/>
+
+                    <Button Content="Dodaj" 
+                            Command="{Binding AddZanrCommand}" 
+                            Width="80" 
+                            Style="{StaticResource PrimaryButton}"
+                            Margin="8,0,0,0"/>
+                </StackPanel>
+
+                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" 
+                        MinHeight="80" MaxHeight="120" Margin="0,12,0,0"
+                        Background="{StaticResource WindowBackgroundBrush}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="5">
+                        <ItemsControl ItemsSource="{Binding Specijalizacija}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource PrimaryBrush}" CornerRadius="4" Margin="3">
+                                        <StackPanel Orientation="Horizontal" Margin="8,4">
+                                            <TextBlock Text="{Binding Naziv}" 
+                                                       Foreground="{StaticResource ButtonTextBrush}" 
+                                                       VerticalAlignment="Center"/>
+                                            <Button Style="{StaticResource ChipRemoveButton}"
+                                                      Foreground="{StaticResource ButtonTextBrush}"
+                                                    Command="{Binding DataContext.RemoveZanrCommand, 
+                                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+
+                <TextBlock
+                    Text="{Binding ErrorMessage}"
+                    Foreground="{StaticResource ErrorBrush}"
+                    TextWrapping="Wrap"
+                    Margin="0,12,0,12"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0,16,0,0">
                     <Button
                         Content="Potvrdi"
                         Command="{Binding ConfirmCommand}"
                         Style="{StaticResource PrimaryButton}"
-                        Margin="0,16,0,0"
-                        HorizontalAlignment="Stretch"/>
+                        Margin="0,0,8,0"
+                        Width="202"/>
 
                     <Button
-                        Content="Otkazi"
+                        Content="Otkaži"
                         Command="{Binding CancelCommand}"
                         Style="{StaticResource PrimaryButton}"
-                        Margin="0,16,0,0"
+                        Margin="8,0,0,0"
                         Background="{StaticResource ErrorBrush}"
-                        HorizontalAlignment="Stretch"/>
-
+                        Width="202"/>
                 </StackPanel>
-            </Border>
-        </Grid>
-    </StackPanel>
+
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

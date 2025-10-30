@@ -17,6 +17,10 @@ namespace MusicCatalog.Models.Umetnici
         public string Opis { get; set; }
         public string Slika { get; set; }
 
+
+        public List<int> MuzickoDeloIDs { get; set; } = new List<int>();
+        
+
         public MuzickiUmetnik(string opis, string slika)
         {
             Id = new Random().Next(1, int.MaxValue);
@@ -26,7 +30,7 @@ namespace MusicCatalog.Models.Umetnici
 
         public MuzickiUmetnik()
         {
-            
+
         }
 
     }

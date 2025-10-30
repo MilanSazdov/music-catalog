@@ -1,46 +1,65 @@
 <UserControl x:Class="MusicCatalog.Views.KorisnikMuzickiSadrzajView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding Dela}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="#DDD" BorderThickness="1" Margin="8" Padding="8">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Grid Margin="16">
+        <StackPanel>
 
-                            <TextBlock Text="{Binding View.Naziv}" FontWeight="Bold" FontSize="14"/>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,8">
-                                <TextBlock Text="{Binding View.Tip}" Margin="0,0,12,0"/>
-                                <TextBlock Text="{Binding View.DatumIzdanja, StringFormat='{}{0:dd.MM.yyyy}'}"/>
-                            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Dela}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="220" Margin="8" Padding="10" CornerRadius="10"
+									Background="{StaticResource SurfaceBrush}"
+									BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1">
+                                <StackPanel>
+                                    <Grid Height="120">
+                                        <Border Background="#111" CornerRadius="6">
+                                            <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
+                                        </Border>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Naziv}" FontWeight="Bold" FontSize="14" Margin="0,8,0,2" Foreground="{StaticResource PrimaryBrush}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <TextBlock Text="Tip: " Foreground="{StaticResource PrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Tip}" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <TextBlock Text="Trajanje: " Foreground="{StaticResource PrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Trajanje}" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                        <TextBlock Text="Datum: " Foreground="{StaticResource PrimaryBrush}"/>
+                                        <TextBlock Text="{Binding DatumIzdanja, StringFormat={}{0:dd.MM.yyyy}}" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
 
-                            <DockPanel Grid.Row="2">
-                                <Button Content="Prikazi ocene"
-                                        DockPanel.Dock="Left"
-                                        Command="{Binding DataContext.PrikaziOceneCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
 
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <Button Content="Dodaj ocenu"
-                                            Visibility="{Binding HasUserRecenzija, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}"
-                                            Command="{Binding DataContext.OceniCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"/>
-                                    <Button Content="Izmeni ocenu"
-                                            Margin="8,0,0,0"
-                                            Visibility="{Binding HasUserRecenzija, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                            Command="{Binding DataContext.IzmeniOcenuCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"/>
+                                        <ToggleButton IsChecked="{Binding IsFavorit}"
+                                                      Style="{StaticResource HeartToggleButton}"
+                                                      Visibility="{Binding DataContext.CanManageFavorites, 
+                                                                           RelativeSource={RelativeSource AncestorType=UserControl}, 
+                                                                           Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Button Content="Oceni"
+                                                Command="{Binding DataContext.OceniCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource PrimaryButton}"
+                                                Padding="4"
+                                                Margin="5,0,0,0"/>
+                                    </StackPanel>
+
                                 </StackPanel>
-                            </DockPanel>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
 </UserControl>

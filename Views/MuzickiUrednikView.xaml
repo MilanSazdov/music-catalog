@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MusicCatalog.Views"
              xmlns:viewmodels="clr-namespace:MusicCatalog.ViewModels"
              mc:Ignorable="d" 
+     
              d:DesignHeight="600" d:DesignWidth="800"
              Background="{StaticResource WindowBackgroundBrush}">
 
@@ -16,6 +17,10 @@
 
         <DataTemplate DataType="{x:Type viewmodels:KorisnikMuzickiSadrzajViewModel}">
             <local:KorisnikMuzickiSadrzajView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:AdminUmetniciViewModel}">
+            <local:AdminUmetniciView/>
         </DataTemplate>
     </UserControl.Resources>
 
@@ -30,6 +35,7 @@
                 <DropShadowEffect ShadowDepth="1" BlurRadius="15" Color="Gray" Opacity="0.3"/>
             </Border.Effect>
 
+
             <DockPanel>
 
                 <StackPanel DockPanel.Dock="Top" Margin="20,20,20,10">
@@ -39,41 +45,50 @@
                     <TextBlock Foreground="{StaticResource PrimaryBrush}" FontSize="20" FontWeight="Bold" TextTrimming="CharacterEllipsis">
 						<Run Text="{Binding TrenutniKorisnik.Ime}"/>
 						<Run Text="{Binding TrenutniKorisnik.Prezime}"/>
+
                     </TextBlock>
                     <TextBlock Text="{Binding TrenutniKorisnik.Email}" Foreground="{StaticResource HintBrush}" FontSize="14" TextTrimming="CharacterEllipsis"/>
                     <Separator Margin="0,20,0,0"/>
                 </StackPanel>
 
-                <StackPanel DockPanel.Dock="Top" Margin="10">
+                <StackPanel DockPanel.Dock="Top" 
+ Margin="10">
                     <Button Content="Prikaži Sadržaj"
                              Command="{Binding PrikaziSadrzajCommand}"
                             Margin="5"
-                            Style="{StaticResource PrimaryButton}"/>
+                    
+                 Style="{StaticResource PrimaryButton}"/>
 
-                    <Button Content="Dodaj Umetnika"
+                    <Button Content="Prikaži Umetnike"
                             Command="{Binding DodajUmetnikaCommand}"
                             Margin="5"
-                            Style="{StaticResource PrimaryButton}"/>
+            
+                         Style="{StaticResource PrimaryButton}"/>
 
                     <Button Content="Izmeni Podatke"
                             Command="{Binding IzmeniPodatkeCommand}"
                             Margin="5"
-                             Style="{StaticResource PrimaryButton}"
+    
+                                  Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource DisabledBrush}"/>
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Bottom" Margin="10">
+
                     <Separator Margin="5"/>
                     <Button Content="Odjavi se"
                             Command="{Binding LogoutCommand}"
                             Margin="5"
-                             Style="{StaticResource PrimaryButton}"
+           
+                          Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource DisabledBrush}"/>
                     <Button Content="Obriši Nalog"
                             Command="{Binding ObrisiNalogCommand}"
-                             Margin="5"
+ 
+                               Margin="5"
                             Style="{StaticResource PrimaryButton}"
                             Background="{StaticResource ErrorBrush}"/>
+
                 </StackPanel>
             </DockPanel>
         </Border>

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -24,6 +25,7 @@ namespace MusicCatalog.ViewModels
         private string _prezime = string.Empty;
         private string _email = string.Empty;
         private string _password = string.Empty;
+        private string _confirmPassword = string.Empty;
         private Zanr? _newZanr;
         private string _errorMessage = string.Empty;
         private bool _isEditing;
@@ -57,8 +59,29 @@ namespace MusicCatalog.ViewModels
         public string Password
         {
             get => _password;
-            set { if (_password == value) return; _password = value; OnPropertyChanged(nameof(Password)); OnPropertyChanged(nameof(CanConfirm)); }
+            set
+            {
+                if (_password == value) return;
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+                OnPropertyChanged(nameof(ConfirmPassword));
+                OnPropertyChanged(nameof(CanConfirm));
+            }
         }
+
+   
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                if (_confirmPassword == value) return;
+                _confirmPassword = value;
+                OnPropertyChanged(nameof(ConfirmPassword));
+                OnPropertyChanged(nameof(CanConfirm));
+            }
+        }
+        
 
         public Zanr? NewZanr
         {
@@ -106,14 +129,7 @@ namespace MusicCatalog.ViewModels
                 Ime = urednik.Ime ?? string.Empty;
                 Prezime = urednik.Prezime ?? string.Empty;
                 Email = urednik.Email ?? string.Empty;
-                Password = urednik.Lozinka;
-
-                Specijalizacija.Clear();
-                if (urednik.Specijalizacija != null)
-                {
-                    foreach (var z in urednik.Specijalizacija)
-                        Specijalizacija.Add(z);
-                }
+               
             }
             else
             {
@@ -168,6 +184,7 @@ namespace MusicCatalog.ViewModels
 
             if (!CanConfirm())
             {
+                
                 return;
             }
 
@@ -175,6 +192,14 @@ namespace MusicCatalog.ViewModels
             {
                 if (IsEditing && _originalUrednik != null)
                 {
+                 
+                    if (_originalUrednik.Email != Email && _korisnikRepo != null && _korisnikRepo.GetByEmail(Email) != null)
+                    {
+                        ErrorMessage = "Korisnik sa ovim emailom već postoji.";
+                        return;
+                    }
+                
+
                     _originalUrednik.Ime = Ime;
                     _originalUrednik.Prezime = Prezime;
                     _originalUrednik.Email = Email;
@@ -191,6 +216,13 @@ namespace MusicCatalog.ViewModels
                 }
                 else
                 {
+                    if (_korisnikRepo != null && _korisnikRepo.GetByEmail(Email) != null)
+                    {
+                        ErrorMessage = "Korisnik sa ovim emailom već postoji.";
+                        return;
+                    }
+
+
                     var novi = new MuzickiUrednik(Email, Ime, Prezime, Password)
                     {
                         Specijalizacija = Specijalizacija.ToList()
@@ -198,7 +230,7 @@ namespace MusicCatalog.ViewModels
 
                     _korisnikRepo.Add(novi);
                     _korisnikRepo.SaveChanges();
-                    
+
                 }
 
                 OnSaved?.Invoke();
@@ -231,11 +263,49 @@ namespace MusicCatalog.ViewModels
                         break;
                     case nameof(Email):
                         if (string.IsNullOrWhiteSpace(Email)) return "Email je obavezan.";
-                        if (!Email.Contains("@")) return "Email nije validan.";
+                        if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")) return "Email nije u ispravnom formatu.";
+                        if (_korisnikRepo != null)
+                        {
+                            var postojeci = _korisnikRepo.GetByEmail(Email);
+                            if (postojeci != null)
+                            {
+                                
+                                if (!IsEditing && postojeci != null)
+                                    return "Korisnik sa ovim emailom već postoji.";
+                                
+                                if (IsEditing && postojeci != null && _originalUrednik != null && postojeci.Email != _originalUrednik.Email)
+                                    return "Korisnik sa ovim emailom već postoji.";
+                            }
+                        }
                         break;
                     case nameof(Password):
-                        if (!IsEditing && string.IsNullOrWhiteSpace(Password)) return "Lozinka je obavezna za novog urednika.";
-                        if (!string.IsNullOrEmpty(Password) && Password.Length < 6) return "Lozinka mora imati najmanje 6 karaktera.";
+                        if (!IsEditing)
+                        {
+                            if (string.IsNullOrWhiteSpace(Password)) return "Lozinka je obavezna za novog urednika.";
+                            if (Password.Length < 6) return "Lozinka mora imati najmanje 6 karaktera.";
+                        }
+                        else
+                        {
+                            
+                            if (!string.IsNullOrWhiteSpace(Password) && Password.Length < 6)
+                                return "Lozinka mora imati bar 6 karaktera.";
+                            
+                            if (!string.IsNullOrWhiteSpace(Password) && string.IsNullOrWhiteSpace(ConfirmPassword))
+                                OnPropertyChanged(nameof(ConfirmPassword));
+                        }
+                        break;
+                    case nameof(ConfirmPassword):
+                        
+                        if (!string.IsNullOrWhiteSpace(Password))
+                        {
+                            if (Password != ConfirmPassword)
+                                return "Lozinke se ne poklapaju.";
+                        }
+                        
+                        else if (string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPassword))
+                        {
+                            return "Unesite prvo lozinku.";
+                        }
                         break;
                 }
                 return string.Empty;
@@ -246,7 +316,7 @@ namespace MusicCatalog.ViewModels
         {
             get
             {
-                string[] properties = { nameof(Ime), nameof(Prezime), nameof(Email), nameof(Password)};
+                string[] properties = { nameof(Ime), nameof(Prezime), nameof(Email), nameof(Password), nameof(ConfirmPassword) };
                 foreach (var prop in properties)
                 {
                     if (!string.IsNullOrEmpty(this[prop]))
