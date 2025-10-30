@@ -16,8 +16,12 @@ namespace MusicCatalog
         private readonly IZanrRepository _zanrRepository;
         private readonly IMuzickiUmetnikRepository _umetnikRepository;
         private readonly IClanstvoRepository _clanstvoRepository;
-
         private readonly IMuzickoDeloRepository _deloRepository;
+
+        // NEW
+        private readonly IRecenzijaRepository _recenzijaRepository;
+        private readonly IOcenaRepository _ocenaRepository;
+        private readonly IZahtevZaIzmenuRepository _zahtevRepository;
 
         private readonly MainViewModel _mainViewModel;
 
@@ -29,8 +33,12 @@ namespace MusicCatalog
             _zanrRepository = new ZanrRepository("Data/zanrovi.json");
             _umetnikRepository = new MuzickiUmetnikRepository("Data/umetnici.json");
             _clanstvoRepository = new ClanstvoRepository("Data/clanstva.json");
-
             _deloRepository = new MuzickoDeloRepository(_zanrRepository);
+
+            // NEW
+            _recenzijaRepository = new RecenzijaRepository("Data/recenzije.json");
+            _ocenaRepository = new OcenaRepository("Data/ocene.json");
+            _zahtevRepository = new ZahtevZaIzmenuRepository("Data/zahtevi_izmene.json");
 
             _authService = new AuthService(_korisnikRepository);
 
@@ -61,9 +69,7 @@ namespace MusicCatalog
             loginVM.ShowRegisterView = ShowRegisterView;
             loginVM.ShowAdminView = ShowAdminView;
             loginVM.ShowRegistrovaniKorisnikView = ShowRegistrovaniKorisnikView;
-
             loginVM.ShowMuzickiUrednikView = ShowMuzickiUrednikView;
-
             _mainViewModel.TrenutniView = loginVM;
         }
 
@@ -76,7 +82,16 @@ namespace MusicCatalog
 
         private void ShowAdminView()
         {
-            var adminVM = new AdminViewModel(_anketaRepository, _korisnikRepository, _zanrRepository, _umetnikRepository, _clanstvoRepository);
+            var adminVM = new AdminViewModel(
+                _anketaRepository,
+                _korisnikRepository,
+                _zanrRepository,
+                _umetnikRepository,
+                _clanstvoRepository,
+                _deloRepository, // <-- Add this missing argument
+                _recenzijaRepository,
+                _ocenaRepository,
+                _zahtevRepository);
             adminVM.LoggedOut += ShowLoginView;
             _mainViewModel.TrenutniView = adminVM;
         }
@@ -84,24 +99,42 @@ namespace MusicCatalog
 
         private void ShowRegistrovaniKorisnikView()
         {
+
             var korisnikVM = new RegistrovaniKorisnikViewModel(
                 _authService,
                 _deloRepository,
                 _zanrRepository,
                 _umetnikRepository,
                 _clanstvoRepository,
-                _korisnikRepository
+                _korisnikRepository,
+                _recenzijaRepository, // <-- Add this missing argument
+                _ocenaRepository      // <-- Add this missing argument
             );
+
             korisnikVM.ShowLoginView = ShowLoginView;
             _mainViewModel.TrenutniView = korisnikVM;
         }
 
         private void ShowMuzickiUrednikView()
         {
+            //public MuzickiUrednikViewModel(
+            //AuthService authService,
+            //IMuzickoDeloRepository deloRepo,
+            //IZanrRepository zanrRepo,
+            //IRecenzijaRepository recRepo,
+            //IOcenaRepository ocenaRepo,
+            //IZahtevZaIzmenuRepository zahtevRepo,
+            //IKorisnikRepository korisnikRepo,
+            //IMuzickiUmetnikRepository umetnikRepo,
+            //IClanstvoRepository clanstvoRepo)
             var urednikVM = new MuzickiUrednikViewModel(
                 _authService,
                 _deloRepository,
                 _zanrRepository,
+                _recenzijaRepository,
+                _ocenaRepository,
+                _zahtevRepository,
+                _korisnikRepository,
                 _umetnikRepository,    
                 _clanstvoRepository    
                 );

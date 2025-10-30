@@ -11,6 +11,7 @@ namespace MusicCatalog.Models.Umetnici
         public string Naziv { get; set; }
         public DateOnly DatumNastanka { get; set; }
 
+
         
         public bool Aktivan { get; set; } = true;
       
@@ -23,7 +24,5 @@ namespace MusicCatalog.Models.Umetnici
         }
 
         public Bend() { }
-
-
     }
 }

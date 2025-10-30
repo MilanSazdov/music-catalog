@@ -56,8 +56,9 @@
                         <Button Content="Muzicki sadrzaj" Command="{Binding ShowMuzickiSadrzajCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Zanrovi" Command="{Binding ShowZanroviCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
                         <Button Content="Umetnici" Command="{Binding ShowUmetniciCommand}" Margin="5" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Zahtevi za izmenu" Command="{Binding ShowZahteviZaIzmenuCommand}" Background="{DynamicResource PrimaryBrush}" />
 
-                        </StackPanel>
+                    </StackPanel>
                         <StackPanel DockPanel.Dock="Bottom" Margin="10">
 
                             <Separator/>

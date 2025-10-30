@@ -20,6 +20,11 @@ namespace MusicCatalog.Repositories
         // Lokalna lista korisnika (keš u memoriji).
         private List<Korisnik> _korisnici;
 
+        // Optional cross-repo refs for cascade ops
+        private readonly IRecenzijaRepository? _recRepo;
+        private readonly IOcenaRepository? _ocenaRepo;
+        private readonly IZahtevZaIzmenuRepository? _zahtevRepo;
+
         public KorisnikRepository(string filePath = "Data/korisnici.json")
         {
             _filePath = filePath;
@@ -30,6 +35,13 @@ namespace MusicCatalog.Repositories
 
             // Učitaj podatke iz fajla čim se repozitorijum kreira
             Load();
+        }
+
+        public KorisnikRepository(IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, IZahtevZaIzmenuRepository zahtevRepo, string filePath = "Data/korisnici.json") : this(filePath)
+        {
+            _recRepo = recRepo;
+            _ocenaRepo = ocenaRepo;
+            _zahtevRepo = zahtevRepo;
         }
 
         /// <summary>
@@ -84,6 +96,25 @@ namespace MusicCatalog.Repositories
             var korisnik = GetByEmail(email);
             if (korisnik != null)
             {
+                // Cascade: delete recenzije, ocene, zahtevi for this user if repos are provided
+                if (_recRepo != null && _ocenaRepo != null && _zahtevRepo != null)
+                {
+                    var recs = _recRepo.GetByKorisnik(email);
+                    var recIds = recs.Select(r => r.Id).ToList();
+                    if (recIds.Count >0)
+                    {
+                        _ocenaRepo.DeleteManyByRecenzije(recIds);
+                        var zahtevi = _zahtevRepo.GetAll().Where(z => recIds.Contains(z.RecenzijaId) || z.AutorEmail.Equals(email, System.StringComparison.OrdinalIgnoreCase)).Select(z => z.Id).ToList();
+                        foreach (var zId in zahtevi) _zahtevRepo.Delete(zId);
+                        _recRepo.DeleteMany(recIds);
+                    }
+                    else
+                    {
+                        // remove any requests authored by the user even if no recenzija currently in storage
+                        var zahteviOnly = _zahtevRepo.GetByAutor(email).Select(z => z.Id).ToList();
+                        foreach (var zId in zahteviOnly) _zahtevRepo.Delete(zId);
+                    }
+                }
                 _korisnici.Remove(korisnik);
             }
         }

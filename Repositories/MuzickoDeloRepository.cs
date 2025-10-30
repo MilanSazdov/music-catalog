@@ -105,8 +105,8 @@ namespace MusicCatalog.Repositories
                 _muzickaDela.Remove(muzickoDelo);
                 Save();
 
-                // Unlink from all genres
-                foreach (var zanr in _zanrRepo.GetAll())
+                // Unlink from all genres - iterate over a snapshot to avoid modifying the collection during enumeration
+                foreach (var zanr in _zanrRepo.GetAll().ToList())
                 {
                     if (zanr.MuzickaDelaIDs.Remove(id))
                     {
@@ -114,6 +114,28 @@ namespace MusicCatalog.Repositories
                     }
                 }
             }
+        }
+
+        public void DeleteWithCascade(int id, IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, IZahtevZaIzmenuRepository zahtevRepo)
+        {
+            // Collect related recenzije
+            var recenzije = recRepo.GetByDeloId(id);
+            var recIds = recenzije.Select(r => r.Id).ToList();
+
+            // Delete related ocene and zahtevi first
+            if (recIds.Count > 0)
+            {
+                ocenaRepo.DeleteManyByRecenzije(recIds);
+                var zahtevi = zahtevRepo.GetAll().Where(z => recIds.Contains(z.RecenzijaId)).Select(z => z.Id).ToList();
+                foreach (var zId in zahtevi)
+                {
+                    zahtevRepo.Delete(zId);
+                }
+                recRepo.DeleteMany(recIds);
+            }
+
+            // Finally delete the work and unlink from genres
+            Delete(id);
         }
 
         public List<MuzickoDelo> GetAll() => _muzickaDela;

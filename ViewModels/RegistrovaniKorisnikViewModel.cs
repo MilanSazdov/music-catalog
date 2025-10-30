@@ -20,6 +20,8 @@ namespace MusicCatalog.ViewModels
         private readonly IMuzickiUmetnikRepository _umetnikRepo;
         private readonly IClanstvoRepository _clanstvoRepo;
         private readonly IKorisnikRepository _korisnikRepo;
+        private readonly IRecenzijaRepository _recenzijaRepo; // Add this
+        private readonly IOcenaRepository _ocenaRepo; // Add this
 
         public Korisnik TrenutniKorisnik { get; private set; }
 
@@ -36,14 +38,17 @@ namespace MusicCatalog.ViewModels
         public ICommand ObrisiNalogCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        // Konstruktor sada prima svih 6 zavisnosti
+        // Konstruktor sada prima svih 8 zavisnosti
         public RegistrovaniKorisnikViewModel(
             AuthService authService,
             IMuzickoDeloRepository deloRepo,
             IZanrRepository zanrRepo,
             IMuzickiUmetnikRepository umetnikRepo,
             IClanstvoRepository clanstvoRepo,
-            IKorisnikRepository korisnikRepo)
+            IKorisnikRepository korisnikRepo,
+            IRecenzijaRepository recenzijaRepo, // Add this
+            IOcenaRepository ocenaRepo // Add this
+            )
         {
             _authService = authService;
             _deloRepo = deloRepo;
@@ -51,6 +56,8 @@ namespace MusicCatalog.ViewModels
             _umetnikRepo = umetnikRepo;
             _clanstvoRepo = clanstvoRepo;
             _korisnikRepo = korisnikRepo;
+            _recenzijaRepo = recenzijaRepo; // Add this
+            _ocenaRepo = ocenaRepo; // Add this
             TrenutniKorisnik = _authService.TrenutniKorisnik!;
             ShowLoginView = () => { };
 
@@ -83,7 +90,9 @@ namespace MusicCatalog.ViewModels
                 _clanstvoRepo,
                 _deloRepo,
                 (RegistrovaniKorisnik)TrenutniKorisnik,
-                _korisnikRepo
+                _korisnikRepo,
+                _recenzijaRepo, // Pass this
+                _ocenaRepo // Pass this
                 );
             CurrentContentView = vm;
         }

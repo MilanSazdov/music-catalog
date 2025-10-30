@@ -1,13 +1,8 @@
 ﻿using MusicCatalog.Repositories;
 using MusicCatalog.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MusicCatalog.Views;
-
 
 namespace MusicCatalog.ViewModels
 {
@@ -20,6 +15,11 @@ namespace MusicCatalog.ViewModels
         IClanstvoRepository _clanstvoRepository;
         private readonly IMuzickoDeloRepository _deloRepo;
 
+        // NEW
+        private readonly IRecenzijaRepository _recRepo;
+        private readonly IOcenaRepository _ocenaRepo;
+        private readonly IZahtevZaIzmenuRepository _zahtevRepo;
+
         private object _currentView;
         public object CurrentView { get => _currentView; set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); } }
         public event Action? LoggedOut;
@@ -30,21 +30,37 @@ namespace MusicCatalog.ViewModels
         public ICommand ShowZanroviCommand { get; }
         public ICommand ShowMuzickiSadrzajCommand { get; }
         public ICommand ShowUmetniciCommand { get; }
-        public AdminViewModel(AnketaRepository anketaRepository, IKorisnikRepository korisnikRepository, IZanrRepository zanrRepository, IMuzickiUmetnikRepository umetnikRepository, IClanstvoRepository clanstvoRepository)
+        public ICommand ShowZahteviZaIzmenuCommand { get; }
+
+        public AdminViewModel(
+            AnketaRepository anketaRepository,
+            IKorisnikRepository korisnikRepository,
+            IZanrRepository zanrRepository,
+            IMuzickiUmetnikRepository umetnikRepository,
+            IClanstvoRepository clanstvoRepository,
+            IMuzickoDeloRepository deloRepo,
+            IRecenzijaRepository recRepo,
+            IOcenaRepository ocenaRepo,
+            IZahtevZaIzmenuRepository zahtevRepo)
         {
             _clanstvoRepository = clanstvoRepository;
             _umetnikRepository = umetnikRepository;
-
             _korisnikRepository = korisnikRepository;
             _anketaRepository = anketaRepository;
             _zanrRepository = zanrRepository;
-            _deloRepo = new MuzickoDeloRepository(_zanrRepository);
+            _deloRepo = deloRepo;
+
+            _recRepo = recRepo;
+            _ocenaRepo = ocenaRepo;
+            _zahtevRepo = zahtevRepo;
+
             ShowKorisniciCommand = new RelayCommand(_ => ShowKorisnici());
             ShowUredniciCommand = new RelayCommand(_ => ShowUrednici());
             ShowAnketeCommand = new RelayCommand(_ => ShowAnkete());
             ShowMuzickiSadrzajCommand = new RelayCommand(_ => ShowMuzickiSadrzaj());
             ShowZanroviCommand = new RelayCommand(_ => ShowZanrove());
             ShowUmetniciCommand = new RelayCommand(_ => ShowUmetnici());
+            ShowZahteviZaIzmenuCommand = new RelayCommand(_ => ShowZahteviZaIzmenu());
 
             LogoutCommand = new RelayCommand(_ => Logout());
 
@@ -68,7 +84,7 @@ namespace MusicCatalog.ViewModels
 
         private void ShowMuzickiSadrzaj()
         {
-            CurrentView = new AdminMuzickiSadrzajView { DataContext = new AdminMuzickiSadrzajViewModel(_deloRepo, _zanrRepository) };
+            CurrentView = new AdminMuzickiSadrzajView { DataContext = new AdminMuzickiSadrzajViewModel(_deloRepo, _zanrRepository, _recRepo, _ocenaRepo, _zahtevRepo, _umetnikRepository) };
         }
 
         private void ShowZanrove()
@@ -81,10 +97,14 @@ namespace MusicCatalog.ViewModels
             CurrentView = new AdminAnketeView { DataContext = new AdminAnketeViewModel(_anketaRepository) };
         }
 
+        private void ShowZahteviZaIzmenu()
+        {
+            CurrentView = new AdminZahteviView { DataContext = new AdminZahteviViewModel(_zahtevRepo, _recRepo, _ocenaRepo) };
+        }
+
         private void Logout()
         {
             LoggedOut?.Invoke();
         }
-
     }
 }

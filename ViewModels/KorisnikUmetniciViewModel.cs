@@ -58,6 +58,8 @@ namespace MusicCatalog.ViewModels
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly RegistrovaniKorisnik _korisnik;
         private readonly IKorisnikRepository _korisnikRepo;
+        private readonly IRecenzijaRepository _recenzijaRepo;
+        private readonly IOcenaRepository _ocenaRepo;
 
         // Kolekcija sada koristi 'UmetnikView'
         public ObservableCollection<UmetnikView> Umetnici { get; } = new();
@@ -71,13 +73,17 @@ namespace MusicCatalog.ViewModels
             IClanstvoRepository clanstvoRepo,
             IMuzickoDeloRepository deloRepo,
             RegistrovaniKorisnik korisnik,
-            IKorisnikRepository korisnikRepo)
+            IKorisnikRepository korisnikRepo,
+            IRecenzijaRepository recenzijaRepo,
+            IOcenaRepository ocenaRepo)
         {
             _umetniciRepository = umetniciRepo;
             _clanstvoRepo = clanstvoRepo;
             _deloRepo = deloRepo;
             _korisnik = korisnik;
             _korisnikRepo = korisnikRepo;
+            _recenzijaRepo = recenzijaRepo;
+            _ocenaRepo = ocenaRepo;
 
             ShowInfoCommand = new RelayCommand(ShowInfo);
             ToggleFavoritCommand = new RelayCommand(ToggleFavorit);
@@ -136,7 +142,13 @@ namespace MusicCatalog.ViewModels
             if (parameter is UmetnikView umetnikView)
             {
                 // Prosleđujemo originalni model, ne wrapper
-                var vm = new UmetnikInfoViewModel(umetnikView.Umetnik, _umetniciRepository, _clanstvoRepo, _deloRepo);
+                var vm = new UmetnikInfoViewModel(
+                    umetnikView.Umetnik,
+                    _umetniciRepository,
+                    _clanstvoRepo,
+                    _deloRepo,
+                    _recenzijaRepo,
+                    _ocenaRepo);
 
                 var view = new UmetnikInfoView
                 {

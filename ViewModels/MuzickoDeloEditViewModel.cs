@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using MusicCatalog.Models.Umetnici;
 
 namespace MusicCatalog.ViewModels
 {
@@ -14,6 +15,7 @@ namespace MusicCatalog.ViewModels
     {
         private readonly IMuzickoDeloRepository _deloRepo;
         private readonly IZanrRepository _zanrRepo;
+        private readonly IMuzickiUmetnikRepository _umetnikRepo;
         private readonly bool _isAlbum;
         private readonly int? _id;
 
@@ -30,6 +32,9 @@ namespace MusicCatalog.ViewModels
 
         public ObservableCollection<PesmaOption> Pesme { get; } = new();
 
+        // New: available artists (bands and performers) selection for songs
+        public ObservableCollection<UmetnikOption> Umetnici { get; } = new();
+
         private string _errorMessage = string.Empty;
         public string ErrorMessage { get => _errorMessage; set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); } }
 
@@ -39,10 +44,11 @@ namespace MusicCatalog.ViewModels
         public Action? OnSaved { get; set; }
         public Action? OnCancelled { get; set; }
 
-        public MuzickoDeloEditViewModel(IMuzickoDeloRepository deloRepo, IZanrRepository zanrRepo, bool isAlbum, int? id = null)
+        public MuzickoDeloEditViewModel(IMuzickoDeloRepository deloRepo, IZanrRepository zanrRepo, IMuzickiUmetnikRepository umetnikRepo, bool isAlbum, int? id = null)
         {
             _deloRepo = deloRepo;
             _zanrRepo = zanrRepo;
+            _umetnikRepo = umetnikRepo;
             _isAlbum = isAlbum;
             _id = id;
             SaveCommand = new RelayCommand(_ => Save(), _ => CanSave());
@@ -83,6 +89,14 @@ namespace MusicCatalog.ViewModels
                 foreach (var z in allZ)
                     Zanrovi.Add(new ZanrOption(z.Id, z.Naziv));
 
+                // Load all artists
+                Umetnici.Clear();
+                foreach (var u in _umetnikRepo.GetAll().OrderBy(u => u is Bend ? (u as Bend)!.Naziv : (u as Izvodjac)!.Ime))
+                {
+                    var display = u is Bend b ? b.Naziv : u is Izvodjac i ? ($"{i.Ime} {i.Prezime}") : $"Umetnik {u.Id}";
+                    Umetnici.Add(new UmetnikOption(u.Id, display));
+                }
+
                 if (_id.HasValue)
                 {
                     var md = _deloRepo.GetById(_id.Value);
@@ -92,9 +106,15 @@ namespace MusicCatalog.ViewModels
                         _trajanjeMin = md.Trajanje.TotalMinutes;
                         _datumIzdanja = md.DatumIzdanja;
                         foreach (var z in Zanrovi) z.IsSelected = md.ZanrIDs.Contains(z.Id);
+                        // preselect artists
+                        var setU = (md.UmetnikIDs ?? new List<int>()).ToHashSet();
+                        foreach (var u in Umetnici) u.IsSelected = setU.Contains(u.Id);
                     }
                 }
             }
+            OnPropertyChanged(nameof(Naziv));
+            OnPropertyChanged(nameof(TrajanjeMin));
+            OnPropertyChanged(nameof(DatumIzdanja));
         }
 
         private void UpdateCanSave() => CommandManager.InvalidateRequerySuggested();
@@ -113,6 +133,7 @@ namespace MusicCatalog.ViewModels
                 && TrajanjeMin > 0
                 && DatumIzdanja <= DateTime.Today
                 && Zanrovi.Any(z => z.IsSelected);
+                // Note: artist selection is optional in validation, but will be persisted if selected
             }
         }
 
@@ -132,12 +153,14 @@ namespace MusicCatalog.ViewModels
                     {
                         var selectedPesmaIds = Pesme.Where(p => p.IsSelected).Select(p => p.Id).ToList();
                         var distinctZanrIds = ComputeAlbumGenresFromSongs(selectedPesmaIds);
+                        var distinctUmetnikIds = ComputeAlbumArtistsFromSongs(selectedPesmaIds);
 
                         alb.Naziv = Naziv;
                         alb.Trajanje = traj;
                         alb.DatumIzdanja = DatumIzdanja;
                         alb.PesmaIDs = selectedPesmaIds;
                         alb.ZanrIDs = distinctZanrIds;
+                        alb.UmetnikIDs = distinctUmetnikIds;
 
                         _deloRepo.Update(alb);
                     }
@@ -145,10 +168,12 @@ namespace MusicCatalog.ViewModels
                     {
                         // Pesma edit
                         var ids = Zanrovi.Where(z => z.IsSelected).Select(z => z.Id).ToList();
+                        var umetnikIds = Umetnici.Where(u => u.IsSelected).Select(u => u.Id).ToList();
                         existing.Naziv = Naziv;
                         existing.Trajanje = traj;
                         existing.DatumIzdanja = DatumIzdanja;
                         existing.ZanrIDs = ids;
+                        existing.UmetnikIDs = umetnikIds;
                         _deloRepo.Update(existing);
                     }
                 }
@@ -158,14 +183,22 @@ namespace MusicCatalog.ViewModels
                     {
                         var selectedPesmaIds = Pesme.Where(p => p.IsSelected).Select(p => p.Id).ToList();
                         var distinctZanrIds = ComputeAlbumGenresFromSongs(selectedPesmaIds);
+                        var distinctUmetnikIds = ComputeAlbumArtistsFromSongs(selectedPesmaIds);
 
-                        var entity = new Album(0, Naziv, traj, DatumIzdanja, distinctZanrIds, selectedPesmaIds);
+                        var entity = new Album(0, Naziv, traj, DatumIzdanja, distinctZanrIds, selectedPesmaIds)
+                        {
+                            UmetnikIDs = distinctUmetnikIds
+                        };
                         _deloRepo.Add(entity);
                     }
                     else
                     {
                         var ids = Zanrovi.Where(z => z.IsSelected).Select(z => z.Id).ToList();
-                        MuzickoDelo entity = new Pesma(0, Naziv, traj, DatumIzdanja, ids);
+                        var umetnikIds = Umetnici.Where(u => u.IsSelected).Select(u => u.Id).ToList();
+                        MuzickoDelo entity = new Pesma(0, Naziv, traj, DatumIzdanja, ids)
+                        {
+                            UmetnikIDs = umetnikIds
+                        };
                         _deloRepo.Add(entity);
                     }
                 }
@@ -183,6 +216,13 @@ namespace MusicCatalog.ViewModels
             if (selectedPesmaIds.Count == 0) return new List<int>();
             var pesme = _deloRepo.GetAll().OfType<Pesma>().Where(p => selectedPesmaIds.Contains(p.Id));
             return pesme.SelectMany(p => p.ZanrIDs).Distinct().ToList();
+        }
+
+        private List<int> ComputeAlbumArtistsFromSongs(List<int> selectedPesmaIds)
+        {
+            if (selectedPesmaIds.Count == 0) return new List<int>();
+            var pesme = _deloRepo.GetAll().Where(p => selectedPesmaIds.Contains(p.Id));
+            return pesme.SelectMany(p => p.UmetnikIDs ?? new List<int>()).Distinct().ToList();
         }
     }
 
@@ -202,5 +242,14 @@ namespace MusicCatalog.ViewModels
         private bool _isSelected;
         public bool IsSelected { get => _isSelected; set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
         public PesmaOption(int id, string naziv) { Id = id; Naziv = naziv; }
+    }
+
+    public class UmetnikOption : ViewModelBase
+    {
+        public int Id { get; }
+        public string Naziv { get; }
+        private bool _isSelected;
+        public bool IsSelected { get => _isSelected; set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
+        public UmetnikOption(int id, string naziv) { Id = id; Naziv = naziv; }
     }
 }

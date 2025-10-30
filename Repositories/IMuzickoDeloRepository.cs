@@ -13,6 +13,7 @@ namespace MusicCatalog.Repositories
         void Add(MuzickoDelo muzickoDelo);
         void Update(MuzickoDelo muzickoDelo);
         void Delete(int id);
+        void DeleteWithCascade(int id, IRecenzijaRepository recRepo, IOcenaRepository ocenaRepo, IZahtevZaIzmenuRepository zahtevRepo);
         int GetNextId();
 
     }
