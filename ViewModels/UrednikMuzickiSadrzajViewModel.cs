@@ -115,7 +115,6 @@ namespace MusicCatalog.ViewModels
         {
             var md = mv.Source;
             if (MessageBox.Show($"Obrisati '{md.Naziv}'?", "Potvrda", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
-
             _delaRepo.DeleteWithCascade(md.Id, _recRepo, _ocenaRepo, _zahtevRepo);
             Load();
         }
@@ -131,12 +130,6 @@ namespace MusicCatalog.ViewModels
 
             var vm = new RecenzijaEditViewModel(_auth, _korisnikRepo, _recRepo, _ocenaRepo, _zahtevRepo, entry.View.Source, null);
             var view = new RecenzijaEditView { DataContext = vm };
-            vm.Close = () =>
-            {
-                Load();
-                var wnd = Window.GetWindow(view);
-                wnd?.Close();
-            };
 
             var window = new Window
             {
@@ -151,10 +144,11 @@ namespace MusicCatalog.ViewModels
                 WindowStyle = WindowStyle.None
             };
 
+            vm.Close = () => window.Close();
             window.MouseLeftButtonDown += (s, e) => { if (e.LeftButton == MouseButtonState.Pressed) window.DragMove(); };
 
-
             window.ShowDialog();
+            Load();
         }
 
         private void IzmeniOcenu(UrednikMuzickoDeloEntry? entry)
@@ -183,12 +177,6 @@ namespace MusicCatalog.ViewModels
 
             var vm = new RecenzijaEditViewModel(_auth, _korisnikRepo, _recRepo, _ocenaRepo, _zahtevRepo, entry.View.Source, entry.Recenzija);
             var view = new RecenzijaEditView { DataContext = vm };
-            vm.Close = () =>
-            {
-                Load();
-                var wnd = Window.GetWindow(view);
-                wnd?.Close();
-            };
 
             var window = new Window
             {
@@ -203,10 +191,11 @@ namespace MusicCatalog.ViewModels
                 WindowStyle = WindowStyle.None
             };
 
+            vm.Close = () => window.Close();
             window.MouseLeftButtonDown += (s, e) => { if (e.LeftButton == MouseButtonState.Pressed) window.DragMove(); };
-           
 
             window.ShowDialog();
+            Load();
         }
 
         private void PrikaziOcene(UrednikMuzickoDeloEntry? entry)
@@ -214,6 +203,7 @@ namespace MusicCatalog.ViewModels
             if (entry == null) return;
             var vm = new PrikaziOceneViewModel(_korisnikRepo, _recRepo, _ocenaRepo, entry.View.Source);
             var view = new PrikaziOceneView { DataContext = vm };
+
             var window = new Window
             {
                 Title = $"Ocene — {entry.View.Naziv}",
@@ -221,11 +211,20 @@ namespace MusicCatalog.ViewModels
                 Width = 600,
                 Height = 400,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Owner = Application.Current.MainWindow
-                
+                Owner = Application.Current.MainWindow,
+                AllowsTransparency = true,
+                Background = Brushes.Transparent,
+                WindowStyle = WindowStyle.None
             };
+
+            vm.CloseWindow = () => window.Close();
+
+            
+            window.MouseLeftButtonDown += (s, e) => { if (e.LeftButton == MouseButtonState.Pressed) window.DragMove(); };
+
             window.ShowDialog();
         }
+        
 
         public class UrednikMuzickoDeloEntry
         {
